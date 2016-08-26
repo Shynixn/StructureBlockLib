@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
  * Created by Shynixn
  */
 public final class LocationHelper
-{
+{//
     public static Location getDownCornerLocation(Location corner1, Location corner2)
     {
         int x,y,z;

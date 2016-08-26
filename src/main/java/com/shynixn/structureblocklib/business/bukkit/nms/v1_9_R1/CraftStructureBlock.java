@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R1.block.CraftBlockState;
+import org.bukkit.util.Vector;
 
 /**
  * Created by Shynixn
@@ -90,9 +91,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         compound.setInt("sizeY", sizeY);
         compound.setInt("sizeZ", sizeZ);
 
-        compound.setString("rotation", getBlockRotation().toString());
-        compound.setString("mirror", getBlockMirror().toString());
-        compound.setString("mode", getBlockUseage().toString());
+        compound.setString("rotation", getBlockRotation(rotation).toString());
+        compound.setString("mirror", getBlockMirror(mirrorType).toString());
+        compound.setString("mode", getBlockUseage(mode).toString());
 
         compound.setBoolean("showboundingbox", boundingBox);
         compound.setBoolean("showair", invisibleBlocks);
@@ -102,98 +103,6 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         compound.setFloat("integrity", integrity);
         compound.setLong("seed",seed);
         return compound;
-    }
-
-    private StructureRotation getBlockRotation(EnumBlockRotation rotation)
-    {
-        switch (rotation)
-        {
-            case NONE:
-                return StructureRotation.NONE;
-            case CLOCKWISE_90:
-                return StructureRotation.ROTATION_90;
-            case CLOCKWISE_180:
-                return StructureRotation.ROTATION_180;
-            case COUNTERCLOCKWISE_90:
-                return StructureRotation.ROTATION_270;
-        }
-        return null;
-    }
-
-    private EnumBlockRotation getBlockRotation()
-    {
-        switch (getRotation())
-        {
-            case NONE:
-                return EnumBlockRotation.NONE;
-            case ROTATION_90:
-                return EnumBlockRotation.CLOCKWISE_90;
-            case ROTATION_180:
-                return EnumBlockRotation.CLOCKWISE_180;
-            case ROTATION_270:
-                return EnumBlockRotation.COUNTERCLOCKWISE_90;
-        }
-        return null;
-    }
-
-    private StructureMode getBlockUseage(TileEntityStructure.UsageMode usageMod)
-    {
-        switch (usageMod)
-        {
-            case CORNER:
-                return StructureMode.CORNER;
-            case DATA:
-                return StructureMode.DATA;
-            case LOAD:
-                return StructureMode.LOAD;
-            case SAVE:
-                return StructureMode.SAVE;
-        }
-        return null;
-    }
-
-    private TileEntityStructure.UsageMode getBlockUseage()
-    {
-        switch (getStructureMode())
-        {
-            case CORNER:
-                return TileEntityStructure.UsageMode.CORNER;
-            case DATA:
-                return TileEntityStructure.UsageMode.DATA;
-            case LOAD:
-                return TileEntityStructure.UsageMode.LOAD;
-            case SAVE:
-                return TileEntityStructure.UsageMode.SAVE;
-        }
-        return null;
-    }
-
-    private StructureMirror getBlockMirror(EnumBlockMirror mirror)
-    {
-        switch (mirror)
-        {
-            case NONE:
-                return StructureMirror.NONE;
-            case FRONT_BACK:
-                return StructureMirror.FRONT_BACK;
-            case LEFT_RIGHT:
-                return StructureMirror.LEFT_RIGHT;
-        }
-        return null;
-    }
-
-    private EnumBlockMirror getBlockMirror()
-    {
-        switch (getMirrorType())
-        {
-            case NONE:
-                return EnumBlockMirror.NONE;
-            case FRONT_BACK:
-                return EnumBlockMirror.FRONT_BACK;
-            case LEFT_RIGHT:
-                return EnumBlockMirror.LEFT_RIGHT;
-        }
-        return null;
     }
 
     @Override
@@ -251,6 +160,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     }
 
     @Override
+    public void load()
+    {
+        load(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), ignoreEntities, rotation, mirrorType);
+    }
+
+    @Override
     public void setRotation(StructureRotation rotation)
     {
         this.rotation = rotation;
@@ -284,6 +199,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean isShowingInvisibleBlocks()
     {
         return this.invisibleBlocks;
+    }
+
+    @Override
+    public void save()
+    {
+        save(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), new Vector(sizeX, sizeY, sizeZ), ignoreEntities);
     }
 
     @Override
@@ -380,5 +301,126 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public StructureMode getStructureMode()
     {
         return mode;
+    }
+
+    private static StructureRotation getBlockRotation(EnumBlockRotation rotation)
+    {
+        switch (rotation)
+        {
+            case NONE:
+                return StructureRotation.NONE;
+            case CLOCKWISE_90:
+                return StructureRotation.ROTATION_90;
+            case CLOCKWISE_180:
+                return StructureRotation.ROTATION_180;
+            case COUNTERCLOCKWISE_90:
+                return StructureRotation.ROTATION_270;
+        }
+        return null;
+    }
+
+    private static EnumBlockRotation getBlockRotation(StructureRotation rotation)
+    {
+        switch (rotation)
+        {
+            case NONE:
+                return EnumBlockRotation.NONE;
+            case ROTATION_90:
+                return EnumBlockRotation.CLOCKWISE_90;
+            case ROTATION_180:
+                return EnumBlockRotation.CLOCKWISE_180;
+            case ROTATION_270:
+                return EnumBlockRotation.COUNTERCLOCKWISE_90;
+        }
+        return null;
+    }
+
+    private static StructureMode getBlockUseage(TileEntityStructure.UsageMode usageMod)
+    {
+        switch (usageMod)
+        {
+            case CORNER:
+                return StructureMode.CORNER;
+            case DATA:
+                return StructureMode.DATA;
+            case LOAD:
+                return StructureMode.LOAD;
+            case SAVE:
+                return StructureMode.SAVE;
+        }
+        return null;
+    }
+
+    private static TileEntityStructure.UsageMode getBlockUseage(StructureMode structureMode)
+    {
+        switch (structureMode)
+        {
+            case CORNER:
+                return TileEntityStructure.UsageMode.CORNER;
+            case DATA:
+                return TileEntityStructure.UsageMode.DATA;
+            case LOAD:
+                return TileEntityStructure.UsageMode.LOAD;
+            case SAVE:
+                return TileEntityStructure.UsageMode.SAVE;
+        }
+        return null;
+    }
+
+    private StructureMirror getBlockMirror(EnumBlockMirror mirror)
+    {
+        switch (mirror)
+        {
+            case NONE:
+                return StructureMirror.NONE;
+            case FRONT_BACK:
+                return StructureMirror.FRONT_BACK;
+            case LEFT_RIGHT:
+                return StructureMirror.LEFT_RIGHT;
+        }
+        return null;
+    }
+
+    private static EnumBlockMirror getBlockMirror(StructureMirror mirror)
+    {
+        switch (mirror)
+        {
+            case NONE:
+                return EnumBlockMirror.NONE;
+            case FRONT_BACK:
+                return EnumBlockMirror.FRONT_BACK;
+            case LEFT_RIGHT:
+                return EnumBlockMirror.LEFT_RIGHT;
+        }
+        return null;
+    }
+
+    public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities)
+    {
+        BlockPosition vPosition = new BlockPosition(0,0,0);
+
+        BlockPosition var1 = vPosition.a(new BlockPosition(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ()));
+        WorldServer var2 = ((CraftWorld)corner.getWorld()).getHandle();
+        MinecraftServer var3 = ((CraftWorld)corner.getWorld()).getHandle().getMinecraftServer();
+        DefinedStructureManager var4 = var2.y();
+        DefinedStructure var5 = var4.a(var3, new MinecraftKey(saveName, author));
+        var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, new BlockPosition(dimensions.getBlockX(),dimensions.getBlockY(), dimensions.getBlockZ()), !ignoreEntities, Blocks.BARRIER);
+        var5.a(author);
+        var4.c(var3, new MinecraftKey(saveName));
+    }
+
+    public static void load(String author, String saveName, Location corner, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
+    {
+        if(((CraftWorld)corner.getWorld()).getHandle().isClientSide)
+            return;
+
+        BlockPosition vPosition = new BlockPosition(0,0,0);
+        BlockPosition var1 = vPosition.a(new BlockPosition(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ()));
+        WorldServer var2 = ((CraftWorld)corner.getWorld()).getHandle();
+        MinecraftServer var3 = ((CraftWorld)corner.getWorld()).getHandle().getMinecraftServer();
+        DefinedStructureManager var4 = var2.y();
+        DefinedStructure var5 = var4.a(var3, new MinecraftKey(saveName, author));
+        DefinedStructureInfo var9 = (new DefinedStructureInfo()).a(getBlockMirror(mirror)).a(getBlockRotation(rotation)).a(ignoreEntities).a((ChunkCoordIntPair)null).a((net.minecraft.server.v1_9_R1.Block) null).b(false);
+        var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, var9);
     }
 }

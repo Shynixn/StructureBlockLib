@@ -160,6 +160,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     }
 
     @Override
+    public void load()
+    {
+        load(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), ignoreEntities, rotation, mirrorType);
+    }
+
+    @Override
     public void setRotation(StructureRotation rotation)
     {
         this.rotation = rotation;
@@ -193,6 +199,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean isShowingInvisibleBlocks()
     {
         return this.invisibleBlocks;
+    }
+
+    @Override
+    public void save()
+    {
+        save(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), new Vector(sizeX, sizeY, sizeZ), ignoreEntities);
     }
 
     @Override
@@ -397,7 +409,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         var4.c(var3, new MinecraftKey(saveName));
     }
 
-    public static void load(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
+    public static void load(String author, String saveName, Location corner, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
     {
         if(((CraftWorld)corner.getWorld()).getHandle().isClientSide)
             return;
@@ -408,11 +420,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         MinecraftServer var3 = ((CraftWorld)corner.getWorld()).getHandle().getMinecraftServer();
         DefinedStructureManager var4 = var2.y();
         DefinedStructure var5 = var4.a(var3, new MinecraftKey(saveName, author));
-        BlockPosition b1 = new BlockPosition(dimensions.getBlockX(),dimensions.getBlockY(), dimensions.getBlockZ());
-        if(b1.equals(var5.a()))
-        {
-            DefinedStructureInfo var9 = (new DefinedStructureInfo()).a(getBlockMirror(mirror)).a(getBlockRotation(rotation)).a(ignoreEntities).a((ChunkCoordIntPair)null).a((net.minecraft.server.v1_10_R1.Block) null).b(false);
-            var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, var9);
-        }
+        DefinedStructureInfo var9 = (new DefinedStructureInfo()).a(getBlockMirror(mirror)).a(getBlockRotation(rotation)).a(ignoreEntities).a((ChunkCoordIntPair)null).a((net.minecraft.server.v1_10_R1.Block) null).b(false);
+        var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, var9);
     }
 }

@@ -1,0 +1,13 @@
+# Use https://travis-ci.org/ for automatic tests
+
+# speed up testing http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
+sudo: false
+
+# This is a java project
+language: java
+
+script: mvn compile test
+
+# We could compile with Java 8 because of Sponge
+jdk:
+  - oraclejdk8

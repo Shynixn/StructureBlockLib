@@ -15,8 +15,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 ## Installation
 
 * Download the source code and copy it into your own projects.
-   OR
-* Download the StructureBlockLib.jar and put it into your plugin folder and use it as library in your own projects.
+* [Download the StructureBlockLib.jar](https://github.com/Shynixn/StructureBlockLib/releases) and put it into your plugin folder and use it as library in your own projects.
 
 ## How to use the it
 

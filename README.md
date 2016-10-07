@@ -63,6 +63,6 @@ StructureBlockApi.save("author", "mysavename", new Location(Bukkit.getWorld("wor
 StructureBlockApi.load("author", "mysavename", new Location(Bukkit.getWorld("world"),400, 5, 400));
 ```
 
-## Lincence
+## Licence
 
 The source code is licensed under the MIT license. 

@@ -5,7 +5,9 @@ install:
     - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /tmp/
 script:
     - cd /tmp/
-    - java -jar BuildTools.jar --rev 1.9.4
+    - java -jar BuildTools.jar --rev 1.9 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
+    - java -jar BuildTools.jar --rev 1.9.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
+    - java -jar BuildTools.jar --rev 1.10 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
     - cd -
     - mvn compile test
 jdk:

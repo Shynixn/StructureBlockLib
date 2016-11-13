@@ -5,7 +5,7 @@ install:
     - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -P /tmp/
 script:
     - cd /tmp/
-    - java -jar BuildTools.jar
+    - java -jar BuildTools.jar --rev 1.9.4
     - cd -
     - mvn compile test
 jdk:

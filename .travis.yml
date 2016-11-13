@@ -1,7 +1,8 @@
 language: java
 sudo: false
 install:
-    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+    - mkdir tmp
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -P /tmp/
 script:
     - java -jar BuildTools.jar
     - mvn compile test

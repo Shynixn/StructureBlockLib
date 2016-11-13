@@ -1,8 +1,8 @@
 language: java
-sudo: false
+sudo: true
 install:
     - mkdir tmp
-    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/52/artifact/target/BuildTools.jar -P /tmp/
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /tmp/
 script:
     - cd /tmp/
     - java -jar BuildTools.jar --rev 1.9.4

@@ -4,7 +4,7 @@ install:
     - mkdir tmp
     - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -P /tmp/
 script:
-    - java -jar BuildTools.jar
+    - java -jar /tmp/BuildTools.jar
     - mvn compile test
 jdk:
   - oraclejdk8

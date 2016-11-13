@@ -7,3 +7,4 @@ script:
     - mvn compile test
 jdk:
   - oraclejdk8
+#jdk

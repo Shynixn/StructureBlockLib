@@ -1,0 +1,9 @@
+language: java
+sudo: false
+install:
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+script:
+    - java -jar BuildTools.jar | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
+    - mvn compile test
+jdk:
+  - oraclejdk8

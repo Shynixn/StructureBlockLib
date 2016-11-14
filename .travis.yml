@@ -1,10 +1,11 @@
 language: java
 sudo: true
 install:
-    - mkdir tmp
-    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /tmp/
+    - cd /home/travis/build/Shynixn/StructureBlockLib/
+    - mkdir lib
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /home/travis/build/Shynixn/StructureBlockLib/lib/
 script:
-    - cd /tmp/
+    - cd /home/travis/build/Shynixn/StructureBlockLib/lib/
     - java -jar BuildTools.jar --rev 1.9 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
     - java -jar BuildTools.jar --rev 1.9.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
     - java -jar BuildTools.jar --rev 1.10 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"

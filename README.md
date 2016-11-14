@@ -36,7 +36,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 #### Obtain an existing structureblock
 
 ```java
-Block block = new Location(Bukkit.getWorld("world"), 0,0,0);
+Block block = new Location(Bukkit.getWorld("world"), 0,0,0).getBlock();
 StructureBlock structureBlock = StructureBlockApi.from(block);
 structureBlock.setStructureMode(StructureMode.SAVE);
 ```

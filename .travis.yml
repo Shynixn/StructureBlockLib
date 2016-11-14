@@ -1,7 +1,8 @@
 language: java
 sudo: true
 install:
-    - rm -r $pwd/tmp; mkdir $pwd/tmp
+    - rm -r $pwd/tmp 
+    - mkdir $pwd/tmp
     - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P $pwd/tmp/
 script:
     - cd $pwd/tmp/

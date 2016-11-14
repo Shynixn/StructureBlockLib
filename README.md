@@ -1,6 +1,7 @@
 # StructureBlockLib
 [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+[![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+
 ## Description
 
 Simple spigot plugin to modify structureblocks on your minecraft server.

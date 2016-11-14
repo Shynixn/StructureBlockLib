@@ -1,11 +1,10 @@
 language: java
 sudo: true
 install:
-    - rm -r $pwd/tmp 
-    - mkdir $pwd/tmp
-    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P $pwd/tmp/
+    - mkdir $pwd/customresource
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P $pwd/customresource/
 script:
-    - cd $pwd/tmp/
+    - cd $pwd/customresource/
     - java -jar BuildTools.jar --rev 1.9 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
     #- java -jar BuildTools.jar --rev 1.9.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
     #- java -jar BuildTools.jar --rev 1.10 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"

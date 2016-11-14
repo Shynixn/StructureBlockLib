@@ -1,3 +1,5 @@
+![alt tag](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)
+
 # StructureBlockLib
 
 ## Description

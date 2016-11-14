@@ -1,8 +1,8 @@
 language: java
 sudo: true
 install:
-    - mkdir tmp
-    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /tmp/
+    - mkdir $pwd/tmp
+    - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P $pwd/tmp/
 script:
     - cd $pwd/tmp/
     - java -jar BuildTools.jar --rev 1.9 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"

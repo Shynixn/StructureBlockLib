@@ -91,7 +91,7 @@
               <artifactId>minecraft19R1</artifactId>
               <scope>system</scope>
               <version>1.0</version>
-              <systemPath>${basedir}/tmp/spigot-1.9.jar</systemPath>
+              <systemPath>/tmp/spigot-1.9.jar</systemPath>
         </dependency>
     </dependencies>
 

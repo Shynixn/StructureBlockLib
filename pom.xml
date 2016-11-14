@@ -93,6 +93,20 @@
               <version>1.0</version>
               <systemPath>/tmp/spigot-1.9.jar</systemPath>
         </dependency>
+        <dependency>
+              <groupId>net</groupId>
+              <artifactId>minecraft19R2</artifactId>
+              <scope>system</scope>
+              <version>1.0</version>
+              <systemPath>/tmp/spigot-1.9.4.jar</systemPath>
+        </dependency> 
+            <dependency>
+              <groupId>net</groupId>
+              <artifactId>minecraft110R1</artifactId>
+              <scope>system</scope>
+              <version>1.0</version>
+              <systemPath>/tmp/spigot-1.10.jar</systemPath>
+        </dependency>     
     </dependencies>
 
     <distributionManagement>

@@ -105,7 +105,7 @@
               <artifactId>minecraft110R1</artifactId>
               <scope>system</scope>
               <version>1.0</version>
-              <systemPath>/tmp/spigot-1.10.jar</systemPath>
+              <systemPath>/tmp/spigot-1.10.2.jar</systemPath>
         </dependency>     
     </dependencies>
 

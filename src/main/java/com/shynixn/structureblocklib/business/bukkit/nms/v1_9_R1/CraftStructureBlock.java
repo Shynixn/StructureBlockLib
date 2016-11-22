@@ -11,8 +11,7 @@ import org.bukkit.util.Vector;
 /**
  * Created by Shynixn
  */
-public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad
-{
+public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
     private TileEntityStructure structure;
 
     private StructureMirror mirrorType;
@@ -31,8 +30,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     private float integrity;
     private long seed;
 
-    public CraftStructureBlock(Block block)
-    {
+    public CraftStructureBlock(Block block) {
         super(block);
         CraftWorld world = (CraftWorld)block.getWorld();
         this.structure = (TileEntityStructure) world.getTileEntityAt(this.getX(), this.getY(), this.getZ());
@@ -40,19 +38,16 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     }
 
     @Override
-    public boolean update(boolean force, boolean applyPhysics)
-    {
+    public boolean update(boolean force, boolean applyPhysics) {
         boolean result = super.update(force, applyPhysics);
-        if(result)
-        {
+        if (result) {
             structure.a(convert());
             structure.update();
         }
         return result;
     }
 
-    private void refresh()
-    {
+    private void refresh() {
         NBTTagCompound compound = new NBTTagCompound();
         structure.save(compound);
 
@@ -76,8 +71,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.seed = compound.getLong("seed");
     }
 
-    private NBTTagCompound convert()
-    {
+    private NBTTagCompound convert() {
         NBTTagCompound compound = new NBTTagCompound();
         structure.save(compound);
         compound.setString("name", name);
@@ -99,214 +93,178 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         compound.setBoolean("showair", invisibleBlocks);
         compound.setBoolean("ignoreEntities", ignoreEntities);
 
-
         compound.setFloat("integrity", integrity);
         compound.setLong("seed",seed);
         return compound;
     }
 
     @Override
-    public TileEntity getTileEntity()
-    {
+    public TileEntity getTileEntity() {
         return structure;
     }
 
     @Override
-    public void setMirrorType(StructureMirror mirrorType)
-    {
+    public void setMirrorType(StructureMirror mirrorType) {
         this.mirrorType = mirrorType;
     }
 
     @Override
-    public StructureMirror getMirrorType()
-    {
+    public StructureMirror getMirrorType() {
         return mirrorType;
     }
 
     @Override
-    public void setBoundingBoxVisible(boolean visible)
-    {
+    public void setBoundingBoxVisible(boolean visible) {
         this.boundingBox = visible;
     }
 
     @Override
-    public boolean isBoundingBoxVisible()
-    {
+    public boolean isBoundingBoxVisible() {
         return boundingBox;
     }
 
     @Override
-    public void setIntegrity(float integrity)
-    {
+    public void setIntegrity(float integrity) {
         this.integrity = integrity;
     }
 
     @Override
-    public float getIntegrity()
-    {
+    public float getIntegrity() {
         return integrity;
     }
 
     @Override
-    public void setSeed(long seed)
-    {
+    public void setSeed(long seed) {
         this.seed = seed;
     }
 
     @Override
-    public long getSeed()
-    {
+    public long getSeed() {
         return seed;
     }
 
     @Override
-    public void load()
-    {
+    public void load() {
         load(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), ignoreEntities, rotation, mirrorType);
     }
 
     @Override
-    public void setRotation(StructureRotation rotation)
-    {
+    public void setRotation(StructureRotation rotation) {
         this.rotation = rotation;
     }
 
     @Override
-    public StructureRotation getRotation()
-    {
+    public StructureRotation getRotation() {
         return rotation;
     }
 
     @Override
-    public void setAuthor(String author)
-    {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
     @Override
-    public String getAuthor()
-    {
+    public String getAuthor() {
         return author;
     }
 
     @Override
-    public void showInvisibleBlocks(boolean showInvisibleBlocks)
-    {
+    public void showInvisibleBlocks(boolean showInvisibleBlocks) {
         this.invisibleBlocks = showInvisibleBlocks;
     }
 
     @Override
-    public boolean isShowingInvisibleBlocks()
-    {
+    public boolean isShowingInvisibleBlocks() {
         return this.invisibleBlocks;
     }
 
     @Override
-    public void save()
-    {
+    public void save() {
         save(author, name, new Location(getWorld(), position.getX(), position.getY(), position.getZ()), new Vector(sizeX, sizeY, sizeZ), ignoreEntities);
     }
 
     @Override
-    public void setSaveName(String name)
-    {
+    public void setSaveName(String name) {
         this.name = name;
     }
 
     @Override
-    public String getSaveName()
-    {
+    public String getSaveName() {
         return name;
     }
 
     @Override
-    public void setStructureLocation(Location location)
-    {
+    public void setStructureLocation(Location location) {
         position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
     @Override
-    public Location getStructureLocation()
-    {
+    public Location getStructureLocation() {
         return new Location(getWorld(), position.getX(), position.getY(), position.getZ());
     }
 
     @Override
-    public void setSizeX(int sizeX)
-    {
+    public void setSizeX(int sizeX) {
         this.sizeX = sizeX;
     }
 
     @Override
-    public void setSizeY(int sizeY)
-    {
+    public void setSizeY(int sizeY) {
         this.sizeY = sizeY;
     }
 
     @Override
-    public void setSizeZ(int sizeZ)
-    {
+    public void setSizeZ(int sizeZ) {
         this.sizeZ = sizeZ;
     }
 
     @Override
-    public int getSizeX()
-    {
+    public int getSizeX() {
         return sizeX;
     }
 
     @Override
-    public int getSizeY()
-    {
+    public int getSizeY() {
         return sizeY;
     }
 
     @Override
-    public int getSizeZ()
-    {
+    public int getSizeZ() {
         return sizeZ;
     }
 
     @Override
-    public void setBlockNameMetaData(String blockNameMetaData)
-    {
+    public void setBlockNameMetaData(String blockNameMetaData) {
         this.metadata = blockNameMetaData;
     }
 
     @Override
-    public String getBlockNameMetaData()
-    {
+    public String getBlockNameMetaData() {
         return metadata;
     }
 
     @Override
-    public void setIgnoreEntities(boolean ignoreEntities)
-    {
+    public void setIgnoreEntities(boolean ignoreEntities) {
         this.ignoreEntities = ignoreEntities;
     }
 
     @Override
-    public boolean isIgnoreEntities()
-    {
+    public boolean isIgnoreEntities() {
         return ignoreEntities;
     }
 
     @Override
-    public void setStructureMode(StructureMode structureMode)
-    {
+    public void setStructureMode(StructureMode structureMode) {
         this.mode = structureMode;
     }
 
     @Override
-    public StructureMode getStructureMode()
-    {
+    public StructureMode getStructureMode() {
         return mode;
     }
 
-    private static StructureRotation getBlockRotation(EnumBlockRotation rotation)
-    {
-        switch (rotation)
-        {
+    private static StructureRotation getBlockRotation(EnumBlockRotation rotation) {
+        switch (rotation) {
             case NONE:
                 return StructureRotation.NONE;
             case CLOCKWISE_90:
@@ -319,10 +277,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    private static EnumBlockRotation getBlockRotation(StructureRotation rotation)
-    {
-        switch (rotation)
-        {
+    private static EnumBlockRotation getBlockRotation(StructureRotation rotation) {
+        switch (rotation) {
             case NONE:
                 return EnumBlockRotation.NONE;
             case ROTATION_90:
@@ -335,10 +291,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    private static StructureMode getBlockUseage(TileEntityStructure.UsageMode usageMod)
-    {
-        switch (usageMod)
-        {
+    private static StructureMode getBlockUseage(TileEntityStructure.UsageMode usageMod) {
+        switch (usageMod) {
             case CORNER:
                 return StructureMode.CORNER;
             case DATA:
@@ -351,10 +305,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    private static TileEntityStructure.UsageMode getBlockUseage(StructureMode structureMode)
-    {
-        switch (structureMode)
-        {
+    private static TileEntityStructure.UsageMode getBlockUseage(StructureMode structureMode) {
+        switch (structureMode) {
             case CORNER:
                 return TileEntityStructure.UsageMode.CORNER;
             case DATA:
@@ -367,10 +319,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    private StructureMirror getBlockMirror(EnumBlockMirror mirror)
-    {
-        switch (mirror)
-        {
+    private StructureMirror getBlockMirror(EnumBlockMirror mirror) {
+        switch (mirror) {
             case NONE:
                 return StructureMirror.NONE;
             case FRONT_BACK:
@@ -381,10 +331,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    private static EnumBlockMirror getBlockMirror(StructureMirror mirror)
-    {
-        switch (mirror)
-        {
+    private static EnumBlockMirror getBlockMirror(StructureMirror mirror) {
+        switch (mirror) {
             case NONE:
                 return EnumBlockMirror.NONE;
             case FRONT_BACK:
@@ -395,10 +343,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         return null;
     }
 
-    public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities)
-    {
+    public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities) {
         BlockPosition vPosition = new BlockPosition(0,0,0);
-
         BlockPosition var1 = vPosition.a(new BlockPosition(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ()));
         WorldServer var2 = ((CraftWorld)corner.getWorld()).getHandle();
         MinecraftServer var3 = ((CraftWorld)corner.getWorld()).getHandle().getMinecraftServer();
@@ -409,11 +355,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         var4.c(var3, new MinecraftKey(saveName));
     }
 
-    public static void load(String author, String saveName, Location corner, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
-    {
+    public static void load(String author, String saveName, Location corner, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror) {
         if(((CraftWorld)corner.getWorld()).getHandle().isClientSide)
             return;
-
         BlockPosition vPosition = new BlockPosition(0,0,0);
         BlockPosition var1 = vPosition.a(new BlockPosition(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ()));
         WorldServer var2 = ((CraftWorld)corner.getWorld()).getHandle();

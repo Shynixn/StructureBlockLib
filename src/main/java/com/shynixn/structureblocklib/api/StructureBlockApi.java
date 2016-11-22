@@ -73,13 +73,11 @@ public final class StructureBlockApi {
         NMSRegistry.save(author,saveName,corner,dimensions, ignoreEntities);
     }
 
-    public static void load(Player player, String saveName, Location location)
-    {
+    public static void load(Player player, String saveName, Location location) {
         load(player,saveName,location, true);
     }
 
-    public static void load(Player player, String saveName, Location location, boolean ignoreEntities)
-    {
+    public static void load(Player player, String saveName, Location location, boolean ignoreEntities) {
         load(player,saveName,location,ignoreEntities, StructureRotation.NONE, StructureMirror.NONE);
     }
 

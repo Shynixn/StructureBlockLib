@@ -6,10 +6,8 @@ import org.bukkit.util.Vector;
 /**
  * Created by Shynixn
  */
-public final class LocationHelper
-{//
-    public static Location getDownCornerLocation(Location corner1, Location corner2)
-    {
+public final class LocationHelper {
+    public static Location getDownCornerLocation(Location corner1, Location corner2) {
         int x,y,z;
         if (corner1.getBlockX() < corner2.getBlockX())
             x = corner1.getBlockX();
@@ -26,13 +24,11 @@ public final class LocationHelper
         return new Location(corner1.getWorld(), x, y, z);
     }
 
-    public static Vector toDimensions(Location downCorner, Location upCorner)
-    {
+    public static Vector toDimensions(Location downCorner, Location upCorner) {
         return new Vector(upCorner.getBlockX() - downCorner.getBlockX(),upCorner.getBlockY() - downCorner.getBlockY(),upCorner.getBlockZ() - downCorner.getBlockZ());
     }
 
-    public static Location getUpCornerLocation(Location corner1, Location corner2)
-    {
+    public static Location getUpCornerLocation(Location corner1, Location corner2) {
         int x,y,z;
         if (corner1.getBlockX() > corner2.getBlockX())
             x = corner1.getBlockX();

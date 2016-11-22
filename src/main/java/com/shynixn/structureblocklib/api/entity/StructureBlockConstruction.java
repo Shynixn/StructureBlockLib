@@ -5,8 +5,7 @@ import org.bukkit.Location;
 /**
  * Created by Shynixn
  */
-public interface StructureBlockConstruction extends StructureBlockCorner
-{
+public interface StructureBlockConstruction extends StructureBlockCorner {
     void setAuthor(String author);
 
     String getAuthor();

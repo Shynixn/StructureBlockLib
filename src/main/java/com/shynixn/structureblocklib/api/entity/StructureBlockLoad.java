@@ -3,8 +3,7 @@ package com.shynixn.structureblocklib.api.entity;
 /**
  * Created by Shynixn
  */
-public interface StructureBlockLoad extends StructureBlockConstruction
-{
+public interface StructureBlockLoad extends StructureBlockConstruction {
     void setMirrorType(StructureMirror mirrorType);
 
     void setRotation(StructureRotation rotation);

@@ -14,10 +14,9 @@ import org.bukkit.util.Vector;
 /**
  * Created by Shynixn
  */
-public final class StructureBlockApi
-{
-    public static StructureBlock from(Block block)
-    {
+public final class StructureBlockApi {
+
+    public static StructureBlock from(Block block) {
         if(block == null)
             throw new IllegalArgumentException("Block cannot be null!");
         if(block.getType() != Material.STRUCTURE_BLOCK)
@@ -25,25 +24,21 @@ public final class StructureBlockApi
         return NMSRegistry.createStructureBlock(block);
     }
 
-    public static void save(Player player, String saveName, Location corner1, Location corner2)
-    {
+    public static void save(Player player, String saveName, Location corner1, Location corner2) {
         save(player, saveName, corner1, corner2, true);
     }
 
-    public static void save(Player player, String saveName, Location corner1, Location corner2, boolean ignoreEntities)
-    {
+    public static void save(Player player, String saveName, Location corner1, Location corner2, boolean ignoreEntities) {
         if(player == null)
             throw new IllegalArgumentException("Player cannot be null!");
         save(String.valueOf(player.getUniqueId()), saveName, corner1, corner2, ignoreEntities);
     }
 
-    public static void save(String author, String saveName, Location corner1, Location corner2)
-    {
+    public static void save(String author, String saveName, Location corner1, Location corner2) {
         save(author, saveName, corner1, corner2, true);
     }
 
-    public static void save(String author, String saveName, Location corner1, Location corner2, boolean ignoreEntities)
-    {
+    public static void save(String author, String saveName, Location corner1, Location corner2, boolean ignoreEntities) {
         if(corner1 == null)
             throw new IllegalArgumentException("Corner1 cannot be null!");
         if(corner2 == null)
@@ -52,25 +47,21 @@ public final class StructureBlockApi
         save(author, saveName, tmp, LocationHelper.toDimensions(tmp, LocationHelper.getUpCornerLocation(corner1, corner2)), ignoreEntities);
     }
 
-    public static void save(Player player, String saveName, Location corner, Vector dimensions)
-    {
+    public static void save(Player player, String saveName, Location corner, Vector dimensions) {
         save(player, saveName, corner, dimensions, true);
     }
 
-    public static void save(Player player, String saveName, Location corner, Vector dimensions, boolean ignoreEntities)
-    {
+    public static void save(Player player, String saveName, Location corner, Vector dimensions, boolean ignoreEntities) {
         if(player == null)
             throw new IllegalArgumentException("Player cannot be null!");
         save(String.valueOf(player.getUniqueId()), saveName, corner, dimensions, ignoreEntities);
     }
 
-    public static void save(String author, String saveName, Location corner, Vector dimensions)
-    {
+    public static void save(String author, String saveName, Location corner, Vector dimensions) {
         save(author, saveName, corner, dimensions, true);
     }
 
-    public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities)
-    {
+    public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities) {
         if(author == null)
             throw new IllegalArgumentException("Author cannot be null!");
         if(saveName== null)
@@ -92,25 +83,21 @@ public final class StructureBlockApi
         load(player,saveName,location,ignoreEntities, StructureRotation.NONE, StructureMirror.NONE);
     }
 
-    public static void load(Player player, String saveName, Location location, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
-    {
+    public static void load(Player player, String saveName, Location location, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror) {
         if(player == null)
             throw new IllegalArgumentException("Player cannot be null!");
         load(String.valueOf(player.getUniqueId()), saveName, location, ignoreEntities, rotation, mirror);
     }
 
-    public static void load(String author, String saveName, Location location)
-    {
+    public static void load(String author, String saveName, Location location) {
         load(author, saveName,location, true);
     }
 
-    public static void load(String author, String saveName, Location location, boolean ignoreEntities)
-    {
+    public static void load(String author, String saveName, Location location, boolean ignoreEntities) {
         load(author,saveName,location,ignoreEntities, StructureRotation.NONE, StructureMirror.NONE);
     }
 
-    public static void load(String author, String saveName, Location location, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror)
-    {
+    public static void load(String author, String saveName, Location location, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror) {
         if(author == null)
             throw new IllegalArgumentException("Author cannot be null!");
         if(saveName == null)

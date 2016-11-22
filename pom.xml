@@ -10,7 +10,7 @@
     <description>Simple spigot plugin to modify structureblocks on your minecraft server.</description>
     <url>https://github.com/Shynixn/StructureBlockLib</url>
     <packaging>jar</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <developers>
         <developer>
@@ -100,13 +100,20 @@
               <version>1.0</version>
               <systemPath>${basedir}/lib/spigot-1.9.4.jar</systemPath>
         </dependency> 
-            <dependency>
+        <dependency>
               <groupId>net</groupId>
               <artifactId>minecraft110R1</artifactId>
               <scope>system</scope>
               <version>1.0</version>
               <systemPath>${basedir}/lib/spigot-1.10.2.jar</systemPath>
-        </dependency>     
+        </dependency>
+        <dependency>
+            <groupId>net</groupId>
+            <artifactId>minecraft111R1</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/spigot-1.11.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

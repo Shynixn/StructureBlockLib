@@ -116,7 +116,7 @@
               <scope>system</scope>
               <version>1.0</version>
               <systemPath>${basedir}/lib/spigot-1.9.4.jar</systemPath>
-        </dependency> 
+        </dependency>
         <dependency>
               <groupId>net</groupId>
               <artifactId>minecraft110R1</artifactId>
@@ -130,6 +130,31 @@
             <scope>system</scope>
             <version>1.0</version>
             <systemPath>${basedir}/lib/spigot-1.11.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net</groupId>
+            <artifactId>minecraft112-PRE-R1</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/spigot-1.12-pre5.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

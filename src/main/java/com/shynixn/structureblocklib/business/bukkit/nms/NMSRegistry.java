@@ -13,7 +13,9 @@ import org.bukkit.util.Vector;
  */
 public class NMSRegistry {
     public static <T extends StructureBlock> T createStructureBlock(Block block) {
-        if (getServerVersion().equals("v1_11_R1"))
+        if (getServerVersion().equals("v1_12_R1"))
+            return (T) new com.shynixn.structureblocklib.business.bukkit.nms.v1_12_R1.CraftStructureBlock(block);
+        else if (getServerVersion().equals("v1_11_R1"))
             return (T) new com.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock(block);
         else if (getServerVersion().equals("v1_10_R1"))
             return (T) new com.shynixn.structureblocklib.business.bukkit.nms.v1_10_R1.CraftStructureBlock(block);
@@ -25,7 +27,9 @@ public class NMSRegistry {
     }
 
     public static void save(String author, String saveName, Location corner, Vector dimensions, boolean ignoreEntities) {
-        if (getServerVersion().equals("v1_11_R1"))
+        if (getServerVersion().equals("v1_12_R1"))
+            com.shynixn.structureblocklib.business.bukkit.nms.v1_12_R1.CraftStructureBlock.save(author, saveName, corner, dimensions, ignoreEntities);
+        else if (getServerVersion().equals("v1_11_R1"))
             com.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock.save(author, saveName, corner, dimensions, ignoreEntities);
         else if (getServerVersion().equals("v1_10_R1"))
             com.shynixn.structureblocklib.business.bukkit.nms.v1_10_R1.CraftStructureBlock.save(author, saveName, corner, dimensions, ignoreEntities);
@@ -38,7 +42,9 @@ public class NMSRegistry {
     }
 
     public static void load(String author, String saveName, Location location, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror) {
-        if (getServerVersion().equals("v1_11_R1"))
+        if (getServerVersion().equals("v1_12_R1"))
+            com.shynixn.structureblocklib.business.bukkit.nms.v1_12_R1.CraftStructureBlock.load(author, saveName, location, ignoreEntities, rotation, mirror);
+        else if (getServerVersion().equals("v1_11_R1"))
             com.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock.load(author, saveName, location, ignoreEntities, rotation, mirror);
         else if (getServerVersion().equals("v1_10_R1"))
             com.shynixn.structureblocklib.business.bukkit.nms.v1_10_R1.CraftStructureBlock.load(author, saveName, location, ignoreEntities, rotation, mirror);

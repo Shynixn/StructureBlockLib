@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
 public final class StructureBlockApi {
 
     /**
-     * Default
+     * Init
      */
     private StructureBlockApi() {
         super();

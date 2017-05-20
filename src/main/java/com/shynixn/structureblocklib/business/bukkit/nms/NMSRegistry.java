@@ -8,9 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-/**
- * Created by Shynixn
- */
 public class NMSRegistry {
     public static <T extends StructureBlock> T createStructureBlock(Block block) {
         if (getServerVersion().equals("v1_12_R1"))

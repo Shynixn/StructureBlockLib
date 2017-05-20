@@ -1,7 +1,7 @@
 package com.shynixn.structureblocklib.api.entity;
 
 /**
- * Created by Shynixn
+ * Type of mirror
  */
 public enum StructureMirror {
     NONE, LEFT_RIGHT, FRONT_BACK

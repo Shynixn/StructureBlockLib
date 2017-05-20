@@ -1,7 +1,7 @@
 package com.shynixn.structureblocklib.api.entity;
 
 /**
- * Created by Shynixn
+ * Types of rotations
  */
 public enum StructureRotation {
     NONE, ROTATION_90, ROTATION_180, ROTATION_270

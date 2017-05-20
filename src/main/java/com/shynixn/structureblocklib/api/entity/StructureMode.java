@@ -1,7 +1,7 @@
 package com.shynixn.structureblocklib.api.entity;
 
 /**
- * Created by Shynixn
+ * Type of structureBlocks
  */
 public enum StructureMode {
     SAVE, LOAD, CORNER, DATA

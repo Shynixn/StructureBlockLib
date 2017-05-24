@@ -1,4 +1,4 @@
 name: StructureBlockLib
 version: 1.3-SNAPSHOT
 author: Shynixn
-main: com.shynixn.structureblocklib.business.bukkit.StructureBlockLibPlugin
+main: StructureBlockLibPlugin

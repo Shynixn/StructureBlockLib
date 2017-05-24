@@ -1,6 +1,9 @@
-# StructureBlockLib
-[![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib)
-[![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+# StructureBlockLib [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+
+| branch        | status        | download      |
+| ------------- | --------------| --------------| 
+| master        | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib) |[Download latest release (recommend)](https://github.com/Shynixn/StructureBlockLib/releases)|
+| experimental  | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=experimental)](https://travis-ci.org/Shynixn/StructureBlockLib) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/) |
 
 ## Description
 

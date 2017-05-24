@@ -13,7 +13,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without a structureblock. 
-* Version support 1.9.R1 - 1.10.R1
+* Version support 1.9.R1 - 1.12.R1
 * Interface Configuration and sending update packets.
 * Lightweight
 
@@ -29,7 +29,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 <dependency>
      <groupId>com.github.shynixn</groupId>
      <artifactId>structureblocklib</artifactId>
-     <version>1.1</version>
+     <version>1.3</version>
 </dependency>
 ```
 

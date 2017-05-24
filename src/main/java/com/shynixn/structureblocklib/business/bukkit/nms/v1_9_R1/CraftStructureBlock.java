@@ -51,7 +51,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.name = compound.getString("name");
         this.author = compound.getString("author");
         this.metadata = compound.getString("metadata");
-        this.position = new BlockPosition(compound.getInt("posX"),compound.getInt("posY"),compound.getInt("posZ"));
+        this.position = new BlockPosition(compound.getInt("posX"), compound.getInt("posY"), compound.getInt("posZ"));
         this.sizeX = compound.getInt("sizeX");
         this.sizeY = compound.getInt("sizeY");
         this.sizeZ = compound.getInt("sizeZ");
@@ -68,7 +68,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.seed = compound.getLong("seed");
     }
 
-    private NBTTagCompound convert() {
+    NBTTagCompound convert() {
         final NBTTagCompound compound = new NBTTagCompound();
         this.structure.save(compound);
         compound.setString("name", this.name);
@@ -102,7 +102,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setMirrorType(StructureMirror mirrorType) {
-        this.mirrorType = mirrorType;
+        if (mirrorType != null) {
+            this.mirrorType = mirrorType;
+        }
     }
 
     @Override
@@ -147,7 +149,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setRotation(StructureRotation rotation) {
-        this.rotation = rotation;
+        if (rotation != null) {
+            this.rotation = rotation;
+        }
     }
 
     @Override
@@ -157,7 +161,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setAuthor(String author) {
-        this.author = author;
+        if (author != null) {
+            this.author = author;
+        }
     }
 
     @Override
@@ -182,7 +188,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setSaveName(String name) {
-        this.name = name;
+        if (name != null) {
+            this.name = name;
+        }
     }
 
     @Override
@@ -192,7 +200,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setStructureLocation(Location location) {
-        this.position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        if (location != null) {
+            this.position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        }
     }
 
     @Override
@@ -232,7 +242,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setBlockNameMetaData(String blockNameMetaData) {
-        this.metadata = blockNameMetaData;
+        if (blockNameMetaData != null) {
+            this.metadata = blockNameMetaData;
+        }
     }
 
     @Override
@@ -252,6 +264,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setStructureMode(StructureMode structureMode) {
+        if (structureMode == null)
+            throw new IllegalArgumentException("StructureMode cannot be null!");
         this.mode = structureMode;
     }
 
@@ -347,13 +361,13 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         final MinecraftServer var3 = ((CraftWorld) corner.getWorld()).getHandle().getMinecraftServer();
         final DefinedStructureManager var4 = var2.y();
         final DefinedStructure var5 = var4.a(var3, new MinecraftKey(saveName, author));
-        var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, new BlockPosition(dimensions.getBlockX(),dimensions.getBlockY(), dimensions.getBlockZ()), !ignoreEntities, Blocks.BARRIER);
+        var5.a(((CraftWorld) corner.getWorld()).getHandle(), var1, new BlockPosition(dimensions.getBlockX(), dimensions.getBlockY(), dimensions.getBlockZ()), !ignoreEntities, Blocks.BARRIER);
         var5.a(author);
         var4.c(var3, new MinecraftKey(saveName));
     }
 
     public static void load(String author, String saveName, Location corner, boolean ignoreEntities, StructureRotation rotation, StructureMirror mirror) {
-        if(((CraftWorld)corner.getWorld()).getHandle().isClientSide)
+        if (((CraftWorld) corner.getWorld()).getHandle().isClientSide)
             return;
         final BlockPosition vPosition = new BlockPosition(0, 0, 0);
         final BlockPosition var1 = vPosition.a(new BlockPosition(corner.getBlockX(), corner.getBlockY(), corner.getBlockZ()));
@@ -362,6 +376,6 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         final DefinedStructureManager var4 = var2.y();
         final DefinedStructure var5 = var4.a(var3, new MinecraftKey(saveName, author));
         final DefinedStructureInfo var9 = (new DefinedStructureInfo()).a(getBlockMirror(mirror)).a(getBlockRotation(rotation)).a(ignoreEntities).a((ChunkCoordIntPair) null).a((net.minecraft.server.v1_9_R1.Block) null).b(false);
-        var5.a(((CraftWorld)corner.getWorld()).getHandle(), var1, var9);
+        var5.a(((CraftWorld) corner.getWorld()).getHandle(), var1, var9);
     }
 }

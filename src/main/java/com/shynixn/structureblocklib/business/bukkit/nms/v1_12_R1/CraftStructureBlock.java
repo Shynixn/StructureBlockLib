@@ -3,6 +3,7 @@ package com.shynixn.structureblocklib.business.bukkit.nms.v1_12_R1;
 import com.shynixn.structureblocklib.api.entity.*;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlockState;
@@ -31,6 +32,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         super(block);
         final CraftWorld world = (CraftWorld) block.getWorld();
         this.structure = (TileEntityStructure) world.getTileEntityAt(this.getX(), this.getY(), this.getZ());
+        this.refresh();
+    }
+
+    public CraftStructureBlock(TileEntityStructure entityStructure) {
+        super(Material.STRUCTURE_BLOCK);
+        this.structure = entityStructure;
         this.refresh();
     }
 
@@ -68,7 +75,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.seed = compound.getLong("seed");
     }
 
-    private NBTTagCompound convert() {
+    NBTTagCompound convert() {
         NBTTagCompound compound = new NBTTagCompound();
         compound = this.structure.save(compound);
         compound.setString("name", this.name);
@@ -102,7 +109,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setMirrorType(StructureMirror mirrorType) {
-        this.mirrorType = mirrorType;
+        if (mirrorType != null) {
+            this.mirrorType = mirrorType;
+        }
     }
 
     @Override
@@ -147,7 +156,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setRotation(StructureRotation rotation) {
-        this.rotation = rotation;
+        if (rotation != null) {
+            this.rotation = rotation;
+        }
     }
 
     @Override
@@ -157,7 +168,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setAuthor(String author) {
-        this.author = author;
+        if (author != null) {
+            this.author = author;
+        }
     }
 
     @Override
@@ -182,7 +195,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setSaveName(String name) {
-        this.name = name;
+        if (name != null) {
+            this.name = name;
+        }
     }
 
     @Override
@@ -192,7 +207,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setStructureLocation(Location location) {
-        this.position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        if (location != null) {
+            this.position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+        }
     }
 
     @Override
@@ -232,7 +249,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setBlockNameMetaData(String blockNameMetaData) {
-        this.metadata = blockNameMetaData;
+        if (blockNameMetaData != null) {
+            this.metadata = blockNameMetaData;
+        }
     }
 
     @Override
@@ -252,6 +271,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
 
     @Override
     public void setStructureMode(StructureMode structureMode) {
+        if (structureMode == null)
+            throw new IllegalArgumentException("StructureMode cannot be null!");
         this.mode = structureMode;
     }
 

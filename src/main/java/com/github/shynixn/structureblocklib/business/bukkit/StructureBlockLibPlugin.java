@@ -44,7 +44,7 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
     public void onEnable() {
         if (!NMSRegistry.isVersionSupported()) {
             Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "================================================");
-            Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "Petblocks does not support your server version");
+            Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "StructureBlockLib does not support your server version");
             Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "Install v1.9.0 - v1.12.0");
             Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "Plugin gets now disabled!");
             Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.RED + "================================================");

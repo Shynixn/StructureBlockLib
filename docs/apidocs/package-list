@@ -1,0 +1,10 @@
+com.github.shynixn.structureblocklib.api
+com.github.shynixn.structureblocklib.api.entity
+com.github.shynixn.structureblocklib.business.bukkit
+com.github.shynixn.structureblocklib.business.bukkit.nms
+com.github.shynixn.structureblocklib.business.bukkit.nms.v1_10_R1
+com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1
+com.github.shynixn.structureblocklib.business.bukkit.nms.v1_12_R1
+com.github.shynixn.structureblocklib.business.bukkit.nms.v1_9_R1
+com.github.shynixn.structureblocklib.business.bukkit.nms.v1_9_R2
+com.github.shynixn.structureblocklib.lib

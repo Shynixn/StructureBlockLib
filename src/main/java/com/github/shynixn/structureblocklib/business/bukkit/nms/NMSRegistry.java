@@ -57,4 +57,12 @@ public class NMSRegistry {
     private static String getServerVersion() {
         return Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
     }
+
+    public static boolean isVersionSupported() {
+        return getServerVersion().equals("v1_9_R1")
+                || getServerVersion().equals("v1_9_R2")
+                || getServerVersion().equals("v1_10_R1")
+                || getServerVersion().equals("v1_11_R1")
+                || getServerVersion().equals("v1_12_R1");
+    }
 }

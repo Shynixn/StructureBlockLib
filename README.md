@@ -1,6 +1,9 @@
-# StructureBlockLib
-[![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib)
-[![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+# StructureBlockLib [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+
+| branch        | status        | download      |
+| ------------- | --------------| --------------| 
+| master        | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib) |[Download latest release (recommend)](https://github.com/Shynixn/StructureBlockLib/releases)|
+| experimental  | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=experimental)](https://travis-ci.org/Shynixn/StructureBlockLib) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/) |
 
 ## Description
 
@@ -10,7 +13,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without a structureblock. 
-* Version support 1.9.R1 - 1.11.R1
+* Version support 1.9.R1 - 1.12.R1
 * Interface Configuration and sending update packets.
 * Lightweight
 
@@ -26,7 +29,7 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 <dependency>
      <groupId>com.github.shynixn</groupId>
      <artifactId>structureblocklib</artifactId>
-     <version>1.2</version>
+     <version>1.3</version>
 </dependency>
 ```
 

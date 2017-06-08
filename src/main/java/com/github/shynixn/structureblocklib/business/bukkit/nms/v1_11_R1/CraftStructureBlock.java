@@ -2,7 +2,8 @@ package com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1;
 
 import com.github.shynixn.structureblocklib.api.entity.*;
 import net.minecraft.server.v1_11_R1.*;
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.block.CraftBlockState;
@@ -31,6 +32,12 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         super(block);
         final CraftWorld world = (CraftWorld) block.getWorld();
         this.structure = (TileEntityStructure) world.getTileEntityAt(this.getX(), this.getY(), this.getZ());
+        this.refresh();
+    }
+
+    public CraftStructureBlock(TileEntityStructure entityStructure) {
+        super(Material.STRUCTURE_BLOCK);
+        this.structure = entityStructure;
         this.refresh();
     }
 

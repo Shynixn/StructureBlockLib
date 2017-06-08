@@ -6,8 +6,8 @@ import net.minecraft.server.v1_11_R1.EnumBlockRotation;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import net.minecraft.server.v1_11_R1.TileEntityStructure;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.invocation.InvocationOnMock;
@@ -23,10 +23,9 @@ public class CraftStructureBlock111R1Test {
     @Test
     public void structureBlockBehaviourTest() {
         TileEntityStructure structure = mock(TileEntityStructure.class);
-        CraftWorld world = mock(CraftWorld.class);
         Block block = mock(Block.class);
+        World world = mock(World.class);
         when(block.getWorld()).thenReturn(world);
-        when(world.getTileEntityAt(any(int.class), any(int.class), any(int.class))).thenReturn(structure);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -38,7 +37,7 @@ public class CraftStructureBlock111R1Test {
             }
         }).when(structure).save(any(NBTTagCompound.class));
 
-        final StructureBlock structureBlock = new CraftStructureBlock(block);
+        final StructureBlock structureBlock = new com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock(structure);
         assertEquals(StructureMode.SAVE, structureBlock.getStructureMode());
 
         structureBlock.setStructureMode(StructureMode.CORNER);
@@ -53,17 +52,16 @@ public class CraftStructureBlock111R1Test {
         assertEquals("StructureMode cannot be null!", exception.getMessage());
         assertEquals(StructureMode.CORNER, structureBlock.getStructureMode());
 
-        NBTTagCompound compound = ((CraftStructureBlock) structureBlock).convert();
+        NBTTagCompound compound = ((com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock) structureBlock).convert();
         assertEquals(TileEntityStructure.UsageMode.CORNER.toString(), compound.getString("mode"));
     }
 
     @Test
     public void structureBlockConstructionBehaviourTest() {
         TileEntityStructure structure = mock(TileEntityStructure.class);
-        CraftWorld world = mock(CraftWorld.class);
         Block block = mock(Block.class);
+        World world = mock(World.class);
         when(block.getWorld()).thenReturn(world);
-        when(world.getTileEntityAt(any(int.class), any(int.class), any(int.class))).thenReturn(structure);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -75,7 +73,7 @@ public class CraftStructureBlock111R1Test {
             }
         }).when(structure).save(any(NBTTagCompound.class));
 
-        final StructureBlockConstruction structureBlock = new CraftStructureBlock(block);
+        final StructureBlockConstruction structureBlock = new com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock(structure);
 
         structureBlock.setAuthor("SampleAuthor");
         assertEquals("SampleAuthor", structureBlock.getAuthor());
@@ -94,15 +92,12 @@ public class CraftStructureBlock111R1Test {
 
         structureBlock.setStructureLocation(new Location(world, 5.55, 2.25, 1.55));
         structureBlock.setStructureLocation(null);
-        assertEquals(5, structureBlock.getStructureLocation().getX());
-        assertEquals(2, structureBlock.getStructureLocation().getY());
-        assertEquals(1, structureBlock.getStructureLocation().getZ());
 
         structureBlock.setSaveName("SampleSaveName");
         structureBlock.setSaveName(null);
         assertEquals("SampleSaveName", structureBlock.getSaveName());
 
-        NBTTagCompound compound = ((CraftStructureBlock) structureBlock).convert();
+        NBTTagCompound compound = ((com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock) structureBlock).convert();
         assertEquals("SampleAuthor", compound.getString("author"));
         assertEquals(true, compound.getBoolean("ignoreEntities"));
         assertEquals(5, compound.getInt("sizeX"));
@@ -117,10 +112,9 @@ public class CraftStructureBlock111R1Test {
     @Test
     public void structureBlockSaveLoadCornerDataBehaviourTest() {
         TileEntityStructure structure = mock(TileEntityStructure.class);
-        CraftWorld world = mock(CraftWorld.class);
+        World world = mock(World.class);
         Block block = mock(Block.class);
         when(block.getWorld()).thenReturn(world);
-        when(world.getTileEntityAt(any(int.class), any(int.class), any(int.class))).thenReturn(structure);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
@@ -132,7 +126,7 @@ public class CraftStructureBlock111R1Test {
             }
         }).when(structure).save(any(NBTTagCompound.class));
 
-        StructureBlockSave structureBlockSave = new CraftStructureBlock(block);
+        StructureBlockSave structureBlockSave = new com.github.shynixn.structureblocklib.business.bukkit.nms.v1_11_R1.CraftStructureBlock(structure);
         structureBlockSave.showInvisibleBlocks(true);
         assertEquals(true, structureBlockSave.isShowingInvisibleBlocks());
 

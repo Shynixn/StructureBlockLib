@@ -5,6 +5,8 @@
 | master        | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib) |[Download latest release (recommend)](https://github.com/Shynixn/StructureBlockLib/releases)|
 | experimental  | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=experimental)](https://travis-ci.org/Shynixn/StructureBlockLib) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/) |
 
+JavaDocs: https://shynixn.github.io/StructureBlockLib/apidocs/
+
 ## Description
 
 Simple spigot plugin to modify structureblocks on your minecraft server.

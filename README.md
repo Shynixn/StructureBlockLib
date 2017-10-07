@@ -35,7 +35,11 @@ Simple spigot plugin to modify structureblocks on your minecraft server.
 </dependency>
 ```
 
-
+```xml
+dependencies {
+    compile 'com.github.shynixn:structureblocklib:1.3'
+}
+```
 
 ## How to use the it
 

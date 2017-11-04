@@ -6,11 +6,11 @@ install:
     - wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar -P /home/travis/build/Shynixn/StructureBlockLib/lib/
 script:
     - cd /home/travis/build/Shynixn/StructureBlockLib/lib/
-    - java -jar BuildTools.jar --rev 1.9 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
-    - java -jar BuildTools.jar --rev 1.9.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
-    - java -jar BuildTools.jar --rev 1.10 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
-    - java -jar BuildTools.jar --rev 1.11 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
-    - java -jar BuildTools.jar --rev 1.12 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$"
+    - java -jar BuildTools.jar --rev 1.9 > /dev/null
+    - java -jar BuildTools.jar --rev 1.9.4 > /dev/null
+    - java -jar BuildTools.jar --rev 1.10 > /dev/null
+    - java -jar BuildTools.jar --rev 1.11 > /dev/null
+    - java -jar BuildTools.jar --rev 1.12 > /dev/null
     - cd -
     - mvn compile test
 jdk:

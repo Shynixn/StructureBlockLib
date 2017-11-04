@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.shynixn</groupId>
     <artifactId>structureblocklib</artifactId>
-
     <name>StructureBlockLib</name>
     <description>Simple spigot plugin to modify structureblocks on your minecraft server.</description>
     <url>https://github.com/Shynixn/StructureBlockLib</url>
@@ -25,11 +24,35 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:git://github.com/Shynixn/StructureBlockLib.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Shynixn/StructureBlockLib.git</developerConnection>
-        <url>http://github.com/Shynixn/StructureBlockLib.git/tree/master</url>
-    </scm>
+    <properties>
+        <structureblocklib.bukkit.test-server-path>D:/Temp/plugins</structureblocklib.bukkit.test-server-path>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -40,6 +63,7 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
@@ -63,28 +87,54 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.19.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.0.0-M4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.0.0-M4</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
+                        <id>failsafe-integration-tests</id>
+                        <phase>integration-test</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>failsafe-verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
                 <executions>
                     <execution>
-                        <id>sign-artifacts</id>
+                        <id>attach-javadocs</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>sign</goal>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>aggregate</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -93,8 +143,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
                 <version>2.3.2</version>
             </plugin>
@@ -109,7 +159,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>D:\Temp\plugins</outputDirectory>
+                    <outputDirectory>${structureblocklib.bukkit.test-server-path}</outputDirectory>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -120,25 +170,25 @@
 
     <dependencies>
         <dependency>
-              <groupId>net</groupId>
-              <artifactId>minecraft19R1</artifactId>
-              <scope>system</scope>
-              <version>1.0</version>
-              <systemPath>${basedir}/lib/spigot-1.9.jar</systemPath>
+            <groupId>net</groupId>
+            <artifactId>minecraft19R1</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/spigot-1.9.jar</systemPath>
         </dependency>
         <dependency>
-              <groupId>net</groupId>
-              <artifactId>minecraft19R2</artifactId>
-              <scope>system</scope>
-              <version>1.0</version>
-              <systemPath>${basedir}/lib/spigot-1.9.4.jar</systemPath>
+            <groupId>net</groupId>
+            <artifactId>minecraft19R2</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/spigot-1.9.4.jar</systemPath>
         </dependency>
         <dependency>
-              <groupId>net</groupId>
-              <artifactId>minecraft110R1</artifactId>
-              <scope>system</scope>
-              <version>1.0</version>
-              <systemPath>${basedir}/lib/spigot-1.10.2.jar</systemPath>
+            <groupId>net</groupId>
+            <artifactId>minecraft110R1</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/spigot-1.10.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net</groupId>
@@ -157,7 +207,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>RELEASE</version>
+            <version>5.0.0-M4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -168,14 +218,21 @@
         </dependency>
     </dependencies>
 
+    <scm>
+        <connection>scm:git:git://github.com/Shynixn/StructureBlockLib.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Shynixn/StructureBlockLib.git</developerConnection>
+        <url>http://github.com/Shynixn/StructureBlockLib.git/tree/master</url>
+    </scm>
+
     <distributionManagement>
-    <snapshotRepository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
+
 </project>

@@ -6,6 +6,7 @@ import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.Struct
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
@@ -56,9 +57,11 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
         Player player = Bukkit.getPlayer("Shynixn");
 
         PersistenceStructureService persistenceStructureService = StructureBlockApi.INSTANCE.getStructurePersistenceService();
-        StructureSaveConfiguration saveConfiguration = persistenceStructureService.createSaveConfiguration("shynixn", "cool", "world");
+        StructureSaveConfiguration saveConfiguration = persistenceStructureService.createSaveConfiguration("shynixn", "cool4", "world_nether");
 
-        persistenceStructureService.save(saveConfiguration, player.getLocation(), new Vector(5, 5, 5));
+        persistenceStructureService.save(saveConfiguration, player.getLocation(), new Vector(3, 2, 4));
+
+        persistenceStructureService.load(saveConfiguration, new Location(player.getWorld(), 26, 81, 266));
 
     }
 }

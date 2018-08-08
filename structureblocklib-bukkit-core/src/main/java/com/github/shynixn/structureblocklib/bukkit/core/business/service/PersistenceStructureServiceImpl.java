@@ -7,7 +7,6 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.service.Persiste
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import com.github.shynixn.structureblocklib.bukkit.core.persistence.entity.StructureSaveConfigurationEntity;
-import net.minecraft.server.v1_12_R1.DefinedStructure;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -104,7 +103,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(source.getBlockX(), source.getBlockY(), source.getBlockZ()));
             final Object finalSecondBlockPosition;
-            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX(), offSet.getBlockY(), offSet.getBlockZ());
+            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX() + 1, offSet.getBlockY() + 1, offSet.getBlockZ() + 1);
 
             final World saveWorldBukkit;
             if ((saveWorldBukkit = Bukkit.getWorld(saveConfiguration.getWorld())) == null) {
@@ -118,7 +117,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
                     .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
-                            .newInstance(saveConfiguration.getSaveName(), saveConfiguration.getAuthor()));
+                            .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, blockPositionClazz, boolean.class, this.findClazz("net.minecraft.server.VERSION.Block"))
@@ -163,7 +162,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object saveWorld = craftWorldGetHandle.invoke(saveWorldBukkit);
             final Class<?> blockPositionClazz = this.findClazz("net.minecraft.server.VERSION.BlockPosition");
             final Object vPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(0, 0, 0);
-            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", blockPositionClazz)
+            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(target.getBlockX(), target.getBlockY(), target.getBlockZ()));
 
             final Object structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
@@ -182,13 +181,13 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             definedStructureInfoClazz.getDeclaredMethod("a", mirrorClazz).invoke(definedStructureInfo, this.getBlockMirror(mirrorClazz, saveConfiguration.getMirror()));
             definedStructureInfoClazz.getDeclaredMethod("a", rotationClazz).invoke(definedStructureInfo, this.getBlockRotation(rotationClazz, saveConfiguration.getRotation()));
             definedStructureInfoClazz.getDeclaredMethod("a", boolean.class).invoke(definedStructureInfo, saveConfiguration.isIgnoreEntities());
-            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.ChunkCoordIntPair")).invoke(definedStructureInfo, null);
-            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.Block")).invoke(definedStructureInfo, null);
+            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.ChunkCoordIntPair")).invoke(definedStructureInfo, new Object[]{null});
+            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.Block")).invoke(definedStructureInfo, new Object[]{null});
             definedStructureInfoClazz.getDeclaredMethod("b", boolean.class).invoke(definedStructureInfo, false);
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, definedStructureInfoClazz)
-                    .invoke(structureManager, nmsWorld, finalBlockPosition, definedStructureInfo);
+                    .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
 
             return true;
 

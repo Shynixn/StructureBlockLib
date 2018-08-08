@@ -42,7 +42,7 @@ dependencies {
 }
 ```
 
-* Use the dependency api and install the standalone StructureBlockLib.jar
+* Use the dependency api and install the standalone StructureBlockLib.jar.
 Users have to download the StructureBlockLib.jar.
 
 ```xml
@@ -143,6 +143,9 @@ structureBlock.update();
     - mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -DartifactId=spigot112R1 -Dversion=1.12.0-R1.0 -Dpackaging=jar
     - mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar
 ```
+
+* Reimport the StructureBlockLib maven project and execute 'mvn package' afterwards.
+* The generated structureblocklib-bukkit-plugin/target/structureblocklib-bukkit-plugin-version.jar can be used for testing on a server.
 
 ## Licence
 

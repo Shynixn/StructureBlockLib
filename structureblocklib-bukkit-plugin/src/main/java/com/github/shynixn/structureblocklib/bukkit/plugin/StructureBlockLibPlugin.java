@@ -1,7 +1,11 @@
 package com.github.shynixn.structureblocklib.bukkit.plugin;
 
 import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
+import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMode;
+import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlock;
+import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlockSave;
 import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
+import com.github.shynixn.structureblocklib.bukkit.api.business.service.StructureBlockService;
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
@@ -53,15 +57,5 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLib...");
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLib " + this.getDescription().getVersion() + " by Shynixn");
-
-        Player player = Bukkit.getPlayer("Shynixn");
-
-        PersistenceStructureService persistenceStructureService = StructureBlockApi.INSTANCE.getStructurePersistenceService();
-        StructureSaveConfiguration saveConfiguration = persistenceStructureService.createSaveConfiguration("shynixn", "cool4", "world_nether");
-
-        persistenceStructureService.save(saveConfiguration, player.getLocation(), new Vector(3, 2, 4));
-
-        persistenceStructureService.load(saveConfiguration, new Location(player.getWorld(), 26, 81, 266));
-
     }
 }

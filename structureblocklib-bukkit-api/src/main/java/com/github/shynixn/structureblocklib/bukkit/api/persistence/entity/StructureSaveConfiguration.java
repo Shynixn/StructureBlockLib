@@ -98,7 +98,7 @@ public interface StructureSaveConfiguration {
     /**
      * Sets the rotation of the structure.
      *
-     * @return rotation
+     * @param rotation rotation
      */
     void setRotation(StructureRotation rotation);
 

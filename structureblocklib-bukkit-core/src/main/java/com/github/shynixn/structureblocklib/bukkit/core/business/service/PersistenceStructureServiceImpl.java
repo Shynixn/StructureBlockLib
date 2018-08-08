@@ -95,15 +95,28 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
     @Override
     public void save(StructureSaveConfiguration saveConfiguration, Location source, Vector offSet) {
         try {
+            if (offSet.getBlockX() < 0) {
+                source.setX(source.getX() + offSet.getX());
+                offSet.setX(offSet.getBlockX() * -1);
+            }
+            if (offSet.getBlockY() < 0) {
+                source.setY(source.getY() + offSet.getY());
+                offSet.setY(offSet.getBlockY() * -1);
+            }
+            if (offSet.getBlockZ() < 0) {
+                source.setZ(source.getZ() + offSet.getZ());
+                offSet.setZ(offSet.getBlockZ() * -1);
+            }
+
             final Method craftWorldGetHandle = this.findClazz("org.bukkit.craftbukkit.VERSION.CraftWorld").getDeclaredMethod("getHandle");
             final Object nmsWorld = craftWorldGetHandle.invoke(source.getWorld());
             final Class<?> blockPositionClazz = this.findClazz("net.minecraft.server.VERSION.BlockPosition");
             final Class<?> minecraftKeyClazz = this.findClazz("net.minecraft.server.VERSION.MinecraftKey");
             final Object vPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(0, 0, 0);
-            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
+            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(source.getBlockX(), source.getBlockY(), source.getBlockZ()));
             final Object finalSecondBlockPosition;
-            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX() + 1, offSet.getBlockY() + 1, offSet.getBlockZ() + 1);
+            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX() + 1, offSet.getBlockY(), offSet.getBlockZ() + 1);
 
             final World saveWorldBukkit;
             if ((saveWorldBukkit = Bukkit.getWorld(saveConfiguration.getWorld())) == null) {
@@ -111,13 +124,28 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             }
 
             final Object saveWorld = craftWorldGetHandle.invoke(saveWorldBukkit);
-            final Object structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
-            final Object mineCraftServer = this.findClazz("net.minecraft.server.VERSION.World").getDeclaredMethod("getMinecraftServer").invoke(saveWorld);
+            final Object structureManager;
 
-            final Object definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
-                    .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
-                    .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
-                            .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);
+            } else {
+                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
+            }
+
+            final Object mineCraftServer = this.findClazz("net.minecraft.server.VERSION.World").getDeclaredMethod("getMinecraftServer").invoke(saveWorld);
+            final Object definedStructure;
+
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
+                        .getDeclaredMethod("a", minecraftKeyClazz)
+                        .invoke(structureManager, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
+                                .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+            } else {
+                definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
+                        .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
+                        .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
+                                .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+            }
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, blockPositionClazz, boolean.class, this.findClazz("net.minecraft.server.VERSION.Block"))
@@ -126,10 +154,8 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure").getDeclaredMethod("a", String.class)
                     .invoke(definedStructure, saveConfiguration.getAuthor());
 
-            this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
-                    .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class).newInstance(saveConfiguration.getSaveName()));
-
-            Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored structure at ./" + saveConfiguration.getWorld() + "/" + saveConfiguration.getSaveName() + ".nbt.");
+            this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", minecraftKeyClazz)
+                    .invoke(structureManager, minecraftKeyClazz.getDeclaredConstructor(String.class).newInstance(saveConfiguration.getSaveName()));
         } catch (final Exception ex) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to load structure.", ex);
         }
@@ -162,16 +188,30 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object saveWorld = craftWorldGetHandle.invoke(saveWorldBukkit);
             final Class<?> blockPositionClazz = this.findClazz("net.minecraft.server.VERSION.BlockPosition");
             final Object vPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(0, 0, 0);
-            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
+            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(target.getBlockX(), target.getBlockY(), target.getBlockZ()));
 
-            final Object structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
+            final Object structureManager;
+
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);
+            } else {
+                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
+            }
             final Object mineCraftServer = this.findClazz("net.minecraft.server.VERSION.World").getDeclaredMethod("getMinecraftServer").invoke(nmsWorld);
 
-            final Object definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
-                    .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
-                    .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
-                            .newInstance(saveConfiguration.getSaveName(), saveConfiguration.getAuthor()));
+            final Object definedStructure;
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
+                        .getDeclaredMethod("a", minecraftKeyClazz)
+                        .invoke(structureManager, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
+                                .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+            } else {
+                definedStructure = this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager")
+                        .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
+                        .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class)
+                                .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+            }
 
             final Class<?> definedStructureInfoClazz = this.findClazz("net.minecraft.server.VERSION.DefinedStructureInfo");
             final Class mirrorClazz = this.findClazz("net.minecraft.server.VERSION.EnumBlockMirror");
@@ -183,11 +223,18 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             definedStructureInfoClazz.getDeclaredMethod("a", boolean.class).invoke(definedStructureInfo, saveConfiguration.isIgnoreEntities());
             definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.ChunkCoordIntPair")).invoke(definedStructureInfo, new Object[]{null});
             definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.Block")).invoke(definedStructureInfo, new Object[]{null});
-            definedStructureInfoClazz.getDeclaredMethod("b", boolean.class).invoke(definedStructureInfo, false);
 
-            this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
-                    .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, definedStructureInfoClazz)
-                    .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                definedStructureInfoClazz.getDeclaredMethod("c", boolean.class).invoke(definedStructureInfo, false);
+                this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
+                        .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.GeneratorAccess"), blockPositionClazz, definedStructureInfoClazz)
+                        .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+            } else {
+                definedStructureInfoClazz.getDeclaredMethod("b", boolean.class).invoke(definedStructureInfo, false);
+                this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
+                        .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, definedStructureInfoClazz)
+                        .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+            }
 
             return true;
 

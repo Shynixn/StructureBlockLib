@@ -51,18 +51,11 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.refresh();
     }
 
-    /**
-     * @deprecated
-     */
     @Override
     public int getTypeId() {
         return -1;
     }
 
-    /**
-     * @param i i.
-     * @deprecated
-     */
     @Override
     public boolean setTypeId(int i) {
         return false;
@@ -72,7 +65,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
         if (result) {
-            this.structure.save(this.convert());
+            this.structure.load(this.convert());
             this.structure.update();
         }
         return result;

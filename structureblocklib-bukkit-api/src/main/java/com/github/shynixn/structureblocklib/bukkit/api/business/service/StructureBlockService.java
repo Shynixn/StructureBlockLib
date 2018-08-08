@@ -37,6 +37,7 @@ public interface StructureBlockService {
      * location if the block is not already a structureBlock.
      *
      * @param location location
+     * @param <S> structureBlockType.
      * @return structureBlock.
      */
     <S extends StructureBlock> S getOrCreateStructureBlockAt(Location location);

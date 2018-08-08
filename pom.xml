@@ -6,7 +6,7 @@
     <groupId>com.github.shynixn.structureblocklib</groupId>
     <artifactId>root</artifactId>
     <name>StructureBlockLib</name>
-    <description>StructureBlockLib is a bukkit implementation for handling structures on your server.</description>
+    <description>StructureBlockLib is a bukkit implementation for handling structures on spigot server.</description>
     <url>https://github.com/Shynixn/StructureBlockLib</url>
     <modules>
         <module>structureblocklib-bukkit-api</module>

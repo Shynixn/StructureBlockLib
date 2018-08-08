@@ -18,6 +18,8 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlockState;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Method;
+
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
     private final PersistenceStructureService persistenceStructureService = new PersistenceStructureServiceImpl(new LocationCalculationServiceImpl());
     private final TileEntityStructure structure;
@@ -55,7 +57,18 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
         if (result) {
-            this.structure.a(this.convert());
+            try {
+                try {
+                    final Method method = Class.forName("net.minecraft.server.v1_12_R1.TileEntityStructure").getDeclaredMethod("a", Class.forName("net.minecraft.server.v1_12_R1.NBTTagCompound"));
+                    method.invoke(this.structure, this.convert());
+                } catch (final Exception e) {
+                    final Method method = Class.forName("net.minecraft.server.v1_12_R1.TileEntityStructure").getDeclaredMethod("load", Class.forName("net.minecraft.server.v1_12_R1.NBTTagCompound"));
+                    method.invoke(this.structure, this.convert());
+                }
+            } catch (final Exception e) {
+                throw new RuntimeException(e);
+            }
+
             this.structure.update();
         }
         return result;

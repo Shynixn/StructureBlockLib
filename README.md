@@ -9,69 +9,143 @@ JavaDocs: https://shynixn.github.io/StructureBlockLib/apidocs/
 
 ## Description
 
-Simple spigot plugin to modify structureblocks on your minecraft server.
+StructureBlockLib is a bukkit implementation for handling structures on spigot server.
 
 ## Features
 
 * NMS Implementation of the StructureBlock.
-* StructureApi to save or load structures without a structureblock. 
+* StructureApi to save or load structures without an actual structure block. 
 * Version support 1.9.R1 - 1.13.R1
-* Interface Configuration and sending update packets.
 * Lightweight
 
 ## Installation
 
-* Download the source code and copy it into your own projects.
-* [Download the StructureBlockLib.jar](https://github.com/Shynixn/StructureBlockLib/releases) and put it into your plugin folder and use it as library in your own projects.
-* If you are using maven you can add it from the central maven repository.
+There are 3 different ways to use the StructureBlockLib.
 
-### Maven
+* Include and ship StructureBlockLib with your personal project. (Recommend if you are familiar with Maven or gradle) 
+This means users don't have to download the StructureBlockLib.jar.
+
+##### DO NOT FORGET TO RELOCATE THE 'com.github.shynixn.structureblocklib' when shading the dependency.
 
 ```xml
 <dependency>
-     <groupId>com.github.shynixn</groupId>
-     <artifactId>structureblocklib</artifactId>
-     <version>1.3</version>
+     <groupId>com.github.shynixn.structureblocklib</groupId>
+     <artifactId>structureblocklib-bukkit-core</artifactId>
+     <version>1.5.0</version>
+     <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn:structureblocklib:1.3'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.5.0'
 }
 ```
 
+* Use the dependency api and install the standalone StructureBlockLib.jar
+Users have to download the StructureBlockLib.jar.
+
+```xml
+<dependency>
+     <groupId>com.github.shynixn.structureblocklib</groupId>
+     <artifactId>structureblocklib-bukkit-api</artifactId>
+     <version>1.5.0</version>
+     <scope>provided</scope>
+</dependency>
+```
+
+```xml
+dependencies {
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.5.0'
+}
+```
+
+### Maven
+
+
+
 ## How to use the it
 
-#### Obtain an existing structureblock
+StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
+structures via the StructureBlock less Api or with structures will be stored somewhere in your local world folder.
 
+#### Store a structure on your server via location and offset and without a structure block
 ```java
-Block block = new Location(Bukkit.getWorld("world"), 0,0,0).getBlock();
-StructureBlock structureBlock = StructureBlockApi.from(block);
+// Data
+Location corner = new Location(Bukkit.getWorld("world"), 100, 100, 100);
+Vector offSet = new Vector(5, 3, -3);
+
+// Get the business logic service.
+PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+// Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Saves the structure to the storage at the given corner with the given offSet.
+service.save(saveConfiguration, corner, offSet);
+```
+
+#### Store a structure on your server between two locations and without a structure block
+```java
+// Data
+Location corner = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+Location otherCorner = new Location(Bukkit.getWorld("world"), 120, 120, 120);
+
+// Get the business logic service.
+PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+// Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Saves the structure to the storage between the given corners.
+service.save(saveConfiguration, corner, otherCorner);
+```
+
+#### Modify and use an existing structure block
+```java
+// Data
+Location blockLocation = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+
+// Get the business logic service.
+StructureBlockService service = StructureBlockApi.INSTANCE.getStructureBlockService();
+
+// Create or get the structureblock at the location.
+StructureBlock structureBlock = service.getOrCreateStructureBlockAt(blockLocation);
+
+// Modify the structure block.
 structureBlock.setStructureMode(StructureMode.SAVE);
-```
-#### Modify the structureblock
-```java
+
+// Optionally cast it to your current use case.
 StructureBlockSave structureBlockSave = (StructureBlockSave) structureBlock;
-StructureBlockLoad structureBlockLoad = (StructureBlockLoad) structureBlock;
-StructureBlockData structureBlockData = (StructureBlockData) structureBlock;
-StructureBlockCorner structureBlockCorner = (StructureBlockCorner) structureBlock;
 
-structureBlockSave.setSaveName("CustomSaveName");
-structureBlockSave.update();
+// Update the structureblock to see the changes.
+structureBlock.update();
+```
+ 
+
+## Contributing
+
+* Fork the StructureBlockLib project on github and clone it to your local environment.
+* Use BuildTools.jar from spigotmc.org to build to following dependencies.
+
+```text
+    - java -jar BuildTools.jar --rev 1.9
+    - java -jar BuildTools.jar --rev 1.9.4
+    - java -jar BuildTools.jar --rev 1.10
+    - java -jar BuildTools.jar --rev 1.11
+    - java -jar BuildTools.jar --rev 1.12
+    - java -jar BuildTools.jar --rev 1.13
 ```
 
-#### Store a structure without a structureblock by corner and sizeX, sizeY and sizeZ
-```java
-StructureBlockApi.save("author", "mysavename", new Location(Bukkit.getWorld("world"), 200, 5, 200), new Vector(5,5,5));
-```
-#### Store a structure without a structureblock by two corners
-```java
-StructureBlockApi.save("author", "mysavename", new Location(Bukkit.getWorld("world"), 195, 5, 195), new Location(Bukkit.getWorld("world"), 200, 10, 200) );
-```
-#### Load a structure without a structureblock
-```java
-StructureBlockApi.load("author", "mysavename", new Location(Bukkit.getWorld("world"),400, 5, 400));
+* Install the created libraries to your local maven repository.
+
+```text
+    - mvn install:install-file -Dfile=spigot-1.9.jar -DgroupId=org.spigotmc -DartifactId=spigot19R1 -Dversion=1.9.0-R1.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.9.4.jar -DgroupId=org.spigotmc -DartifactId=spigot19R2 -Dversion=1.9.4-R2.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.10.2.jar -DgroupId=org.spigotmc -DartifactId=spigot110R1 -Dversion=1.10.2-R1.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.11.jar -DgroupId=org.spigotmc -DartifactId=spigot111R1 -Dversion=1.11.0-R1.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -DartifactId=spigot112R1 -Dversion=1.12.0-R1.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar
 ```
 
 ## Licence

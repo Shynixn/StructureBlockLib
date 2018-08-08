@@ -3,8 +3,6 @@ package com.github.shynixn.structureblocklib.bukkit.core.persistence.entity;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 /**
  * Created by Shynixn 2018.
@@ -84,7 +82,7 @@ public class StructureSaveConfigurationEntity implements StructureSaveConfigurat
     /**
      * Sets the rotation of the structure.
      *
-     * @return rotation
+     * @param rotation rotation.
      */
     public void setRotation(StructureRotation rotation) {
         this.rotation = rotation;

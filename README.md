@@ -20,9 +20,9 @@ StructureBlockLib is a bukkit implementation for handling structures on spigot s
 
 ## Installation
 
-There are 3 different ways to use the StructureBlockLib.
+There are 2 different ways to use the StructureBlockLib.
 
-* Include and ship StructureBlockLib with your personal project. (Recommend if you are familiar with Maven or gradle) 
+* Include and ship StructureBlockLib with your personal project.
 This means users don't have to download the StructureBlockLib.jar.
 
 ##### DO NOT FORGET TO RELOCATE THE 'com.github.shynixn.structureblocklib' when shading the dependency.
@@ -60,14 +60,10 @@ dependencies {
 }
 ```
 
-### Maven
-
-
-
 ## How to use the it
 
 StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
-structures via the StructureBlock less Api or with structures will be stored somewhere in your local world folder.
+structures via the Api will be stored somewhere in your local world folder.
 
 #### Store a structure on your server via location and offset and without a structure block
 ```java

@@ -7,6 +7,7 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.service.Persiste
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import com.github.shynixn.structureblocklib.bukkit.core.persistence.entity.StructureSaveConfigurationEntity;
+import net.minecraft.server.v1_12_R1.DefinedStructure;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -66,7 +67,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
      */
     @Override
     public StructureSaveConfiguration createSaveConfiguration(String author, String saveName, String world) {
-        return new StructureSaveConfigurationEntity(world, saveName, world);
+        return new StructureSaveConfigurationEntity(world, author, saveName);
     }
 
     /**
@@ -100,10 +101,10 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Class<?> blockPositionClazz = this.findClazz("net.minecraft.server.VERSION.BlockPosition");
             final Class<?> minecraftKeyClazz = this.findClazz("net.minecraft.server.VERSION.MinecraftKey");
             final Object vPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(0, 0, 0);
-            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", blockPositionClazz)
+            final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(source.getBlockX(), source.getBlockY(), source.getBlockZ()));
             final Object finalSecondBlockPosition;
-            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX(), offSet.getBlockY(), offSet.getZ());
+            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX(), offSet.getBlockY(), offSet.getBlockZ());
 
             final World saveWorldBukkit;
             if ((saveWorldBukkit = Bukkit.getWorld(saveConfiguration.getWorld())) == null) {
@@ -120,15 +121,16 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                             .newInstance(saveConfiguration.getSaveName(), saveConfiguration.getAuthor()));
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
-                    .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, blockPositionClazz, boolean.class, this.findClazz("net.minecraft.server.VERSION.World.Block"))
-                    .invoke(definedStructure, nmsWorld, finalBlockPosition, finalSecondBlockPosition, !saveConfiguration.isIgnoreEntities(), Class.forName("net.minecraft.server.VERSION.World.Blocks").getDeclaredField("BARRIER").get(null));
+                    .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, blockPositionClazz, boolean.class, this.findClazz("net.minecraft.server.VERSION.Block"))
+                    .invoke(definedStructure, nmsWorld, finalBlockPosition, finalSecondBlockPosition, !saveConfiguration.isIgnoreEntities(), this.findClazz("net.minecraft.server.VERSION.Blocks").getDeclaredField("BARRIER").get(null));
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure").getDeclaredMethod("a", String.class)
                     .invoke(definedStructure, saveConfiguration.getAuthor());
 
-            this.findClazz("net.minecraft.server.VERSION.DefinedStructure").getDeclaredMethod("c", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
-                    .invoke(definedStructure, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class).newInstance(saveConfiguration.getSaveName()));
+            this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
+                    .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class).newInstance(saveConfiguration.getSaveName()));
 
+            Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored structure at ./" + saveConfiguration.getWorld() + "/" + saveConfiguration.getSaveName() + ".nbt.");
         } catch (final Exception ex) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to load structure.", ex);
         }
@@ -186,7 +188,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, definedStructureInfoClazz)
-                    .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+                    .invoke(structureManager, nmsWorld, finalBlockPosition, definedStructureInfo);
 
             return true;
 

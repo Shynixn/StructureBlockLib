@@ -1,9 +1,14 @@
 package com.github.shynixn.structureblocklib.bukkit.plugin;
 
+import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
+import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
+import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 /**
  * Plugin main which initializes the plugin data.
@@ -47,5 +52,13 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLib...");
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLib " + this.getDescription().getVersion() + " by Shynixn");
+
+        Player player = Bukkit.getPlayer("Shynixn");
+
+        PersistenceStructureService persistenceStructureService = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+        StructureSaveConfiguration saveConfiguration = persistenceStructureService.createSaveConfiguration("shynixn", "cool", "world");
+
+        persistenceStructureService.save(saveConfiguration, player.getLocation(), new Vector(5, 5, 5));
+
     }
 }

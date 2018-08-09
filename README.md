@@ -25,7 +25,7 @@ There are 2 different ways to use the StructureBlockLib.
 * Include and ship StructureBlockLib with your personal project.
 This means users don't have to download the StructureBlockLib.jar.
 
-##### DO NOT FORGET TO RELOCATE THE 'com.github.shynixn.structureblocklib' when shading the dependency.
+##### DO NOT FORGET TO RELOCATE THE PACKAGE 'com.github.shynixn.structureblocklib' WHEN SHADING THE DEPENDENCY.
 
 ```xml
 <dependency>
@@ -60,7 +60,7 @@ dependencies {
 }
 ```
 
-## How to use the it
+## How to use it
 
 StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
 structures via the Api will be stored somewhere in your local world folder.

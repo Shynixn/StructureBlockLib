@@ -1,0 +1,4 @@
+name: StructureBlockLib
+version: 1.5.0
+author: Shynixn
+main: com.github.shynixn.structureblocklib.bukkit.plugin.StructureBlockLibPlugin

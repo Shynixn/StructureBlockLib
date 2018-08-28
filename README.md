@@ -62,8 +62,26 @@ dependencies {
 
 ## How to use it
 
-StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
+Things to notice:
+
+* StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
 structures via the Api will be stored somewhere in your local world folder.
+* Compared to other NBT formats, structures are version independent and structures
+created in lower Minecraft versions can be used in the latest one.
+* Minecraft 1.13+ uses the previously unused author tag to store structures per author. This means structures are stored at a different location than before.
+
+1.12
+```java
+../%world%/structures/%name%.nbt
+```
+
+1.13
+```java
+../%world%/generated/%author%/structures/%name%.nbt
+```
+
+* StructureBlockLib automatically creates a copy of structures created in 1.12 and below to allow
+using structures after upgrading to 1.13.
 
 #### Store a structure on your server via location and offset and without a structure block
 ```java

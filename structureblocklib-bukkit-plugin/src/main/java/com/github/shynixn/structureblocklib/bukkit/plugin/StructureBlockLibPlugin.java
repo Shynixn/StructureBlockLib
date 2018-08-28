@@ -1,19 +1,9 @@
 package com.github.shynixn.structureblocklib.bukkit.plugin;
 
-import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
-import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMode;
-import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlock;
-import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlockSave;
-import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
-import com.github.shynixn.structureblocklib.bukkit.api.business.service.StructureBlockService;
-import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 /**
  * Plugin main which initializes the plugin data.
@@ -57,17 +47,5 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLib...");
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLib " + this.getDescription().getVersion() + " by Shynixn");
-
-        // Data
-        Location target = new Location(Bukkit.getWorld("world"), 100, 100, 120);
-
-// Get the business logic service.
-        PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
-
-    // Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
-        final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
-
-// Load the structure to the target location
-        service.load(saveConfiguration, target);
     }
 }

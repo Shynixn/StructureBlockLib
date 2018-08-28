@@ -57,5 +57,17 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLib...");
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLib " + this.getDescription().getVersion() + " by Shynixn");
+
+        // Data
+        Location target = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+
+// Get the business logic service.
+        PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+    // Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+        final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Load the structure to the target location
+        service.load(saveConfiguration, target);
     }
 }

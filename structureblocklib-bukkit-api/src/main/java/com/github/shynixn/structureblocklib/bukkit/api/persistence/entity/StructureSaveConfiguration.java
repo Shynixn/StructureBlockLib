@@ -105,7 +105,7 @@ public interface StructureSaveConfiguration {
     /**
      * Returns the mirror of the structure.
      *
-     * @return mirro
+     * @return mirror
      */
     StructureMirror getMirror();
 

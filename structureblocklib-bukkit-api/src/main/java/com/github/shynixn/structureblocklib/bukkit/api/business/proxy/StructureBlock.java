@@ -5,14 +5,14 @@ import org.bukkit.block.BlockState;
 
 public interface StructureBlock extends BlockState {
     /**
-     * Changes the type of the structureBlock
+     * Changes the type of the structureBlock.
      *
      * @param structureMode structureMode
      */
     void setStructureMode(StructureMode structureMode);
 
     /**
-     * Returns the type of the structureBlock
+     * Returns the type of the structureBlock.
      *
      * @return structureMode
      */

@@ -15,7 +15,7 @@ StructureBlockLib is a bukkit implementation for handling structures on spigot s
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without an actual structure block. 
-* Version support 1.9.R1 - 1.13.R1
+* Version support 1.9.R1 - 1.13.R2
 * Lightweight
 
 ## Installation
@@ -31,14 +31,14 @@ This means users don't have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>1.5.0</version>
+     <version>1.6.0</version>
      <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.5.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.6.0'
 }
 ```
 
@@ -49,21 +49,39 @@ Users have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>1.5.0</version>
+     <version>1.6.0</version>
      <scope>provided</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.5.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.6.0'
 }
 ```
 
 ## How to use it
 
-StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
+Things to notice:
+
+* StructureBlockLib wraps around the default structure storage of Minecraft. This means all your created
 structures via the Api will be stored somewhere in your local world folder.
+* Compared to other NBT formats, structures are version independent and structures
+created in lower Minecraft versions can be used in the latest one.
+* Minecraft 1.13+ uses the previously unused author tag to store structures per author. This means structures are stored at a different location than before.
+
+1.12
+```java
+../%world%/structures/%name%.nbt
+```
+
+1.13
+```java
+../%world%/generated/%author%/structures/%name%.nbt
+```
+
+* StructureBlockLib automatically creates a copy of structures created in 1.12 and below to allow
+using structures after upgrading to 1.13.
 
 #### Store a structure on your server via location and offset and without a structure block
 ```java
@@ -97,6 +115,21 @@ final StructureSaveConfiguration saveConfiguration = service.createSaveConfigura
 service.save(saveConfiguration, corner, otherCorner);
 ```
 
+#### Load a structure from the storage into the world
+```java
+// Data
+Location target = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+
+// Get the business logic service.
+PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+// Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Load the structure to the target location
+service.load(saveConfiguration, target);
+```
+
 #### Modify and use an existing structure block
 ```java
 // Data
@@ -122,7 +155,7 @@ structureBlock.update();
 ## Contributing
 
 * Fork the StructureBlockLib project on github and clone it to your local environment.
-* Use BuildTools.jar from spigotmc.org to build to following dependencies.
+* Use BuildTools.jar from spigotmc.org to build the following dependencies.
 
 ```text
     - java -jar BuildTools.jar --rev 1.9
@@ -131,6 +164,7 @@ structureBlock.update();
     - java -jar BuildTools.jar --rev 1.11
     - java -jar BuildTools.jar --rev 1.12
     - java -jar BuildTools.jar --rev 1.13
+    - java -jar BuildTools.jar --rev 1.13.1
 ```
 
 * Install the created libraries to your local maven repository.
@@ -142,6 +176,7 @@ structureBlock.update();
     - mvn install:install-file -Dfile=spigot-1.11.jar -DgroupId=org.spigotmc -DartifactId=spigot111R1 -Dversion=1.11.0-R1.0 -Dpackaging=jar
     - mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -DartifactId=spigot112R1 -Dversion=1.12.0-R1.0 -Dpackaging=jar
     - mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar
+    - mvn install:install-file -Dfile=spigot-1.13.1.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.1-R2.0 -Dpackaging=jar
 ```
 
 * Reimport the StructureBlockLib maven project and execute 'mvn package' afterwards.

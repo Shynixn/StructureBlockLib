@@ -7,11 +7,15 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.service.Persiste
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import com.github.shynixn.structureblocklib.bukkit.core.persistence.entity.StructureSaveConfigurationEntity;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
@@ -124,14 +128,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             }
 
             final Object saveWorld = craftWorldGetHandle.invoke(saveWorldBukkit);
-            final Object structureManager;
-
-            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
-                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);
-            } else {
-                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
-            }
-
+            final Object structureManager = this.findStructureManager(saveWorld);
             final Object mineCraftServer = this.findClazz("net.minecraft.server.VERSION.World").getDeclaredMethod("getMinecraftServer").invoke(saveWorld);
             final Object definedStructure;
 
@@ -154,8 +151,26 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure").getDeclaredMethod("a", String.class)
                     .invoke(definedStructure, saveConfiguration.getAuthor());
 
-            this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", minecraftKeyClazz)
-                    .invoke(structureManager, minecraftKeyClazz.getDeclaredConstructor(String.class).newInstance(saveConfiguration.getSaveName()));
+            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+                this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", minecraftKeyClazz)
+                        .invoke(structureManager, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class).newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+                Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored structure to ../" + saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+            } else {
+                this.findClazz("net.minecraft.server.VERSION.DefinedStructureManager").getDeclaredMethod("c", this.findClazz("net.minecraft.server.VERSION.MinecraftServer"), minecraftKeyClazz)
+                        .invoke(structureManager, mineCraftServer, minecraftKeyClazz.getDeclaredConstructor(String.class, String.class).newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
+
+                Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored structure to ../" + saveWorldBukkit.getName() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+
+                try {
+                    final File sourceFile = new File(saveWorldBukkit.getName() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+                    final File targetFile = new File(saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+                    FileUtils.copyFile(sourceFile, targetFile);
+
+                    Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored 1.13 compatibility structure to ../" + saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+                } catch (final IOException ex) {
+                    Bukkit.getLogger().log(Level.WARNING, "Failed to create compatibility structure copy.", ex);
+                }
+            }
         } catch (final Exception ex) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to load structure.", ex);
         }
@@ -191,13 +206,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(target.getBlockX(), target.getBlockY(), target.getBlockZ()));
 
-            final Object structureManager;
-
-            if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
-                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);
-            } else {
-                structureManager = this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
-            }
+            final Object structureManager = this.findStructureManager(saveWorld);
             final Object mineCraftServer = this.findClazz("net.minecraft.server.VERSION.World").getDeclaredMethod("getMinecraftServer").invoke(nmsWorld);
 
             final Object definedStructure;
@@ -263,6 +272,16 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
         }
 
         return null;
+    }
+
+    private Object findStructureManager(Object saveWorld) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R2)) {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("D").invoke(saveWorld);
+        } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);
+        } else {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("y").invoke(saveWorld);
+        }
     }
 
     @SuppressWarnings("unchecked")

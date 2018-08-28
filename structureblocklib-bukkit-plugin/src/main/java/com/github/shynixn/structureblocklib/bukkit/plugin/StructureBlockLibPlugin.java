@@ -1,19 +1,9 @@
 package com.github.shynixn.structureblocklib.bukkit.plugin;
 
-import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
-import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMode;
-import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlock;
-import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlockSave;
-import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
-import com.github.shynixn.structureblocklib.bukkit.api.business.service.StructureBlockService;
-import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 /**
  * Plugin main which initializes the plugin data.

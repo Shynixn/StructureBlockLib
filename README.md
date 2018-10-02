@@ -1,9 +1,9 @@
-# StructureBlockLib [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
+# StructureBlockLib  [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.structureblocklib/structureblocklib-bukkit-api/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.structureblocklib/structureblocklib-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
 
-| branch        | status        | download      |
-| ------------- | --------------| --------------| 
-| master        | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=master)](https://travis-ci.org/Shynixn/StructureBlockLib) |[Download latest release (recommend)](https://github.com/Shynixn/StructureBlockLib/releases)|
-| experimental  | [![Build Status](https://travis-ci.org/Shynixn/StructureBlockLib.svg?branch=experimental)](https://travis-ci.org/Shynixn/StructureBlockLib) | [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/) |
+| branch        | status        | coverage | version | download |
+| ------------- | ------------- | -------- | --------| ---------| 
+| master        | [![Build Status](https://img.shields.io/travis/Shynixn/StructureBlockLib/master.svg?style=flat-square)](https://travis-ci.org/Shynixn/StructureBlockLib) | [![Coverage](https://img.shields.io/codecov/c/github/shynixn/structureblocklib/master.svg?style=flat-square)](https://codecov.io/gh/Shynixn/StructureBlockLib/branch/master)|![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square)  |[Download latest release](https://github.com/Shynixn/StructureBlockLib/releases)|
+| experimental   | [![Build Status](https://img.shields.io/travis/Shynixn/StructureBlockLib/experimental.svg?style=flat-square)](https://travis-ci.org/Shynixn/StructureBlockLib)|[![Coverage](https://img.shields.io/codecov/c/github/shynixn/structureblocklib/experimental.svg?style=flat-square)](https://codecov.io/gh/Shynixn/StructureBlockLib/branch/development) |![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/structureblocklib-bukkit-plugin/) |
 
 JavaDocs: https://shynixn.github.io/StructureBlockLib/apidocs/
 

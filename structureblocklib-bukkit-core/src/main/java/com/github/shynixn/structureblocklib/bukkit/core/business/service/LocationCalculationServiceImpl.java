@@ -56,18 +56,25 @@ public class LocationCalculationServiceImpl implements LocationCalculationServic
         final int x;
         final int y;
         final int z;
-        if (corner1.getBlockX() < corner2.getBlockX())
+
+        if (corner1.getBlockX() < corner2.getBlockX()) {
             x = corner1.getBlockX();
-        else
+        } else {
             x = corner2.getBlockX();
-        if (corner1.getBlockY() < corner2.getBlockY())
+        }
+
+        if (corner1.getBlockY() < corner2.getBlockY()) {
             y = corner1.getBlockY();
-        else
+        } else {
             y = corner2.getBlockY();
-        if (corner1.getBlockZ() < corner2.getBlockZ())
+        }
+
+        if (corner1.getBlockZ() < corner2.getBlockZ()) {
             z = corner1.getBlockZ();
-        else
+        } else {
             z = corner2.getBlockZ();
+        }
+
         return new Location(corner1.getWorld(), x, y, z);
     }
 
@@ -83,18 +90,25 @@ public class LocationCalculationServiceImpl implements LocationCalculationServic
         final int x;
         final int y;
         final int z;
-        if (corner1.getBlockX() > corner2.getBlockX())
+
+        if (corner1.getBlockX() > corner2.getBlockX()) {
             x = corner1.getBlockX();
-        else
+        } else {
             x = corner2.getBlockX();
-        if (corner1.getBlockY() > corner2.getBlockY())
+        }
+
+        if (corner1.getBlockY() > corner2.getBlockY()) {
             y = corner1.getBlockY();
-        else
+        } else {
             y = corner2.getBlockY();
-        if (corner1.getBlockZ() > corner2.getBlockZ())
+        }
+
+        if (corner1.getBlockZ() > corner2.getBlockZ()) {
             z = corner1.getBlockZ();
-        else
+        } else {
             z = corner2.getBlockZ();
+        }
+
         return new Location(corner1.getWorld(), x, y, z);
     }
 }

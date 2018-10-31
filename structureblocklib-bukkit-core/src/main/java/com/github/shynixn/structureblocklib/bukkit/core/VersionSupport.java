@@ -3,6 +3,8 @@ package com.github.shynixn.structureblocklib.bukkit.core;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.util.logging.Level;
+
 /**
  * Enum to check for supported server versions.
  * <p>
@@ -182,13 +184,18 @@ public enum VersionSupport {
      * @return serverVersion
      */
     public static VersionSupport getServerVersion() {
-        if (Bukkit.getServer() == null || Bukkit.getServer().getClass().getPackage() == null)
-            return null;
-        final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-        for (final VersionSupport versionSupport : VersionSupport.values()) {
-            if (versionSupport.getVersionText().equals(version))
-                return versionSupport;
+        try {
+            if (Bukkit.getServer() == null || Bukkit.getServer().getClass().getPackage() == null)
+                return null;
+            final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+            for (final VersionSupport versionSupport : VersionSupport.values()) {
+                if (versionSupport.getVersionText().equals(version))
+                    return versionSupport;
+            }
+        } catch (final Exception e) {
+            Bukkit.getLogger().log(Level.WARNING, "Failed to get server version.", e);
         }
+
         return null;
     }
 }

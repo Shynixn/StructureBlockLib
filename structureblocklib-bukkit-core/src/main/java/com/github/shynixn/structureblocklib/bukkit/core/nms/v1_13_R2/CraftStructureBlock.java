@@ -41,7 +41,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public CraftStructureBlock(Block block) {
         super(block);
         final CraftWorld world = (CraftWorld) block.getWorld();
-        this.structure = (TileEntityStructure) world.getTileEntityAt(this.getX(), this.getY(), this.getZ());
+        this.structure = (TileEntityStructure) world.getHandle().getTileEntity(new BlockPosition(this.getX(), this.getY(), this.getZ()));
         this.refresh();
     }
 

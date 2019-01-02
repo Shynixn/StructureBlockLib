@@ -31,14 +31,14 @@ This means users don't have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>1.8.0</version>
+     <version>1.8.1</version>
      <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.8.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.8.1'
 }
 ```
 
@@ -49,14 +49,14 @@ Users have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>1.8.0</version>
+     <version>1.8.1</version>
      <scope>provided</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.8.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.8.1'
 }
 ```
 
@@ -127,7 +127,7 @@ PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePer
 final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
 
 // Load the structure to the target location
-service.load(saveConfiguration, target);
+boolean structureExists = service.load(saveConfiguration, target);
 ```
 
 #### Modify and use an existing structure block

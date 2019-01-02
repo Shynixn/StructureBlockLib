@@ -1,4 +1,4 @@
 name: StructureBlockLib
-version: 1.8.0
+version: 1.8.1-SNAPSHOT
 author: Shynixn
 main: com.github.shynixn.structureblocklib.bukkit.plugin.StructureBlockLibPlugin

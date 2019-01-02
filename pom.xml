@@ -14,13 +14,20 @@
         <module>structureblocklib-bukkit-plugin</module>
     </modules>
     <packaging>pom</packaging>
-    <version>1.8.0</version>
+    <version>1.8.1-SNAPSHOT</version>
 
     <developers>
         <developer>
             <name>Shynixn</name>
         </developer>
     </developers>
+
+    <contributors>
+        <contributor>
+            <name>HielkePlugins</name>
+            <url>https://github.com/HielkePlugins</url>
+        </contributor>
+    </contributors>
 
     <licenses>
         <license>

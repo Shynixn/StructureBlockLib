@@ -186,6 +186,10 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
     @Override
     public boolean load(StructureSaveConfiguration saveConfiguration, Location target) {
         try {
+            if (!this.structureExists(saveConfiguration)) {
+                return false;
+            }
+
             final Method craftWorldGetHandle = this.findClazz("org.bukkit.craftbukkit.VERSION.CraftWorld").getDeclaredMethod("getHandle");
             final Class<?> minecraftKeyClazz = this.findClazz("net.minecraft.server.VERSION.MinecraftKey");
             final Object nmsWorld = craftWorldGetHandle.invoke(target.getWorld());
@@ -272,6 +276,24 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the structure file specified in the given configuration actually exists.
+     *
+     * @param configuration configuration.
+     * @return file exists.
+     */
+    private boolean structureExists(StructureSaveConfiguration configuration) {
+        final File file;
+
+        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
+            file = new File(configuration.getWorld() + File.separator + "generated" + File.separator + configuration.getAuthor() + File.separator + "structures" + File.separator + configuration.getSaveName() + ".nbt");
+        } else {
+            file = new File(configuration.getWorld() + File.separator + "structures" + File.separator + configuration.getSaveName() + ".nbt");
+        }
+
+        return file.isFile();
     }
 
     private Object findStructureManager(Object saveWorld) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {

@@ -120,7 +120,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             final Object finalBlockPosition = blockPositionClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.BaseBlockPosition"))
                     .invoke(vPosition, blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(source.getBlockX(), source.getBlockY(), source.getBlockZ()));
             final Object finalSecondBlockPosition;
-            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX() + 1, offSet.getBlockY(), offSet.getBlockZ() + 1);
+            finalSecondBlockPosition = blockPositionClazz.getDeclaredConstructor(int.class, int.class, int.class).newInstance(offSet.getBlockX() + 1, offSet.getBlockY() + 1, offSet.getBlockZ() + 1);
 
             final World saveWorldBukkit;
             if ((saveWorldBukkit = Bukkit.getWorld(saveConfiguration.getWorld())) == null) {

@@ -15,7 +15,7 @@ StructureBlockLib is a bukkit implementation for handling structures on spigot s
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without an actual structure block. 
-* Version support 1.9.R1 - 1.13.R2
+* Version support 1.9.R1 - 1.14.R1
 * Lightweight
 
 ## Installation
@@ -31,14 +31,14 @@ This means users don't have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>1.8.2</version>
+     <version>1.9.0</version>
      <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.8.2'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.9.0'
 }
 ```
 
@@ -49,14 +49,14 @@ Users have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>1.8.2</version>
+     <version>1.9.0</version>
      <scope>provided</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.8.2'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.9.0'
 }
 ```
 
@@ -166,6 +166,7 @@ java -jar BuildTools.jar --rev 1.12
 java -jar BuildTools.jar --rev 1.13
 java -jar BuildTools.jar --rev 1.13.1
 java -jar BuildTools.jar --rev 1.13.2
+java -jar BuildTools.jar --rev 1.14.2
 ```
 
 * Install the created libraries to your local maven repository.
@@ -179,6 +180,7 @@ mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -Dartifac
 mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar
 mvn install:install-file -Dfile=spigot-1.13.1.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.1-R2.0 -Dpackaging=jar
 mvn install:install-file -Dfile=spigot-1.13.2.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.2-R2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=spigot-1.14.2.jar -DgroupId=org.spigotmc -DartifactId=spigot114R1 -Dversion=1.14.1-R1.0 -Dpackaging=jar
 ```
 
 * Reimport the StructureBlockLib maven project and execute 'mvn package' afterwards.

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>root</artifactId>
         <groupId>com.github.shynixn.structureblocklib</groupId>
-        <version>1.8.2</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,13 +15,13 @@
         <dependency>
             <groupId>com.github.shynixn.structureblocklib</groupId>
             <artifactId>structureblocklib-bukkit-core</artifactId>
-            <version>1.8.2</version>
+            <version>1.9.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot113R2</artifactId>
-            <version>1.13.2-R2.0</version>
+            <artifactId>spigot114R1</artifactId>
+            <version>1.14.1-R1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

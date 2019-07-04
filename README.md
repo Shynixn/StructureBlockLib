@@ -155,36 +155,18 @@ structureBlock.update();
 ## Contributing
 
 * Fork the StructureBlockLib project on github and clone it to your local environment.
-* Use BuildTools.jar from spigotmc.org to build the following dependencies.
+* Execute gradle sync for dependencies.
+* Install the additional spigot dependencies by executing the following gradle task.
 
-```text
-java -jar BuildTools.jar --rev 1.9
-java -jar BuildTools.jar --rev 1.9.4
-java -jar BuildTools.jar --rev 1.10
-java -jar BuildTools.jar --rev 1.11
-java -jar BuildTools.jar --rev 1.12
-java -jar BuildTools.jar --rev 1.13
-java -jar BuildTools.jar --rev 1.13.1
-java -jar BuildTools.jar --rev 1.13.2
-java -jar BuildTools.jar --rev 1.14.2
+```xml
+[./gradlew|gradlew.bat] downloadDependencies
 ```
 
-* Install the created libraries to your local maven repository.
+* Build the module files by executing the following gradle task.
 
-```text
-mvn install:install-file -Dfile=spigot-1.9.jar -DgroupId=org.spigotmc -DartifactId=spigot19R1 -Dversion=1.9.0-R1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.9.4.jar -DgroupId=org.spigotmc -DartifactId=spigot19R2 -Dversion=1.9.4-R2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.10.2.jar -DgroupId=org.spigotmc -DartifactId=spigot110R1 -Dversion=1.10.2-R1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.11.jar -DgroupId=org.spigotmc -DartifactId=spigot111R1 -Dversion=1.11.0-R1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -DartifactId=spigot112R1 -Dversion=1.12.0-R1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.13.1.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.1-R2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.13.2.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.2-R2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=spigot-1.14.2.jar -DgroupId=org.spigotmc -DartifactId=spigot114R1 -Dversion=1.14.1-R1.0 -Dpackaging=jar
+```xml
+[./gradlew|gradlew.bat] shadowJar
 ```
-
-* Reimport the StructureBlockLib maven project and execute 'mvn package' afterwards.
-* The generated structureblocklib-bukkit-plugin/target/structureblocklib-bukkit-plugin-version.jar can be used for testing on a server.
 
 ## Licence
 

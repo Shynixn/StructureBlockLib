@@ -1,1 +1,5 @@
-'.idea' 
+.idea/*
+*.iml
+local.properties
+*.log
+*.class

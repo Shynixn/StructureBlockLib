@@ -235,7 +235,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             definedStructureInfoClazz.getDeclaredMethod("a", rotationClazz).invoke(definedStructureInfo, this.getBlockRotation(rotationClazz, saveConfiguration.getRotation()));
             definedStructureInfoClazz.getDeclaredMethod("a", boolean.class).invoke(definedStructureInfo, saveConfiguration.isIgnoreEntities());
             definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.ChunkCoordIntPair")).invoke(definedStructureInfo, new Object[]{null});
-            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.Block")).invoke(definedStructureInfo, new Object[]{null});
+            definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.BlockPosition")).invoke(definedStructureInfo, new Object[]{null});
 
             if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
                 definedStructureInfoClazz.getDeclaredMethod("c", boolean.class).invoke(definedStructureInfo, false);
@@ -297,7 +297,9 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
     }
 
     private Object findStructureManager(Object saveWorld) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R2)) {
+        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_14_R1)) {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("r").invoke(saveWorld);
+        } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R2)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("D").invoke(saveWorld);
         } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("C").invoke(saveWorld);

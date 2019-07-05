@@ -228,15 +228,17 @@ task downloadDependencies(type: Exec) {
     def temporary13File = new File(folder, "spigot-1.13.jar")
 
     if (!temporary13File.exists()) {
-        new URL('https://mcmirror.io/files/Spigot/Spigot-1.13-fe3ab0d_162bda9-20180815-2348.jar').withInputStream { i ->
-            file.withOutputStream {
-                it << i
-            }
-        }
+        def connection = new URL('https://mcmirror.io/files/Spigot/Spigot-1.13-fe3ab0d_162bda9-20180815-2348.jar').openConnection()
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+
+        def out = new BufferedOutputStream(new FileOutputStream(temporary13File))
+        out << connection.inputStream
+
+        out.close()
     }
 
-    /* def text = "cd build/buildtools"
-      text += " && java -jar BuildTools.jar --rev 1.9"
+    def text = "cd build/buildtools"
+    /*   text += " && java -jar BuildTools.jar --rev 1.9"
      text += " && mvn install:install-file -Dfile=spigot-1.9.jar -DgroupId=org.spigotmc -DartifactId=spigot19R1 -Dversion=1.9.0-R1.0 -Dpackaging=jar"
      text += " && java -jar BuildTools.jar --rev 1.9.4"
      text += " && mvn install:install-file -Dfile=spigot-1.9.4.jar -DgroupId=org.spigotmc -DartifactId=spigot19R2 -Dversion=1.9.4-R2.0 -Dpackaging=jar"

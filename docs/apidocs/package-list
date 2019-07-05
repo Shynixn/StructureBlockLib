@@ -10,7 +10,10 @@ com.github.shynixn.structureblocklib.bukkit.core.nms.v1_11_R1
 com.github.shynixn.structureblocklib.bukkit.core.nms.v1_12_R1
 com.github.shynixn.structureblocklib.bukkit.core.nms.v1_13_R1
 com.github.shynixn.structureblocklib.bukkit.core.nms.v1_13_R2
+com.github.shynixn.structureblocklib.bukkit.core.nms.v1_14_R1
 com.github.shynixn.structureblocklib.bukkit.core.nms.v1_9_R1
 com.github.shynixn.structureblocklib.bukkit.core.nms.v1_9_R2
 com.github.shynixn.structureblocklib.bukkit.core.persistence.entity
 com.github.shynixn.structureblocklib.bukkit.plugin
+com.github.shynixn.structureblocklibsample
+com.github.shynixn.structureblocklibsample.commandexecutor

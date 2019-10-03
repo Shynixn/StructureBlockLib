@@ -152,7 +152,6 @@ StructureBlockSave structureBlockSave = (StructureBlockSave) structureBlock;
 structureBlock.update();
 ```
  
-
 ## Contributing
 
 * Fork the StructureBlockLib project on github and clone it to your local environment.

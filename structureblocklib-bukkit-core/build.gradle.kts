@@ -4,18 +4,20 @@ plugins {
     id("com.github.johnrengelman.shadow") version("2.0.4")
 }
 
-tasks.withType<ShadowJar> {
-    archiveName = "$baseName-$version.$extension"
-}
-
 publishing {
     publications {
         (findByName("mavenJava") as MavenPublication).artifact(tasks.findByName("shadowJar")!!)
     }
 }
 
+tasks.withType<ShadowJar> {
+    dependsOn("jar")
+    archiveName = "$baseName-$version.$extension"
+}
+
 dependencies {
     implementation(project(":structureblocklib-bukkit-api"))
+    implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-114R1"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-115R1"))
 
     compileOnly("org.spigotmc:spigot19R1:1.9.0-R1.0")

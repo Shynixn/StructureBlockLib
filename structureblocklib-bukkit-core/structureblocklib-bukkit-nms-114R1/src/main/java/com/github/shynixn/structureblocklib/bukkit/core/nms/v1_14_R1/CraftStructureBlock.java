@@ -1,5 +1,6 @@
 package com.github.shynixn.structureblocklib.bukkit.core.nms.v1_14_R1;
 
+import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureRotation;
@@ -8,8 +9,6 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureB
 import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlockSave;
 import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
-import com.github.shynixn.structureblocklib.bukkit.core.business.service.LocationCalculationServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.core.business.service.PersistenceStructureServiceImpl;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +18,7 @@ import org.bukkit.craftbukkit.v1_14_R1.block.CraftBlockState;
 import org.bukkit.util.Vector;
 
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
-    private final PersistenceStructureService persistenceStructureService = new PersistenceStructureServiceImpl(new LocationCalculationServiceImpl());
+    private final PersistenceStructureService persistenceStructureService = StructureBlockApi.INSTANCE.getStructurePersistenceService();
     private final TileEntityStructure structure;
 
     private StructureMirror mirrorType;
@@ -49,16 +48,6 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         super(Material.STRUCTURE_BLOCK);
         this.structure = entityStructure;
         this.refresh();
-    }
-
-    @Override
-    public int getTypeId() {
-        return -1;
-    }
-
-    @Override
-    public boolean setTypeId(int i) {
-        return false;
     }
 
     @Override

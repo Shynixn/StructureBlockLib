@@ -16,6 +16,7 @@ publishing {
 
 dependencies {
     implementation(project(":structureblocklib-bukkit-api"))
+    implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-115R1"))
 
     compileOnly("org.spigotmc:spigot19R1:1.9.0-R1.0")
     compileOnly("org.spigotmc:spigot19R2:1.9.4-R2.0")

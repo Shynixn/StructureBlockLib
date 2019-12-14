@@ -17,6 +17,16 @@ publishing {
     }
 }
 
+tasks.register<Exec>("dockerJar") {
+    dependsOn("shadowJar")
+
+    commandLine = if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        listOf("cmd", "/c", "docker cp build/libs/. structureblocklib:/minecraft/plugins")
+    } else {
+        listOf("sh", "-c", "docker cp build/libs/. structureblocklib:/minecraft/plugins")
+    }
+}
+
 dependencies {
     implementation(project(":structureblocklib-bukkit-api"))
     implementation(project(":structureblocklib-bukkit-core"))

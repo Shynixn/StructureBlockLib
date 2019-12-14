@@ -53,27 +53,9 @@ public class LocationCalculationServiceImpl implements LocationCalculationServic
      */
     @Override
     public Location getDownCornerLocation(Location corner1, Location corner2) {
-        final int x;
-        final int y;
-        final int z;
-
-        if (corner1.getBlockX() < corner2.getBlockX()) {
-            x = corner1.getBlockX();
-        } else {
-            x = corner2.getBlockX();
-        }
-
-        if (corner1.getBlockY() < corner2.getBlockY()) {
-            y = corner1.getBlockY();
-        } else {
-            y = corner2.getBlockY();
-        }
-
-        if (corner1.getBlockZ() < corner2.getBlockZ()) {
-            z = corner1.getBlockZ();
-        } else {
-            z = corner2.getBlockZ();
-        }
+        final int x = Math.min(corner1.getBlockX(), corner2.getBlockX());
+        final int y = Math.min(corner1.getBlockY(), corner2.getBlockY());
+        final int z = Math.min(corner1.getBlockZ(), corner2.getBlockZ());
 
         return new Location(corner1.getWorld(), x, y, z);
     }
@@ -87,27 +69,9 @@ public class LocationCalculationServiceImpl implements LocationCalculationServic
      */
     @Override
     public Location getUpCornerLocation(Location corner1, Location corner2) {
-        final int x;
-        final int y;
-        final int z;
-
-        if (corner1.getBlockX() > corner2.getBlockX()) {
-            x = corner1.getBlockX();
-        } else {
-            x = corner2.getBlockX();
-        }
-
-        if (corner1.getBlockY() > corner2.getBlockY()) {
-            y = corner1.getBlockY();
-        } else {
-            y = corner2.getBlockY();
-        }
-
-        if (corner1.getBlockZ() > corner2.getBlockZ()) {
-            z = corner1.getBlockZ();
-        } else {
-            z = corner2.getBlockZ();
-        }
+        final int x = Math.max(corner1.getBlockX(), corner2.getBlockX());
+        final int y = Math.max(corner1.getBlockY(), corner2.getBlockY());
+        final int z = Math.max(corner1.getBlockZ(), corner2.getBlockZ());
 
         return new Location(corner1.getWorld(), x, y, z);
     }

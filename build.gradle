@@ -39,7 +39,7 @@ allprojects {
 
 subprojects {
     group 'com.github.shynixn.structureblocklib'
-    version '1.9.0'
+    version '1.10.0'
 
     sourceCompatibility = 1.8
 
@@ -216,69 +216,27 @@ task downloadDependencies(type: Exec) {
     def file = new File(folder, "BuildTools.jar")
 
     if (!file.exists()) {
-        new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar').withInputStream { i ->
-            file.withOutputStream {
-                it << i
-            }
-        }
-    }
-
-    // The build tools mirror is broken for 1.13+ jars. Using an external download is temporary acceptable and not an security issue.
-    def temporary13File = new File(folder, "spigot-1.13.jar")
-
-    if (!temporary13File.exists()) {
-        def connection = new URL('https://mcmirror.io/files/Spigot/Spigot-1.13-fe3ab0d_162bda9-20180815-2348.jar').openConnection()
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-
-        def out = new BufferedOutputStream(new FileOutputStream(temporary13File))
-        out << connection.inputStream
-
-        out.close()
-    }
-
-    // The build tools mirror is broken for 1.13+ jars. Using an external download is temporary acceptable and not an security issue.
-    def temporary132File = new File(folder, "spigot-1.13.2.jar")
-
-    if (!temporary132File.exists()) {
-        def connection = new URL('https://mcmirror.io/files/Spigot/Spigot-1.13.2-0c02b0c-20190425-0538.jar').openConnection()
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-
-        def out = new BufferedOutputStream(new FileOutputStream(temporary132File))
-        out << connection.inputStream
-
-        out.close()
-    }
-
-    // The build tools mirror is broken for 1.13+ jars. Using an external download is temporary acceptable and not an security issue.
-    def temporary14File = new File(folder, "spigot-1.14.3.jar")
-
-    if (!temporary14File.exists()) {
-        def connection = new URL('https://mcmirror.io/files/Spigot/Spigot-1.14.3-d05d3c1-20190703-0030.jar').openConnection()
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-
-        def out = new BufferedOutputStream(new FileOutputStream(temporary14File))
-        out << connection.inputStream
-
-        out.close()
+        new URL('https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar').withInputStream { i -> file.withOutputStream { it << i } }
     }
 
     def text = "cd build/buildtools"
-    text += " && java -jar BuildTools.jar --rev 1.9"
+    text += " && mvn install:install-file -Dfile=HeadDatabaseAPI.jar -DgroupId=me.arcaniax.hdb -DartifactId=HeadDatabaseAPI -Dversion=1.0 -Dpackaging=jar"
+    text += " && java -jar BuildTools.jar --rev 1.8.8"
     text += " && java -jar BuildTools.jar --rev 1.9.4"
     text += " && java -jar BuildTools.jar --rev 1.10"
     text += " && java -jar BuildTools.jar --rev 1.11"
     text += " && java -jar BuildTools.jar --rev 1.12"
-  // Broken?  text += " && java -jar BuildTools.jar --rev 1.13"
-  // Broken?  text += " && java -jar BuildTools.jar --rev 1.13.2"
-  // Broken?   text += " && java -jar BuildTools.jar --rev 1.14.2"
-    text += " && mvn install:install-file -Dfile=spigot-1.9.jar -DgroupId=org.spigotmc -DartifactId=spigot19R1 -Dversion=1.9.0-R1.0 -Dpackaging=jar"
+    text += " && java -jar BuildTools.jar --rev 1.13.2"
+    text += " && java -jar BuildTools.jar --rev 1.14.4"
+    text += " && java -jar BuildTools.jar --rev 1.15"
+    text += " && mvn install:install-file -Dfile=spigot-1.8.8.jar -DgroupId=org.spigotmc -DartifactId=spigot18R3 -Dversion=1.8.8-R3.0 -Dpackaging=jar"
     text += " && mvn install:install-file -Dfile=spigot-1.9.4.jar -DgroupId=org.spigotmc -DartifactId=spigot19R2 -Dversion=1.9.4-R2.0 -Dpackaging=jar"
     text += " && mvn install:install-file -Dfile=spigot-1.10.2.jar -DgroupId=org.spigotmc -DartifactId=spigot110R1 -Dversion=1.10.2-R1.0 -Dpackaging=jar"
     text += " && mvn install:install-file -Dfile=spigot-1.11.jar -DgroupId=org.spigotmc -DartifactId=spigot111R1 -Dversion=1.11.0-R1.0 -Dpackaging=jar"
     text += " && mvn install:install-file -Dfile=spigot-1.12.jar -DgroupId=org.spigotmc -DartifactId=spigot112R1 -Dversion=1.12.0-R1.0 -Dpackaging=jar"
-    text += " && mvn install:install-file -Dfile=spigot-1.13.jar -DgroupId=org.spigotmc -DartifactId=spigot113R1 -Dversion=1.13.0-R1.0 -Dpackaging=jar"
     text += " && mvn install:install-file -Dfile=spigot-1.13.2.jar -DgroupId=org.spigotmc -DartifactId=spigot113R2 -Dversion=1.13.2-R2.0 -Dpackaging=jar"
-    text += " && mvn install:install-file -Dfile=spigot-1.14.3.jar -DgroupId=org.spigotmc -DartifactId=spigot114R1 -Dversion=1.14.1-R1.0 -Dpackaging=jar"
+    text += " && mvn install:install-file -Dfile=spigot-1.14.4.jar -DgroupId=org.spigotmc -DartifactId=spigot114R1 -Dversion=1.14.4-R1.0 -Dpackaging=jar"
+    text += " && mvn install:install-file -Dfile=spigot-1.15.jar -DgroupId=org.spigotmc -DartifactId=spigot115R1 -Dversion=1.15.0-R1.0 -Dpackaging=jar"
 
     standardOutput = new ByteArrayOutputStream()
 

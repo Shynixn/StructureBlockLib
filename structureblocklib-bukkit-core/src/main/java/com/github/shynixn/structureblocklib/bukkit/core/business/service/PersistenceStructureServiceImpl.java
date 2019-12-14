@@ -7,7 +7,6 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.service.Persiste
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import com.github.shynixn.structureblocklib.bukkit.core.persistence.entity.StructureSaveConfigurationEntity;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,7 +16,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.logging.Level;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * Created by Shynixn 2018.
@@ -164,7 +166,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                 try {
                     final File sourceFile = new File(saveWorldBukkit.getName() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
                     final File targetFile = new File(saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
-                    FileUtils.copyFile(sourceFile, targetFile);
+                    Files.copy(sourceFile.toPath(), targetFile.toPath(), REPLACE_EXISTING);
 
                     Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored 1.13 compatibility structure to ../" + saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
                 } catch (final IOException ex) {

@@ -168,6 +168,10 @@ structureBlock.update();
 [./gradlew|gradlew.bat] shadowJar
 ```
 
+### Docker (Optional)
+
+* You can also use the provided `Dockerfile` to launch a container with a pre configured server and plugin.
+
 ## Licence
 
 The source code is licensed under the MIT license. 

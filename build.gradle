@@ -39,7 +39,7 @@ allprojects {
 
 subprojects {
     group 'com.github.shynixn.structureblocklib'
-    version '1.10.0-SNAPSHOT'
+    version '1.10.0'
 
     sourceCompatibility = 1.8
 

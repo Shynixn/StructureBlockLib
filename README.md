@@ -170,7 +170,7 @@ structureBlock.update();
 
 ### Docker (Optional)
 
-* You can also use the provided `Dockerfile` to launch a container with a pre configured server and plugin.
+* You can also use the provided `Dockerfile` to launch a container with a pre configured server and sample plugin.
 
 ## Licence
 

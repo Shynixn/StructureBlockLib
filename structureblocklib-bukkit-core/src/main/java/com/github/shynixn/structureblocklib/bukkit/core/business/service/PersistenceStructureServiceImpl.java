@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.util.Random;
 import java.util.logging.Level;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -240,9 +241,17 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
 
             if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
                 definedStructureInfoClazz.getDeclaredMethod("c", boolean.class).invoke(definedStructureInfo, false);
-                this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
-                        .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.GeneratorAccess"), blockPositionClazz, definedStructureInfoClazz)
-                        .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+
+                if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
+                    Random random = new Random();
+                    this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
+                            .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.GeneratorAccess"), blockPositionClazz, definedStructureInfoClazz, Random.class)
+                            .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo, random);
+                } else {
+                    this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
+                            .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.GeneratorAccess"), blockPositionClazz, definedStructureInfoClazz)
+                            .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo);
+                }
             } else {
                 definedStructureInfoClazz.getDeclaredMethod("b", boolean.class).invoke(definedStructureInfo, false);
                 this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
@@ -321,7 +330,9 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
      * @throws IllegalAccessException    exception.
      */
     private Object findStructureManager(Object saveWorld) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_14_R1)) {
+        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("r_").invoke(saveWorld);
+        } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_14_R1)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("r").invoke(saveWorld);
         } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R2)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("D").invoke(saveWorld);

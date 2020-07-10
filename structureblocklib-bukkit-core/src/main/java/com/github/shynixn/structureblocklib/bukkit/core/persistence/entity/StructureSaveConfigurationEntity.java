@@ -38,6 +38,8 @@ public class StructureSaveConfigurationEntity implements StructureSaveConfigurat
     private StructureMirror mirror = StructureMirror.NONE;
     private String author;
     private String saveName;
+    private float integrity = 1.0F;
+    private long seed = 0L;
 
     /**
      * Creates a new instance of the StructureSaveConfiguration.
@@ -104,6 +106,47 @@ public class StructureSaveConfigurationEntity implements StructureSaveConfigurat
      */
     public void setMirror(StructureMirror mirror) {
         this.mirror = mirror;
+    }
+
+    /**
+     * Sets the integrity of the seed of the structure.
+     *
+     * @param integrity integrity.
+     */
+    @Override
+    public void setIntegrity(float integrity) {
+        this.integrity = integrity;
+    }
+
+    /**
+     * Gets the integrity of the seed of the structure.
+     *
+     * @return integrity.
+     */
+    @Override
+    public float getIntegrity() {
+        return this.integrity;
+    }
+
+    /**
+     * Gets the seed for randomly removing blocks when loading
+     * the structure.
+     *
+     * @return seed.
+     */
+    @Override
+    public long getSeed() {
+        return this.seed;
+    }
+
+    /**
+     * Sets the seed for randomly removing blocks when loading the structure.
+     *
+     * @param seed seed.
+     */
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
     }
 
     /**

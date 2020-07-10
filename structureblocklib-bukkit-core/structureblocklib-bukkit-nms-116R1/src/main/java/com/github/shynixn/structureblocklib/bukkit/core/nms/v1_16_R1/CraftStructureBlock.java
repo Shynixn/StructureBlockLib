@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.bukkit.core.nms.v1_13_R2;
+package com.github.shynixn.structureblocklib.bukkit.core.nms.v1_16_R1;
 
 import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
 import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.StructureMirror;
@@ -9,12 +9,12 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureB
 import com.github.shynixn.structureblocklib.bukkit.api.business.proxy.StructureBlockSave;
 import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
 import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_16_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.block.CraftBlockState;
 import org.bukkit.util.Vector;
 
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
@@ -54,7 +54,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
         if (result) {
-            this.structure.load(this.convert());
+            this.structure.load(null, this.convert());
             this.structure.update();
         }
         return result;
@@ -159,8 +159,6 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         saveConfiguration.setMirror(this.mirrorType);
         saveConfiguration.setRotation(this.rotation);
         saveConfiguration.setIgnoreEntities(this.ignoreEntities);
-        saveConfiguration.setIntegrity(this.integrity);
-        saveConfiguration.setSeed(this.seed);
 
         this.persistenceStructureService.load(saveConfiguration, new Location(this.getWorld(), this.position.getX(), this.position.getY(), this.position.getZ()));
     }
@@ -205,6 +203,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         saveConfiguration.setMirror(this.mirrorType);
         saveConfiguration.setRotation(this.rotation);
         saveConfiguration.setIgnoreEntities(this.ignoreEntities);
+        saveConfiguration.setIntegrity(this.integrity);
+        saveConfiguration.setSeed(this.seed);
 
         this.persistenceStructureService.save(saveConfiguration, new Location(this.getWorld(), this.position.getX(), this.position.getY(), this.position.getZ()), new Vector(this.sizeX, this.sizeY, this.sizeZ));
     }

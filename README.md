@@ -15,7 +15,7 @@ StructureBlockLib is a bukkit implementation for handling structures on spigot s
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without an actual structure block. 
-* Version support 1.9.R1 - 1.15.R1
+* Version support 1.9.R1 - 1.16.R1
 * Lightweight
 
 ## Installation
@@ -31,14 +31,14 @@ This means users don't have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>1.10.0</version>
+     <version>1.11.0</version>
      <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.10.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.11.0'
 }
 ```
 
@@ -49,14 +49,14 @@ Users have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>1.10.0</version>
+     <version>1.11.0</version>
      <scope>provided</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.10.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.11.0'
 }
 ```
 

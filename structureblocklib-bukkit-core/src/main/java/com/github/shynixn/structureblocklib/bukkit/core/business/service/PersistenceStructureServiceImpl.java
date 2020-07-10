@@ -167,6 +167,8 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                 try {
                     final File sourceFile = new File(saveWorldBukkit.getName() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
                     final File targetFile = new File(saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+
+                    Files.createDirectories(targetFile.getParentFile().toPath());
                     Files.copy(sourceFile.toPath(), targetFile.toPath(), REPLACE_EXISTING);
 
                     Bukkit.getLogger().log(Level.INFO, "[StructureBlockLib] Stored 1.13 compatibility structure to ../" + saveWorldBukkit.getName() + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
@@ -257,7 +259,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                     definedStructureInfoClazz.getDeclaredMethod("a", Random.class).invoke(definedStructureInfo, getRandomFromSeed(saveConfiguration.getSeed()));
                 } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_10_R1)) {
                     definedStructureInfoClazz.getDeclaredMethod("a", float.class).invoke(definedStructureInfo, processorRotationInput);
-                    definedStructureInfoClazz.getDeclaredMethod("a", long.class).invoke(definedStructure, saveConfiguration.getSeed());
+                    definedStructureInfoClazz.getDeclaredMethod("a", Long.class).invoke(definedStructureInfo, saveConfiguration.getSeed());
                 }
             }
 

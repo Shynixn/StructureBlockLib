@@ -34,8 +34,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     private boolean ignoreEntities;
     private boolean boundingBox;
     private boolean invisibleBlocks;
-    private float integrity;
-    private long seed;
+    private float integrity = 1.0F;
+    private long seed = 0L;
 
     public CraftStructureBlock(Block block) {
         super(block);
@@ -203,6 +203,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         saveConfiguration.setMirror(this.mirrorType);
         saveConfiguration.setRotation(this.rotation);
         saveConfiguration.setIgnoreEntities(this.ignoreEntities);
+        saveConfiguration.setIntegrity(this.integrity);
+        saveConfiguration.setSeed(this.seed);
 
         this.persistenceStructureService.save(saveConfiguration, new Location(this.getWorld(), this.position.getX(), this.position.getY(), this.position.getZ()), new Vector(this.sizeX, this.sizeY, this.sizeZ));
     }

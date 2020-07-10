@@ -230,8 +230,8 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             }
 
             final Class<?> definedStructureInfoClazz = this.findClazz("net.minecraft.server.VERSION.DefinedStructureInfo");
-            final Class mirrorClazz = this.findClazz("net.minecraft.server.VERSION.EnumBlockMirror");
-            final Class rotationClazz = this.findClazz("net.minecraft.server.VERSION.EnumBlockRotation");
+            final Class<?> mirrorClazz = this.findClazz("net.minecraft.server.VERSION.EnumBlockMirror");
+            final Class<?> rotationClazz = this.findClazz("net.minecraft.server.VERSION.EnumBlockRotation");
 
             final Object definedStructureInfo = definedStructureInfoClazz.newInstance();
             definedStructureInfoClazz.getDeclaredMethod("a", mirrorClazz).invoke(definedStructureInfo, this.getBlockMirror(mirrorClazz, saveConfiguration.getMirror()));
@@ -239,6 +239,29 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             definedStructureInfoClazz.getDeclaredMethod("a", boolean.class).invoke(definedStructureInfo, saveConfiguration.isIgnoreEntities());
             definedStructureInfoClazz.getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.ChunkCoordIntPair")).invoke(definedStructureInfo, new Object[]{null});
 
+            // Integrity and seed handling
+            if (saveConfiguration.getIntegrity() < 1.0F) {
+                Class<?> mathHelperClazz = this.findClazz("net.minecraft.server.VERSION.MathHelper");
+                float processorRotationInput = (float) mathHelperClazz
+                        .getDeclaredMethod("a", float.class, float.class, float.class)
+                        .invoke(null, saveConfiguration.getIntegrity(), 0.0F, 1.0F);
+
+                // Integrity and seed handling exists since 1.10.
+                if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_14_R1)) {
+                    definedStructureInfoClazz.getDeclaredMethod("b").invoke(definedStructureInfo);
+                    Class<?> structureProcessorRotationClazz = this.findClazz("net.minecraft.server.VERSION.DefinedStructureProcessorRotation");
+                    Class<?> structureProcessorClazz = this.findClazz("net.minecraft.server.VERSION.DefinedStructureProcessor");
+
+                    Object structureProcessor = structureProcessorRotationClazz.getConstructor(float.class).newInstance(processorRotationInput);
+                    definedStructureInfoClazz.getDeclaredMethod("a", structureProcessorClazz).invoke(definedStructureInfo, structureProcessor);
+                    definedStructureInfoClazz.getDeclaredMethod("a", Random.class).invoke(definedStructureInfo, getRandomFromSeed(saveConfiguration.getSeed()));
+                } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_10_R1)) {
+                    definedStructureInfoClazz.getDeclaredMethod("a", float.class).invoke(definedStructureInfo, processorRotationInput);
+                    definedStructureInfoClazz.getDeclaredMethod("a", long.class).invoke(definedStructure, saveConfiguration.getSeed());
+                }
+            }
+
+            // World Processing.
             if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
                 definedStructureInfoClazz.getDeclaredMethod("c", boolean.class).invoke(definedStructureInfo, false);
 
@@ -362,5 +385,19 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
         }
 
         return null;
+    }
+
+    /**
+     * Gets the random from the given seed.
+     *
+     * @param seed seed.
+     * @return random.
+     */
+    private Random getRandomFromSeed(long seed) {
+        if (seed == 0L) {
+            return new Random();
+        }
+
+        return new Random(seed);
     }
 }

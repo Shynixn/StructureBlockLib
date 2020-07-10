@@ -31,6 +31,35 @@ import com.github.shynixn.structureblocklib.bukkit.api.business.enumeration.Stru
  * SOFTWARE.
  */
 public interface StructureSaveConfiguration {
+    /**
+     * Sets the integrity of the seed of the structure.
+     *
+     * @param integrity integrity.
+     */
+    void setIntegrity(float integrity);
+
+    /**
+     * Gets the integrity of the seed of the structure.
+     *
+     * @return integrity.
+     */
+    float getIntegrity();
+
+    /**
+     * Gets the seed for randomly removing blocks when loading
+     * the structure.
+     *
+     * @return seed.
+     */
+    long getSeed();
+
+    /**
+     * Sets the seed for randomly removing blocks when loading the structure.
+     *
+     * @param seed seed.
+     */
+    void setSeed(long seed);
+
 
     /**
      * Returns the author.

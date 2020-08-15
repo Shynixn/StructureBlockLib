@@ -15,7 +15,7 @@ StructureBlockLib is a bukkit implementation for handling structures on spigot s
 
 * NMS Implementation of the StructureBlock.
 * StructureApi to save or load structures without an actual structure block. 
-* Version support 1.9.R1 - 1.16.R1
+* Version support 1.9.R1 - 1.16.R2
 * Lightweight
 
 ## Installation
@@ -31,14 +31,14 @@ This means users don't have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>1.11.0</version>
+     <version>1.12.0</version>
      <scope>compile</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.11.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:1.12.0'
 }
 ```
 
@@ -49,14 +49,14 @@ Users have to download the StructureBlockLib.jar.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>1.11.0</version>
+     <version>1.12.0</version>
      <scope>provided</scope>
 </dependency>
 ```
 
 ```xml
 dependencies {
-    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.11.0'
+    compile 'com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:1.12.0'
 }
 ```
 
@@ -155,8 +155,13 @@ structureBlock.update();
 ## Contributing
 
 * Fork the StructureBlockLib project on github and clone it to your local environment.
-* Execute gradle sync for dependencies.
-* Install the additional spigot dependencies by executing the following gradle task.
+* Install Java 8 (later versions are not supported by the ``downloadDependencies`` task)
+* Install Apache Maven
+* Make sure ``java`` points to a Java 8 installation (``java -version``)
+* Make sure ``$JAVA_HOME`` points to a Java 8 installation
+* Make sure ``mvn`` points to a Maven installation (``mvn --version``)
+* Execute gradle sync for dependencies
+* Install the additional spigot dependencies by executing the following gradle task (this task can take a very long time)
 
 ```xml
 [./gradlew|gradlew.bat] downloadDependencies

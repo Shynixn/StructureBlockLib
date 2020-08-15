@@ -267,7 +267,12 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
             if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R1)) {
                 definedStructureInfoClazz.getDeclaredMethod("c", boolean.class).invoke(definedStructureInfo, false);
 
-                if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
+                if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R2)) {
+                    Random random = new Random();
+                    this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
+                            .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.WorldAccess"), blockPositionClazz, definedStructureInfoClazz, Random.class)
+                            .invoke(definedStructure, nmsWorld, finalBlockPosition, definedStructureInfo, random);
+                } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
                     Random random = new Random();
                     this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                             .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.GeneratorAccess"), blockPositionClazz, definedStructureInfoClazz, Random.class)
@@ -355,7 +360,9 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
      * @throws IllegalAccessException    exception.
      */
     private Object findStructureManager(Object saveWorld) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
+        if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R2)) {
+            return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("n").invoke(saveWorld);
+        } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_16_R1)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("r_").invoke(saveWorld);
         } else if (this.versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_14_R1)) {
             return this.findClazz("net.minecraft.server.VERSION.WorldServer").getDeclaredMethod("r").invoke(saveWorld);

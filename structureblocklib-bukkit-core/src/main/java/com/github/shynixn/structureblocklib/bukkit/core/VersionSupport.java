@@ -42,7 +42,8 @@ public enum VersionSupport {
     VERSION_1_13_R2("v1_13_R2", "1.13.1", 1.131),
     VERSION_1_14_R1("v1_14_R1", "1.14.4", 1.142),
     VERSION_1_15_R1("v1_15_R1", "1.15.2", 1.152),
-    VERSION_1_16_R1("v1_16_R1", "1.16.1", 1.161);
+    VERSION_1_16_R1("v1_16_R1", "1.16.1", 1.161),
+    VERSION_1_16_R2("v1_16_R2", "1.16.2", 1.162);
 
     private final String versionText;
     private final String simpleVersionText;

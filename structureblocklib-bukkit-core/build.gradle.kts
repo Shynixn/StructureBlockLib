@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-114R1"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-115R1"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-116R1"))
+    implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-116R2"))
 
     compileOnly("org.spigotmc:spigot114R1:1.14.4-R1.0")
 

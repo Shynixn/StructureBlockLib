@@ -172,6 +172,7 @@ File sourceFile = new File(plugin.getDataFolder(), "mystructure.nbt")
 File targetFile = new File("world" + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
 
 // Copy it to your target file.
+Files.createDirectories(targetFile.getParentFile().toPath());
 Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 // Load the structure to the target location

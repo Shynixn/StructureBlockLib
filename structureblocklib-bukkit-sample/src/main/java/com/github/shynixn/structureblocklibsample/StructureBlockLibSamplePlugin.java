@@ -44,7 +44,11 @@ public class StructureBlockLibSamplePlugin extends JavaPlugin {
     public void onEnable() {
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLibSample...");
 
-        this.getCommand("structure").setExecutor(new StructureCommandExecutor(StructureBlockApi.INSTANCE.getStructurePersistenceService()));
+        if (!this.getDataFolder().exists()) {
+            this.getDataFolder().mkdir();
+        }
+
+        this.getCommand("structure").setExecutor(new StructureCommandExecutor(this, StructureBlockApi.INSTANCE.getStructurePersistenceService()));
         this.getCommand("structureblock").setExecutor(new StructureBlockCommandExecutor(StructureBlockApi.INSTANCE.getStructureBlockService()));
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLibSample " + this.getDescription().getVersion() + " by Shynixn");

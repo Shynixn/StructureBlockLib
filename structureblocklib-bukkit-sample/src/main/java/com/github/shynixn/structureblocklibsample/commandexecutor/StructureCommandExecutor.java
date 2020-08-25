@@ -8,7 +8,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
 
 /**
  * Created by Shynixn 2019.
@@ -41,6 +48,7 @@ public class StructureCommandExecutor implements CommandExecutor {
     private final String prefix = ChatColor.YELLOW + "[Structure] ";
 
     private final PersistenceStructureService persistenceStructureService;
+    private final Plugin plugin;
 
     /**
      * Creates a new instance of the structureCommandExecutor with the persistenceStructureService
@@ -48,8 +56,9 @@ public class StructureCommandExecutor implements CommandExecutor {
      *
      * @param persistenceStructureService dependency.
      */
-    public StructureCommandExecutor(PersistenceStructureService persistenceStructureService) {
+    public StructureCommandExecutor(Plugin plugin, PersistenceStructureService persistenceStructureService) {
         this.persistenceStructureService = persistenceStructureService;
+        this.plugin = plugin;
     }
 
     /**
@@ -75,6 +84,30 @@ public class StructureCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        if (args.length == 6 && args[0].equalsIgnoreCase("save") && this.toIntOrNull(args[2]) != null && this.toIntOrNull(args[3]) != null && this.toIntOrNull(args[4]) != null) {
+            final Location location = player.getLocation();
+            final Vector vector = new Vector(this.toIntOrNull(args[2]), this.toIntOrNull(args[3]), this.toIntOrNull(args[4]));
+            final String fileName = args[5];
+
+            final StructureSaveConfiguration structureSaveConfiguration = this.persistenceStructureService.createSaveConfiguration(player.getName().toLowerCase(), args[1], location.getWorld().getName());
+            this.persistenceStructureService.save(structureSaveConfiguration, location, vector);
+
+            File sourceFile = new File(location.getWorld().getName() + "/generated/" + structureSaveConfiguration.getAuthor() + "/structures/" + structureSaveConfiguration.getSaveName() + ".nbt");
+            File targetFile = new File(plugin.getDataFolder(), fileName);
+
+            try {
+                // Please notice that IO operations are not recommend on the Spigot Main Thread.
+                Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                plugin.getLogger().log(Level.SEVERE, "Failed to copy file.", e);
+                return false;
+            }
+
+            player.sendMessage(this.prefix + ChatColor.GREEN + "Saved structure '" + args[1] + "'.");
+
+            return true;
+        }
+
         if (args.length == 2 && args[0].equalsIgnoreCase("load")) {
             final Location location = player.getLocation();
 
@@ -91,8 +124,37 @@ public class StructureCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        player.sendMessage(this.prefix + "/structure save <name> <x> <y> <z> - Saves a structure from the current player position and given offset.");
-        player.sendMessage(this.prefix + "/structure load <name> - Loads a structure at the current player position.");
+        if (args.length == 3 && args[0].equalsIgnoreCase("load")) {
+            final Location location = player.getLocation();
+            final StructureSaveConfiguration structureSaveConfiguration = this.persistenceStructureService.createSaveConfiguration(player.getName().toLowerCase(), args[1], location.getWorld().getName());
+            final String fileName = args[2];
+
+            File sourceFile = new File(plugin.getDataFolder(), fileName);
+            File targetFile = new File(location.getWorld().getName() + "/generated/" + structureSaveConfiguration.getAuthor() + "/structures/" + structureSaveConfiguration.getSaveName() + ".nbt");
+
+            try {
+                // Please notice that IO operations are not recommend on the Spigot Main Thread.
+                Files.createDirectories(targetFile.getParentFile().toPath());
+                Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                plugin.getLogger().log(Level.SEVERE, "Failed to copy file.", e);
+                return false;
+            }
+
+            final boolean hasBeenLoaded = this.persistenceStructureService.load(structureSaveConfiguration, location);
+
+            if (hasBeenLoaded) {
+                player.sendMessage(this.prefix + ChatColor.GREEN + "Placed structure '" + args[1] + "'.");
+
+            } else {
+                player.sendMessage(this.prefix + ChatColor.RED + "Cannot load structure '" + args[1] + "'.");
+            }
+
+            return true;
+        }
+
+        player.sendMessage(this.prefix + "/structure save <name> <x> <y> <z> [filename] - Saves a structure from the current player position and given offset.");
+        player.sendMessage(this.prefix + "/structure load <name> [filename] - Loads a structure at the current player position.");
 
         if (args.length != 0) {
             player.sendMessage(this.prefix + ChatColor.RED + "Cannot parse arguments.");

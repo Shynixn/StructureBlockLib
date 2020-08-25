@@ -147,9 +147,21 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                                 .newInstance(saveConfiguration.getAuthor(), saveConfiguration.getSaveName()));
             }
 
+            Object voidBlock = null;
+
+            if (versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_13_R2)) {
+                voidBlock = this.findClazz("net.minecraft.server.VERSION.Blocks")
+                        .getDeclaredField("STRUCTURE_VOID").get(null);
+            } else if (versionSupport.isVersionSameOrGreaterThan(VersionSupport.VERSION_1_10_R1)) {
+                voidBlock = this.findClazz("net.minecraft.server.VERSION.Blocks")
+                        .getDeclaredField("dj").get(null);
+            } else {
+                voidBlock = this.findClazz("net.minecraft.server.VERSION.Blocks").getDeclaredField("BARRIER").get(null);
+            }
+
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")
                     .getDeclaredMethod("a", this.findClazz("net.minecraft.server.VERSION.World"), blockPositionClazz, blockPositionClazz, boolean.class, this.findClazz("net.minecraft.server.VERSION.Block"))
-                    .invoke(definedStructure, nmsWorld, finalBlockPosition, finalSecondBlockPosition, !saveConfiguration.isIgnoreEntities(), this.findClazz("net.minecraft.server.VERSION.Blocks").getDeclaredField("BARRIER").get(null));
+                    .invoke(definedStructure, nmsWorld, finalBlockPosition, finalSecondBlockPosition, !saveConfiguration.isIgnoreEntities(), voidBlock);
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure").getDeclaredMethod("a", String.class)
                     .invoke(definedStructure, saveConfiguration.getAuthor());

@@ -156,7 +156,7 @@ public class PersistenceStructureServiceImpl implements PersistenceStructureServ
                 voidBlock = this.findClazz("net.minecraft.server.VERSION.Blocks")
                         .getDeclaredField("dj").get(null);
             } else {
-                this.findClazz("net.minecraft.server.VERSION.Blocks").getDeclaredField("BARRIER").get(null);
+                voidBlock = this.findClazz("net.minecraft.server.VERSION.Blocks").getDeclaredField("BARRIER").get(null);
             }
 
             this.findClazz("net.minecraft.server.VERSION.DefinedStructure")

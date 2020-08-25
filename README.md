@@ -116,6 +116,30 @@ final StructureSaveConfiguration saveConfiguration = service.createSaveConfigura
 service.save(saveConfiguration, corner, otherCorner);
 ```
 
+#### Store a structure on your server between two locations and without a structure block to a target file
+
+```java
+// Data
+Location corner = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+Location otherCorner = new Location(Bukkit.getWorld("world"), 120, 120, 120);
+
+// Get the business logic service.
+PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+// Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Saves the structure to the storage between the given corners.
+service.save(saveConfiguration, corner, otherCorner);
+
+// The path of the stored file.
+File sourceFile = new File("world" + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+File targetFile = new File(plugin.getDataFolder(), "mystructure.nbt")
+
+// Copy it to your target file.
+Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+```
+
 #### Load a structure from the storage into the world
 ```java
 // Data
@@ -126,6 +150,29 @@ PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePer
 
 // Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
 final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// Load the structure to the target location
+boolean structureExists = service.load(saveConfiguration, target);
+```
+
+#### Load a structure from a file into the world
+
+```java
+// Data
+Location target = new Location(Bukkit.getWorld("world"), 100, 100, 120);
+
+// Get the business logic service.
+PersistenceStructureService service = StructureBlockApi.INSTANCE.getStructurePersistenceService();
+
+// Create a save configuration for the meta data author 'shynixn' the identifier 'super_fancy_structure' and the world folder where it should be stored 'world'.
+final StructureSaveConfiguration saveConfiguration = service.createSaveConfiguration("shynixn", "super_fancy_structure", "world");
+
+// The path of the stored file.
+File sourceFile = new File(plugin.getDataFolder(), "mystructure.nbt")
+File targetFile = new File("world" + "/generated/" + saveConfiguration.getAuthor() + "/structures/" + saveConfiguration.getSaveName() + ".nbt");
+
+// Copy it to your target file.
+Files.copy(sourceFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 // Load the structure to the target location
 boolean structureExists = service.load(saveConfiguration, target);

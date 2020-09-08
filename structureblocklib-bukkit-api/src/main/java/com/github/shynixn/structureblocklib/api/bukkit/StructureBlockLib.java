@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Api Bukkit implementation.
  */
-class StructureBlockLib implements StructureBlockLibApi {
+public class StructureBlockLib implements StructureBlockLibApi {
     /**
      * Creates a new instance of the {@link StructureSaver} for saving
      * structures from a minecraft world into a target.

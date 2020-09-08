@@ -5,12 +5,13 @@ import com.github.shynixn.structureblocklib.api.entity.ProgressToken;
 import com.github.shynixn.structureblocklib.api.entity.StructureSaverRaw;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRestriction;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
+import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface fluent API to save structures from the world into
@@ -18,6 +19,8 @@ import java.nio.file.Path;
  */
 public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
     private final ProxyService proxyService;
+    private final StructureSerializationService serializationService;
+
     private Position location;
     private Position offset;
     private String author;
@@ -30,8 +33,9 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      *
      * @param proxyService dependency.
      */
-    public StructureSaverRawImpl(ProxyService proxyService) {
+    public StructureSaverRawImpl(ProxyService proxyService, StructureSerializationService serializationService) {
         this.proxyService = proxyService;
+        this.serializationService = serializationService;
     }
 
     /**
@@ -263,6 +267,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name, @NotNull String author) {
+        // TODO
         return null;
     }
 
@@ -277,6 +282,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<String> saveToString() {
+        // TODO
         return null;
     }
 
@@ -292,7 +298,8 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToPath(@NotNull Path target) {
-        return null;
+        // TODO
+        return saveToFile(target.toFile());
     }
 
     /**
@@ -307,7 +314,25 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToFile(@NotNull File target) {
-        return null;
+        // TODO
+        ProgressToken<Void> rootToken = null;
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+
+        proxyService.runAsyncTask(() -> {
+            try (FileOutputStream outputStream = new FileOutputStream(target)) {
+                ProgressToken<Void> progressToken = saveToOutputStream(outputStream);
+                // progressToken.onProgress(c -> rootToken.progress())
+                progressToken.getCompletionStage().thenAccept(completableFuture::complete);
+                progressToken.getCompletionStage().exceptionally(throwable -> {
+                    completableFuture.completeExceptionally(throwable);
+                    return null;
+                });
+            } catch (IOException e) {
+                proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
+            }
+        });
+
+        return rootToken;
     }
 
     /**
@@ -322,6 +347,23 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToOutputStream(@NotNull OutputStream target) {
+        // TODO
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+
+        proxyService.runSyncTask(() -> {
+            // TODO Read world.
+            Object definedStructure = null;
+            proxyService.runAsyncTask(() -> {
+                try {
+                    serializationService.serialize(definedStructure, target);
+                    proxyService.runSyncTask(() -> completableFuture.complete(null));
+                } catch (IOException e) {
+                    proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
+                }
+            });
+
+        });
+
         return null;
     }
 }

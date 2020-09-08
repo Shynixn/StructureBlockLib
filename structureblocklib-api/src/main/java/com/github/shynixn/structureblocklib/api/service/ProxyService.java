@@ -15,8 +15,7 @@ public interface ProxyService {
      * @param <L>      Location Type.
      * @return location.
      */
-    @Nullable
-    <L> L toLocation(@Nullable Position position);
+    @Nullable <L> L toLocation(@Nullable Position position);
 
     /**
      * Converts the given position to a vector.
@@ -25,8 +24,7 @@ public interface ProxyService {
      * @param <V>      Vector Type.
      * @return vector.
      */
-    @Nullable
-    <V> V toVector(@Nullable Position position);
+    @Nullable <V> V toVector(@Nullable Position position);
 
     /**
      * Converts the given location to a position.
@@ -35,22 +33,19 @@ public interface ProxyService {
      * @param <L>      Location Type.
      * @return position.
      */
-    @Nullable
-    <L> Position toPosition(@Nullable L location);
+    @Nullable <L> Position toPosition(@Nullable L location);
 
     /**
      * Runs an async task.
      *
-     * @param delay    Delay in ticks.
      * @param runnable Runnable.
      */
-    void runAsyncTask(@NotNull Runnable runnable, int delay);
+    void runAsyncTask(@NotNull Runnable runnable);
 
     /**
      * Runs a sync task.
      *
-     * @param delay    Delay in ticks.
      * @param runnable Runnable.
      */
-    void runSyncTask(@NotNull Runnable runnable, int delay);
+    void runSyncTask(@NotNull Runnable runnable);
 }

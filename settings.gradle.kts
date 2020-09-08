@@ -1,4 +1,5 @@
 rootProject.name = "structureblocklib-root"
+include("structureblocklib-api")
 include("structureblocklib-bukkit-api")
 include("structureblocklib-bukkit-core")
 include("structureblocklib-bukkit-plugin")

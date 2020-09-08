@@ -12,7 +12,7 @@ import java.nio.file.Path;
  * Interface fluent API to save structures from the world into
  * different targets.
  */
-public interface StructureSaver<L, V> {
+public interface StructureSaverRaw<L, V> {
     /**
      * Gets the target Location.
      *
@@ -81,7 +81,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> at(@Nullable L location);
+    StructureSaverRaw<L, V> at(@Nullable L location);
 
     /**
      * Sets the source Vector offset where the
@@ -92,7 +92,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> offSet(@Nullable V vector);
+    StructureSaverRaw<L, V> offSet(@Nullable V vector);
 
     /**
      * Sets the offset in x coordinate.
@@ -101,7 +101,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> sizeX(double x);
+    StructureSaverRaw<L, V> sizeX(double x);
 
     /**
      * Sets the offset in y coordinate.
@@ -110,7 +110,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> sizeY(double y);
+    StructureSaverRaw<L, V> sizeY(double y);
 
     /**
      * Sets the offset in z coordinate.
@@ -119,7 +119,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> sizeZ(double z);
+    StructureSaverRaw<L, V> sizeZ(double z);
 
     /**
      * Sets the author.
@@ -129,7 +129,7 @@ public interface StructureSaver<L, V> {
      * @param author name.
      * @return This instance.
      */
-    StructureSaver<L, V> author(@NotNull String author);
+    StructureSaverRaw<L, V> author(@Nullable String author);
 
     /**
      * Should entities be included in the save file.
@@ -138,7 +138,7 @@ public interface StructureSaver<L, V> {
      * @param enabled Flag.
      * @return This instance.
      */
-    StructureSaver<L, V> includeEntities(boolean enabled);
+    StructureSaverRaw<L, V> includeEntities(boolean enabled);
 
     /**
      * Restricts the structure to a certain size if a larger
@@ -149,7 +149,7 @@ public interface StructureSaver<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaver<L, V> restriction(@NotNull StructureRestriction structureRestriction);
+    StructureSaverRaw<L, V> restriction(@NotNull StructureRestriction structureRestriction);
 
     /**
      * Sets the name of the block type
@@ -159,7 +159,7 @@ public interface StructureSaver<L, V> {
      * @param name Name of the block type.
      * @return This instance.
      */
-    StructureSaver<L, V> structureVoidTypeName(String name);
+    StructureSaverRaw<L, V> structureVoidTypeName(String name);
 
     /**
      * Saves the blocks and entities from the world into

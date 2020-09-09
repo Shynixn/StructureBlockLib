@@ -1,6 +1,5 @@
 package com.github.shynixn.structureblocklib.api.entity;
 
-import com.github.shynixn.structureblocklib.api.enumeration.StructureRestriction;
 import org.jetbrains.annotations.NotNull;
 
 public interface StructureReadMeta {
@@ -19,6 +18,15 @@ public interface StructureReadMeta {
      */
     @NotNull
     Position getOffset();
+
+    /**
+     * Gets the author.
+     * The author is a optional meta data in the final
+     * structure file.
+     *
+     * @return author.
+     */
+    @NotNull String getAuthor();
 
     /**
      * Should entities included in the saved file.

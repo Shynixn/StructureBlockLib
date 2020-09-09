@@ -9,6 +9,7 @@ public class StructureReadMetaImpl implements StructureReadMeta {
     public Position offset;
     public boolean includeEntities;
     public String structureVoid;
+    public String author = "";
 
     /**
      * Gets the source Location.
@@ -28,6 +29,18 @@ public class StructureReadMetaImpl implements StructureReadMeta {
     @Override
     public @NotNull Position getOffset() {
         return offset;
+    }
+
+    /**
+     * Gets the author.
+     * The author is a optional meta data in the final
+     * structure file.
+     *
+     * @return author.
+     */
+    @Override
+    public @NotNull String getAuthor() {
+        return author;
     }
 
     /**

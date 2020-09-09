@@ -387,11 +387,18 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
 
         proxyService.runSyncTask(() -> {
             progressToken.progress(0.0);
-            Object definedStructure = worldService.readStructureFromWorld(meta);
+            Object definedStructure = null;
+            try {
+                definedStructure = worldService.readStructureFromWorld(meta);
+            } catch (Exception e) {
+                completableFuture.completeExceptionally(e);
+                return;
+            }
             progressToken.progress(0.5);
+            Object finalDefinedStructure = definedStructure;
             proxyService.runAsyncTask(() -> {
                 try {
-                    serializationService.serialize(definedStructure, target);
+                    serializationService.serialize(finalDefinedStructure, target);
                     proxyService.runSyncTask(() -> {
                         completableFuture.complete(null);
                         progressToken.progress(1.0);
@@ -436,6 +443,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
         readMeta.offset = new PositionImpl(this.offset);
         readMeta.includeEntities = this.includeEntities;
         readMeta.structureVoid = this.structureVoid;
+        readMeta.author = this.author;
         return readMeta;
     }
 

@@ -9,5 +9,5 @@ public interface StructureWorldService {
      * @param meta Meta data to describe the block selection.
      * @return A new NMS Structure definition.
      */
-    Object readStructureFromWorld(StructureReadMeta meta);
+    Object readStructureFromWorld(StructureReadMeta meta) throws Exception;
 }

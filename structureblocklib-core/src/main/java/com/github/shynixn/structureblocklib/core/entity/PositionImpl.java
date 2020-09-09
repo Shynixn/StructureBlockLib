@@ -12,6 +12,16 @@ public class PositionImpl implements Position {
     private double y;
     private double z;
 
+    public PositionImpl() {
+    }
+
+    public PositionImpl(Position position) {
+        this.world = position.getWorldName();
+        this.x = position.getX();
+        this.y = position.getY();
+        this.z = position.getZ();
+    }
+
     /**
      * Gets the x coordinate.
      *

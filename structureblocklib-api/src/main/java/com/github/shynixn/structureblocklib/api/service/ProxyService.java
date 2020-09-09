@@ -1,6 +1,7 @@
 package com.github.shynixn.structureblocklib.api.service;
 
 import com.github.shynixn.structureblocklib.api.entity.Position;
+import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,4 +49,11 @@ public interface ProxyService {
      * @param runnable Runnable.
      */
     void runSyncTask(@NotNull Runnable runnable);
+
+    /**
+     * Gets the running minecraft version.
+     *
+     * @return version.
+     */
+    Version getServerVersion();
 }

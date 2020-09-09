@@ -14,7 +14,7 @@ import java.nio.file.Path;
  */
 public interface StructureSaverRaw<L, V> {
     /**
-     * Gets the target Location.
+     * Gets the source Location.
      *
      * @return location.
      */
@@ -165,6 +165,7 @@ public interface StructureSaverRaw<L, V> {
      * Saves the blocks and entities from the world into
      * into a structure.nbt file located in the world folder,
      * author folder. Overrides existing files.
+     * This allows to use the structure in Vanilla Structure Blocks.
      *
      * <p>
      * This call does not block and finishes in the future. Use
@@ -172,11 +173,10 @@ public interface StructureSaverRaw<L, V> {
      *
      * @param worldName World where the structure file is stored.
      * @param name      Name of the stored structure.
-     * @param author    Name of the structure author.
      * @return Instance of {@link ProgressToken}.
      */
     @NotNull
-    ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name, @NotNull String author);
+    ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name);
 
     /**
      * Saves the blocks and entities from the world into

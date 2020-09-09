@@ -2,15 +2,19 @@ package com.github.shynixn.structureblocklib.core.entity;
 
 import com.github.shynixn.structureblocklib.api.entity.Position;
 import com.github.shynixn.structureblocklib.api.entity.ProgressToken;
+import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureSaverRaw;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRestriction;
+import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
+import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -20,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
     private final ProxyService proxyService;
     private final StructureSerializationService serializationService;
+    private final StructureWorldService worldService;
 
     private Position location;
     private Position offset;
@@ -33,9 +38,10 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      *
      * @param proxyService dependency.
      */
-    public StructureSaverRawImpl(ProxyService proxyService, StructureSerializationService serializationService) {
+    public StructureSaverRawImpl(ProxyService proxyService, StructureSerializationService serializationService, StructureWorldService worldService) {
         this.proxyService = proxyService;
         this.serializationService = serializationService;
+        this.worldService = worldService;
     }
 
     /**
@@ -262,13 +268,24 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      *
      * @param worldName World where the structure file is stored.
      * @param name      Name of the stored structure.
-     * @param author    Name of the structure author.
      * @return Instance of {@link ProgressToken}.
      */
     @Override
-    public @NotNull ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name, @NotNull String author) {
-        // TODO
-        return null;
+    public @NotNull ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name) {
+        if (this.author == null) {
+            throw new IllegalArgumentException("Author #author(String) cannot be null!");
+        }
+
+        Version version = proxyService.getServerVersion();
+        File file;
+
+        if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R1)) {
+            file = new File(worldName + File.separator + "generated" + File.separator + author + File.separator + "structures" + File.separator + name + ".nbt");
+        } else {
+            file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
+        }
+
+        return saveToFile(file);
     }
 
     /**
@@ -282,8 +299,27 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<String> saveToString() {
-        // TODO
-        return null;
+        CompletableFuture<String> completableFuture = new CompletableFuture<>();
+        ProgressTokenImpl<String> rootToken = new ProgressTokenImpl<>(completableFuture);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        ProgressToken<Void> innerToken = saveToOutputStream(byteArrayOutputStream);
+        innerToken.onProgress(rootToken::progress);
+        innerToken.getCompletionStage().thenAccept(e -> {
+            try {
+                String data = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+                byteArrayOutputStream.close();
+                completableFuture.complete(data);
+            } catch (IOException ioException) {
+                completableFuture.completeExceptionally(ioException);
+            }
+        });
+        innerToken.getCompletionStage().exceptionally(e -> {
+            completableFuture.completeExceptionally(e);
+            return null;
+        });
+
+        return rootToken;
     }
 
     /**
@@ -298,7 +334,6 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToPath(@NotNull Path target) {
-        // TODO
         return saveToFile(target.toFile());
     }
 
@@ -314,14 +349,13 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToFile(@NotNull File target) {
-        // TODO
-        ProgressToken<Void> rootToken = null;
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
 
         proxyService.runAsyncTask(() -> {
             try (FileOutputStream outputStream = new FileOutputStream(target)) {
                 ProgressToken<Void> progressToken = saveToOutputStream(outputStream);
-                // progressToken.onProgress(c -> rootToken.progress())
+                progressToken.onProgress(rootToken::progress);
                 progressToken.getCompletionStage().thenAccept(completableFuture::complete);
                 progressToken.getCompletionStage().exceptionally(throwable -> {
                     completableFuture.completeExceptionally(throwable);
@@ -347,23 +381,112 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      */
     @Override
     public @NotNull ProgressToken<Void> saveToOutputStream(@NotNull OutputStream target) {
-        // TODO
+        StructureReadMeta meta = validate();
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(completableFuture);
 
         proxyService.runSyncTask(() -> {
-            // TODO Read world.
-            Object definedStructure = null;
+            progressToken.progress(0.0);
+            Object definedStructure = worldService.readStructureFromWorld(meta);
+            progressToken.progress(0.5);
             proxyService.runAsyncTask(() -> {
                 try {
                     serializationService.serialize(definedStructure, target);
-                    proxyService.runSyncTask(() -> completableFuture.complete(null));
+                    proxyService.runSyncTask(() -> {
+                        completableFuture.complete(null);
+                        progressToken.progress(1.0);
+                    });
                 } catch (IOException e) {
                     proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
                 }
             });
-
         });
 
-        return null;
+        return progressToken;
+    }
+
+    /**
+     * Validates if the given builder is correct.
+     */
+    private StructureReadMeta validate() {
+        if (location == null) {
+            throw new IllegalArgumentException("Location #at(Location) cannot be null!");
+        }
+
+        if (offset == null) {
+            throw new IllegalArgumentException("Offset #offset(Location) cannot be null!");
+        }
+
+        StructureReadMeta structureReadMeta = createReadMeta();
+        changeOffSetToPositivOffset(structureReadMeta.getLocation(), structureReadMeta.getOffset());
+        validateDirection("x", structureReadMeta.getLocation().getX(), structureReadMeta.getOffset().getX());
+        validateDirection("y", structureReadMeta.getLocation().getY(), structureReadMeta.getOffset().getY());
+        validateDirection("z", structureReadMeta.getLocation().getZ(), structureReadMeta.getOffset().getZ());
+        return structureReadMeta;
+    }
+
+    /**
+     * Creates a read meta.
+     *
+     * @return New StructureReadMeta.
+     */
+    private StructureReadMeta createReadMeta() {
+        StructureReadMetaImpl readMeta = new StructureReadMetaImpl();
+        readMeta.location = new PositionImpl(this.location);
+        readMeta.offset = new PositionImpl(this.offset);
+        readMeta.includeEntities = this.includeEntities;
+        readMeta.structureVoid = this.structureVoid;
+        return readMeta;
+    }
+
+    /**
+     * Validates the direction (x,y,z) axe of the selection.
+     *
+     * @param direction direction.
+     * @param source    source.
+     * @param offset    offset.
+     */
+    private void validateDirection(String direction, double source, double offset) {
+        double diff = (int) Math.abs(source - (source + offset));
+
+        if (this.structureRestriction == StructureRestriction.SINGLE_32) {
+            if (diff > 32) {
+                throw new IllegalArgumentException("Axe " + direction + " exceeded StructureRestriction of 32x32x32! Change the restriction or reduce the size of your selection.");
+            }
+            return;
+        }
+
+        if (this.structureRestriction == StructureRestriction.SINGLE_48) {
+            if (diff > 48) {
+                throw new IllegalArgumentException("Axe " + direction + " exceeded StructureRestriction of 48x48x48! Change the restriction or reduce the size of your selection.");
+            }
+        }
+    }
+
+    /**
+     * Modifies the offset so it points into positiv direction.
+     *
+     * @param source source.
+     * @param offSet fofset.
+     */
+    private void changeOffSetToPositivOffset(Position source, Position offSet) {
+        if (offSet.getX() < 0) {
+            source.setX(source.getX() + offSet.getX());
+            offSet.setX(offSet.getX() * -1);
+        }
+
+        if (offSet.getY() < 0) {
+            source.setY(source.getY() + offSet.getY());
+            offSet.setY(offSet.getY() * -1);
+        }
+
+        if (offSet.getZ() < 0) {
+            source.setZ(source.getZ() + offSet.getZ());
+            offSet.setZ(offSet.getZ() * -1);
+        }
+
+        offSet.setX(offSet.getX() + 1);
+        offSet.setY(offSet.getY() + 1);
+        offSet.setZ(offSet.getZ() + 1);
     }
 }

@@ -31,12 +31,15 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
     private String author;
     private boolean includeEntities = false;
     private StructureRestriction structureRestriction = StructureRestriction.SINGLE_32;
-    private String structureVoid = "STRUCTURE_VOID";
+    // private String structureVoid = "STRUCTURE_VOID";
+    private String structureVoid = "BARRIER";
 
     /**
      * Creates a new raw structure save instance.
      *
-     * @param proxyService dependency.
+     * @param proxyService         dependency.
+     * @param serializationService dependency.
+     * @param worldService         dependency.
      */
     public StructureSaverRawImpl(ProxyService proxyService, StructureSerializationService serializationService, StructureWorldService worldService) {
         this.proxyService = proxyService;
@@ -353,10 +356,18 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
         ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
 
         proxyService.runAsyncTask(() -> {
-            try (FileOutputStream outputStream = new FileOutputStream(target)) {
+            try {
+                FileOutputStream outputStream = new FileOutputStream(target);
                 ProgressToken<Void> progressToken = saveToOutputStream(outputStream);
                 progressToken.onProgress(rootToken::progress);
-                progressToken.getCompletionStage().thenAccept(completableFuture::complete);
+                progressToken.getCompletionStage().thenAccept(c -> {
+                    try {
+                        outputStream.close();
+                        completableFuture.complete(c);
+                    } catch (IOException e) {
+                        completableFuture.completeExceptionally(e);
+                    }
+                });
                 progressToken.getCompletionStage().exceptionally(throwable -> {
                     completableFuture.completeExceptionally(throwable);
                     return null;

@@ -8,7 +8,7 @@ tasks.withType<ShadowJar> {
     archiveName = "$baseName-$version.$extension"
 
     // Change the output folder of the plugin.
-    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+   // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
 }
 
 publishing {
@@ -28,6 +28,8 @@ tasks.register<Exec>("dockerJar") {
 }
 
 dependencies {
+    implementation(project(":structureblocklib-api"))
+    implementation(project(":structureblocklib-core"))
     implementation(project(":structureblocklib-bukkit-api"))
     implementation(project(":structureblocklib-bukkit-core"))
 

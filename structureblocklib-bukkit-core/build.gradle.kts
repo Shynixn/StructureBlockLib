@@ -16,6 +16,8 @@ tasks.withType<ShadowJar> {
 }
 
 dependencies {
+    implementation(project(":structureblocklib-api"))
+    implementation(project(":structureblocklib-core"))
     implementation(project(":structureblocklib-bukkit-api"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-19R2"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-110R1"))

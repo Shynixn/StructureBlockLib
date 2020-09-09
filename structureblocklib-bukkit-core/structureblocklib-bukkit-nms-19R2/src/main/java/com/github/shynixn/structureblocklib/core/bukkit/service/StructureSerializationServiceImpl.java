@@ -24,16 +24,7 @@ public class StructureSerializationServiceImpl implements StructureSerialization
      * @param world world.
      */
     public StructureSerializationServiceImpl(World world) {
-        this(((CraftWorld) world).getHandle().y());
-    }
-
-    /**
-     * Creates a new instance of the StructureSerializationServiceImpl.
-     *
-     * @param structureManager manager.
-     */
-    public StructureSerializationServiceImpl(DefinedStructureManager structureManager) {
-        this.structureManager = structureManager;
+        this.structureManager = (((CraftWorld) world).getHandle().y());
     }
 
     /**

@@ -90,15 +90,14 @@ public class StructureNCommandExecutor implements CommandExecutor {
         }
 
         if (args.length == 3 && args[0].equalsIgnoreCase("load")) {
-            final boolean hasBeenLoaded = true;
-
-            if (hasBeenLoaded) {
-                player.sendMessage(this.prefix + ChatColor.GREEN + "Placed structure '" + args[1] + "'.");
-
-            } else {
-                player.sendMessage(this.prefix + ChatColor.RED + "Cannot load structure '" + args[1] + "'.");
-            }
-
+            final String fileName = args[2];
+            structureBlockLibApi
+                    .loadStructure(plugin)
+                    .at(player.getLocation())
+                    .loadFromPath(plugin.getDataFolder().toPath().resolve(fileName))
+                    .onProgress(c -> System.out.println(String.format("Percentage %.2f", c)))
+                    .onException(c -> c.printStackTrace())
+                    .onResult(e -> player.sendMessage(this.prefix + ChatColor.GREEN + "Placed structure '" + args[1] + "'."));
             return true;
         }
 

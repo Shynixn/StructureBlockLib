@@ -1,9 +1,11 @@
 package com.github.shynixn.structureblocklib.core.bukkit;
 
+import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureLoader;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureSaver;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
+import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureLoaderImpl;
 import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureSaverImpl;
 import com.github.shynixn.structureblocklib.core.bukkit.service.ProxyServiceImpl;
 import com.github.shynixn.structureblocklib.core.bukkit.service.StructureSerializationServiceImpl;
@@ -23,5 +25,18 @@ public class Main {
         StructureWorldService worldService = new StructureWorldServiceImpl();
         StructureSerializationService serializationService = new StructureSerializationServiceImpl(Bukkit.getWorlds().get(0));
         return new StructureSaverImpl(proxyService, serializationService, worldService);
+    }
+
+    /**
+     * Creates a new structure loader for the given plugin.
+     *
+     * @param plugin plugin.
+     * @return loader.
+     */
+    public static StructureLoader createStructureLoader(Plugin plugin) {
+        ProxyService proxyService = new ProxyServiceImpl(plugin);
+        StructureWorldService worldService = new StructureWorldServiceImpl();
+        StructureSerializationService serializationService = new StructureSerializationServiceImpl(Bukkit.getWorlds().get(0));
+        return new StructureLoaderImpl(proxyService, serializationService, worldService);
     }
 }

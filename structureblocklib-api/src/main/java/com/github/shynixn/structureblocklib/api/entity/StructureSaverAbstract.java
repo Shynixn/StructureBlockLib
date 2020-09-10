@@ -172,11 +172,12 @@ public interface StructureSaverAbstract<L, V> {
      * {@link ProgressToken} ()} for cancellation or callbacks.
      *
      * @param worldName World where the structure file is stored.
+     * @param author    Author of the structure.
      * @param name      Name of the stored structure.
      * @return Instance of {@link ProgressToken}.
      */
     @NotNull
-    ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name);
+    ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String author, @NotNull String name);
 
     /**
      * Saves the blocks and entities from the world into

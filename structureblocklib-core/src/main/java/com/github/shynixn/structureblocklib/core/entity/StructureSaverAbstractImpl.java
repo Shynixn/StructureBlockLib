@@ -264,21 +264,19 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * Saves the blocks and entities from the world into
      * into a structure.nbt file located in the world folder,
      * author folder. Overrides existing files.
+     * This allows to use the structure in Vanilla Structure Blocks.
      *
      * <p>
      * This call does not block and finishes in the future. Use
      * {@link ProgressToken} ()} for cancellation or callbacks.
      *
      * @param worldName World where the structure file is stored.
+     * @param author    Author of the structure.
      * @param name      Name of the stored structure.
      * @return Instance of {@link ProgressToken}.
      */
     @Override
-    public @NotNull ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String name) {
-        if (this.author == null) {
-            throw new IllegalArgumentException("Author #author(String) cannot be null!");
-        }
-
+    public @NotNull ProgressToken<Void> saveToWorld(@NotNull String worldName, @NotNull String author, @NotNull String name) {
         Version version = proxyService.getServerVersion();
         File file;
 
@@ -290,6 +288,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
 
         return saveToFile(file);
     }
+
 
     /**
      * Saves the blocks and entities from the world into

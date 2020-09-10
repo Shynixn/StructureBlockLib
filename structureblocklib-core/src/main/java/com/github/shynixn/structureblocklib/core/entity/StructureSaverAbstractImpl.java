@@ -3,7 +3,7 @@ package com.github.shynixn.structureblocklib.core.entity;
 import com.github.shynixn.structureblocklib.api.entity.Position;
 import com.github.shynixn.structureblocklib.api.entity.ProgressToken;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
-import com.github.shynixn.structureblocklib.api.entity.StructureSaverRaw;
+import com.github.shynixn.structureblocklib.api.entity.StructureSaverAbstract;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRestriction;
 import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
  * Interface fluent API to save structures from the world into
  * different targets.
  */
-public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
+public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<L, V> {
     private final ProxyService proxyService;
     private final StructureSerializationService serializationService;
     private final StructureWorldService worldService;
@@ -41,7 +41,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @param serializationService dependency.
      * @param worldService         dependency.
      */
-    public StructureSaverRawImpl(ProxyService proxyService, StructureSerializationService serializationService, StructureWorldService worldService) {
+    public StructureSaverAbstractImpl(ProxyService proxyService, StructureSerializationService serializationService, StructureWorldService worldService) {
         this.proxyService = proxyService;
         this.serializationService = serializationService;
         this.worldService = worldService;
@@ -138,7 +138,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> at(@Nullable L location) {
+    public @NotNull StructureSaverAbstract<L, V> at(@Nullable L location) {
         this.location = this.proxyService.toPosition(location);
         return this;
     }
@@ -152,7 +152,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> offSet(@Nullable V vector) {
+    public @NotNull StructureSaverAbstract<L, V> offSet(@Nullable V vector) {
         this.offset = this.proxyService.toPosition(vector);
         return this;
     }
@@ -164,7 +164,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> sizeX(double x) {
+    public @NotNull StructureSaverAbstract<L, V> sizeX(double x) {
         if (offset == null) {
             offset = new PositionImpl();
         }
@@ -180,7 +180,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> sizeY(double y) {
+    public @NotNull StructureSaverAbstract<L, V> sizeY(double y) {
         if (offset == null) {
             offset = new PositionImpl();
         }
@@ -196,7 +196,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> sizeZ(double z) {
+    public @NotNull StructureSaverAbstract<L, V> sizeZ(double z) {
         if (offset == null) {
             offset = new PositionImpl();
         }
@@ -214,7 +214,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public StructureSaverRaw<L, V> author(@Nullable String author) {
+    public StructureSaverAbstract<L, V> author(@Nullable String author) {
         this.author = author;
         return this;
     }
@@ -227,7 +227,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public StructureSaverRaw<L, V> includeEntities(boolean enabled) {
+    public StructureSaverAbstract<L, V> includeEntities(boolean enabled) {
         this.includeEntities = enabled;
         return this;
     }
@@ -241,7 +241,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverRaw<L, V> restriction(@NotNull StructureRestriction structureRestriction) {
+    public @NotNull StructureSaverAbstract<L, V> restriction(@NotNull StructureRestriction structureRestriction) {
         this.structureRestriction = structureRestriction;
         return this;
     }
@@ -255,7 +255,7 @@ public class StructureSaverRawImpl<L, V> implements StructureSaverRaw<L, V> {
      * @return This instance.
      */
     @Override
-    public StructureSaverRaw<L, V> structureVoidTypeName(String name) {
+    public StructureSaverAbstract<L, V> structureVoidTypeName(String name) {
         this.structureVoid = name;
         return this;
     }

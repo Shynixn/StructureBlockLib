@@ -6,7 +6,6 @@ import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.core.entity.PositionImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -114,6 +113,23 @@ public class ProxyServiceImpl implements ProxyService {
      */
     @Override
     public Version getServerVersion() {
-        return Version.VERSION_1_13_R1;
+        try {
+            if (Bukkit.getServer() == null || Bukkit.getServer().getClass().getPackage() == null) {
+                return Version.VERSION_UNKNOWN;
+            }
+
+            String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+
+            for (Version versionSupport : Version.values()) {
+                if (versionSupport.getBukkitId().equals(version)) {
+                    return versionSupport;
+                }
+            }
+
+        } catch (Exception e) {
+            // Ignore parsing exceptions.
+        }
+
+        return Version.VERSION_UNKNOWN;
     }
 }

@@ -1,5 +1,7 @@
 package com.github.shynixn.structureblocklib.api.entity;
 
+import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
+import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +23,50 @@ public interface StructureLoaderAbstract<L, V> {
     L getLocation();
 
     /**
+     * Should entities which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default false.
+     *
+     * @return flag.
+     */
+    boolean isIncludeEntitiesEnabled();
+
+    /**
+     * Gets the target mirror type.
+     * Default StructureMirror.NONE.
+     *
+     * @return {@link StructureMirror}.
+     */
+    StructureMirror getMirrorType();
+
+    /**
+     * Gets the target rotation type.
+     * Default StructureRotation.NONE.
+     *
+     * @return {@link StructureRotation}.
+     */
+    StructureRotation getRotationType();
+
+    /**
+     * Gets the target integrity.
+     * Default 1.0.
+     * 1.0 ->  Every block which is present in the structure file is placed in the world.
+     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
+     *
+     * @return integrity.
+     */
+    float getIntegrity();
+
+    /**
+     * Gets the target seed.
+     * Default 0L.
+     * The seed is used to randomly remove blocks if the integrity {@code getIntegrity} is less than 1.0.
+     *
+     * @return seed.
+     */
+    long getSeed();
+
+    /**
      * Sets the target Location corner where the
      * blocks start to get placed.
      * Required parameter.
@@ -30,6 +76,55 @@ public interface StructureLoaderAbstract<L, V> {
      */
     @NotNull
     StructureLoaderAbstract<L, V> at(@Nullable L location);
+
+    /**
+     * Should entities which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default false.
+     *
+     * @param enabled Flag.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V> includeEntities(boolean enabled);
+
+    /**
+     * Sets the target mirror type.
+     * Default StructureMirror.NONE.
+     *
+     * @param mirror Mirror.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V> mirror(StructureMirror mirror);
+
+    /**
+     * Sets the target rotation type.
+     * Default StructureRotation.NONE.
+     *
+     * @param rotation Rotation.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V> rotation(StructureRotation rotation);
+
+    /**
+     * Sets the target integrity.
+     * Default 1.0.
+     * 1.0 ->  Every block which is present in the structure file is placed in the world.
+     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code setSeed}.
+     *
+     * @param integrity Integrity.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V> integrity(float integrity);
+
+    /**
+     * Sets the target seed.
+     * Default 0L.
+     * The seed is used to randomly remove blocks if the integrity {@code setIntegrity} is less than 1.0.
+     *
+     * @param seed Seed.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V> seed(long seed);
 
     /**
      * Loads the structure blocks and entities from the given source and places

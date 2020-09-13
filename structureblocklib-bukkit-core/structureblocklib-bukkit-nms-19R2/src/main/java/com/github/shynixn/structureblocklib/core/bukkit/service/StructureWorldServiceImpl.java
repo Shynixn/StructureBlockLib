@@ -3,6 +3,7 @@ package com.github.shynixn.structureblocklib.core.bukkit.service;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
+import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
 import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
@@ -11,6 +12,17 @@ import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
  * Implementation to interact with structures in the world.
  */
 public class StructureWorldServiceImpl implements StructureWorldService {
+    private final TypeConversionService conversionService;
+
+    /**
+     * Creates a new service with dependencies.
+     *
+     * @param conversionService dependency.
+     */
+    public StructureWorldServiceImpl(TypeConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
     /**
      * Places the blocks in the world defined by the given structure.
      *
@@ -27,7 +39,11 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         World world = ((CraftWorld) Bukkit.getWorld(meta.getLocation().getWorldName())).getHandle();
         BlockPosition cornerBlock = new BlockPosition((int) meta.getLocation().getX(), (int) meta.getLocation().getY(), (int) meta.getLocation().getZ());
         DefinedStructureInfo info = new DefinedStructureInfo();
-        // TODO: Settings
+        info.a(!meta.isIncludeEntitiesEnabled());
+        info.a((EnumBlockMirror) conversionService.convertToMirrorHandle(meta.getMirrorType()));
+        info.a((EnumBlockRotation) conversionService.convertToRotationHandle(meta.getRotationType()));
+
+        // Integrity and seed handling exists since 1.10.
         definedStructure.a(world, cornerBlock, info);
     }
 

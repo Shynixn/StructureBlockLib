@@ -6,8 +6,9 @@ import com.github.shynixn.structureblocklib.api.service.StructureSerializationSe
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.core.entity.StructureLoaderAbstractImpl;
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
-public class StructureLoaderImpl extends StructureLoaderAbstractImpl<Location> implements StructureLoader {
+public class StructureLoaderImpl extends StructureLoaderAbstractImpl<Location, Vector> implements StructureLoader {
     /**
      * Creates a new raw structure load instance.
      *

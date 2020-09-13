@@ -31,8 +31,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
     private String author;
     private boolean includeEntities = false;
     private StructureRestriction structureRestriction = StructureRestriction.SINGLE_32;
-    // private String structureVoid = "STRUCTURE_VOID";
-    private String structureVoid = "BARRIER";
+    private String structureVoid;
 
     /**
      * Creates a new raw structure save instance.
@@ -45,6 +44,14 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         this.proxyService = proxyService;
         this.serializationService = serializationService;
         this.worldService = worldService;
+
+        if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_13_R2)) {
+            structureVoid = "STRUCTURE_VOID";
+        } else if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_10_R1)) {
+            structureVoid = "dj";
+        } else {
+            structureVoid = "BARRIER";
+        }
     }
 
     /**
@@ -281,7 +288,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         Version version = proxyService.getServerVersion();
         File file;
 
-        if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R1)) {
+        if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R2)) {
             file = new File(worldName + File.separator + "generated" + File.separator + author + File.separator + "structures" + File.separator + name + ".nbt");
         } else {
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");

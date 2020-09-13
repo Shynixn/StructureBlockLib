@@ -125,7 +125,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
         Version version = proxyService.getServerVersion();
         File file;
 
-        if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R1)) {
+        if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R2)) {
             file = new File(worldName + File.separator + "generated" + File.separator + author + File.separator + "structures" + File.separator + name + ".nbt");
         } else {
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");

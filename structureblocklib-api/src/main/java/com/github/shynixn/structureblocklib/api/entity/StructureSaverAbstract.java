@@ -159,6 +159,7 @@ public interface StructureSaverAbstract<L, V> {
      * @param name Name of the block type.
      * @return This instance.
      */
+    @NotNull
     StructureSaverAbstract<L, V> structureVoidTypeName(String name);
 
     /**

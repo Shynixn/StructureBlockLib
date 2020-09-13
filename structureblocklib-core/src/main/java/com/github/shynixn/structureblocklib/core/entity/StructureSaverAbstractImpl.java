@@ -255,7 +255,8 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * @return This instance.
      */
     @Override
-    public StructureSaverAbstract<L, V> structureVoidTypeName(String name) {
+    @NotNull
+    public StructureSaverAbstract<L, V> structureVoidTypeName(@NotNull String name) {
         this.structureVoid = name;
         return this;
     }
@@ -397,7 +398,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
 
         proxyService.runSyncTask(() -> {
             progressToken.progress(0.0);
-            Object definedStructure = null;
+            Object definedStructure;
             try {
                 definedStructure = worldService.readStructureFromWorld(meta);
             } catch (Exception e) {

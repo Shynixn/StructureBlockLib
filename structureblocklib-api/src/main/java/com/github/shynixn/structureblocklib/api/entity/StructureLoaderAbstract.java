@@ -11,7 +11,7 @@ import java.nio.file.Path;
  * Interface fluent API to load structures from sources into
  * the world
  */
-public interface StructureLoaderAbstract<L> {
+public interface StructureLoaderAbstract<L, V> {
     /**
      * Gets the target Location.
      *
@@ -29,7 +29,20 @@ public interface StructureLoaderAbstract<L> {
      * @return This instance.
      */
     @NotNull
-    StructureLoaderAbstract<L> at(@Nullable L location);
+    StructureLoaderAbstract<L, V> at(@Nullable L location);
+
+    /**
+     * Loads the structure blocks and entities from the given source and places
+     * the blocks at the defined position.
+     * <p>
+     * This call does not block and finishes in the future. Use
+     * {@link ProgressToken} ()} for cancellation or callbacks.
+     *
+     * @param source Existing Structure in world defined by {@link StructureSaverAbstract}.
+     * @return NotNull instance of {@link ProgressToken}.
+     */
+    @NotNull
+    ProgressToken<Void> loadFromSaver(@NotNull StructureSaverAbstract<L, V> source);
 
     /**
      * Loads the structure blocks and entities from the structure storage
@@ -44,7 +57,8 @@ public interface StructureLoaderAbstract<L> {
      * @param author    Name of the structure author.
      * @return NotNull instance of {@link ProgressToken}.
      */
-    ProgressToken<Void> loadFromWorld(String worldName, String name, String author);
+    @NotNull
+    ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String name, @NotNull String author);
 
     /**
      * Loads the structure blocks and entities from the given source and places
@@ -56,7 +70,8 @@ public interface StructureLoaderAbstract<L> {
      * @param source Base64 encoded Structure binary.
      * @return NotNull instance of {@link ProgressToken}.
      */
-    ProgressToken<Void> loadFromString(String source);
+    @NotNull
+    ProgressToken<Void> loadFromString(@NotNull String source);
 
     /**
      * Loads the structure blocks and entities from the given source and places
@@ -68,7 +83,8 @@ public interface StructureLoaderAbstract<L> {
      * @param source Existing Path.
      * @return NotNull instance of {@link ProgressToken}.
      */
-    ProgressToken<Void> loadFromPath(Path source);
+    @NotNull
+    ProgressToken<Void> loadFromPath(@NotNull Path source);
 
     /**
      * Loads the structure blocks and entities from the given source and places
@@ -80,7 +96,8 @@ public interface StructureLoaderAbstract<L> {
      * @param source Existing File.
      * @return NotNull instance of {@link ProgressToken}.
      */
-    ProgressToken<Void> loadFromFile(File source);
+    @NotNull
+    ProgressToken<Void> loadFromFile(@NotNull File source);
 
     /**
      * Loads the structure blocks and entities from the given source and places
@@ -92,5 +109,6 @@ public interface StructureLoaderAbstract<L> {
      * @param source Open binary inputStream. Does not close the inputStream.
      * @return NotNull instance of {@link ProgressToken}.
      */
-    ProgressToken<Void> loadFromInputStream(InputStream source);
+    @NotNull
+    ProgressToken<Void> loadFromInputStream(@NotNull InputStream source);
 }

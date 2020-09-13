@@ -1,9 +1,6 @@
 package com.github.shynixn.structureblocklib.core.entity;
 
-import com.github.shynixn.structureblocklib.api.entity.Position;
-import com.github.shynixn.structureblocklib.api.entity.ProgressToken;
-import com.github.shynixn.structureblocklib.api.entity.StructureLoaderAbstract;
-import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
+import com.github.shynixn.structureblocklib.api.entity.*;
 import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
@@ -16,7 +13,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
-public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L> {
+public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstract<L, V> {
     private final ProxyService proxyService;
     private final StructureSerializationService serializationService;
     private final StructureWorldService worldService;
@@ -60,9 +57,53 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return This instance.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<L> at(@Nullable L location) {
+    public @NotNull StructureLoaderAbstract<L, V> at(@Nullable L location) {
         this.location = this.proxyService.toPosition(location);
         return this;
+    }
+
+    /**
+     * Loads the structure blocks and entities from the given source and places
+     * the blocks at the defined position.
+     * <p>
+     * This call does not block and finishes in the future. Use
+     * {@link ProgressToken} ()} for cancellation or callbacks.
+     *
+     * @param source Existing Structure in world defined by {@link StructureSaverAbstract}.
+     * @return NotNull instance of {@link ProgressToken}.
+     */
+    @Override
+    public @NotNull ProgressToken<Void> loadFromSaver(@NotNull StructureSaverAbstract<L, V> source) {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ProgressToken<Void> innerToken = source.saveToOutputStream(outputStream);
+        rootToken.progress(0.0);
+        innerToken.getCompletionStage().thenAccept(e_ -> {
+            rootToken.progress(0.5);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+            ProgressToken<Void> finalToken = this.loadFromInputStream(inputStream);
+            finalToken.getCompletionStage().exceptionally(e -> {
+                completableFuture.completeExceptionally(e);
+                return null;
+            });
+            finalToken.getCompletionStage().thenAccept(a_ -> {
+                try {
+                    outputStream.close();
+                    inputStream.close();
+                    rootToken.progress(1.0);
+                    completableFuture.complete(a_);
+                } catch (IOException ioException) {
+                    completableFuture.completeExceptionally(ioException);
+                }
+            });
+        });
+        innerToken.getCompletionStage().exceptionally(e -> {
+            completableFuture.completeExceptionally(e);
+            return null;
+        });
+
+        return rootToken;
     }
 
     /**
@@ -79,7 +120,8 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    public ProgressToken<Void> loadFromWorld(String worldName, String name, String author) {
+    @NotNull
+    public ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String name, @NotNull String author) {
         Version version = proxyService.getServerVersion();
         File file;
 
@@ -103,7 +145,8 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    public ProgressToken<Void> loadFromString(String source) {
+    @NotNull
+    public ProgressToken<Void> loadFromString(@NotNull String source) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
         byte[] content = Base64.getDecoder().decode(source);
@@ -138,7 +181,8 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    public ProgressToken<Void> loadFromPath(Path source) {
+    @NotNull
+    public ProgressToken<Void> loadFromPath(@NotNull Path source) {
         return loadFromFile(source.toFile());
     }
 
@@ -153,7 +197,8 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    public ProgressToken<Void> loadFromFile(File source) {
+    @NotNull
+    public ProgressToken<Void> loadFromFile(@NotNull File source) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
 
@@ -193,7 +238,8 @@ public class StructureLoaderAbstractImpl<L> implements StructureLoaderAbstract<L
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    public ProgressToken<Void> loadFromInputStream(InputStream source) {
+    @NotNull
+    public ProgressToken<Void> loadFromInputStream(@NotNull InputStream source) {
         CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(completableFuture);
         StructurePlaceMetaImpl meta = new StructurePlaceMetaImpl();

@@ -1,12 +1,35 @@
-package com.github.shynixn.structureblocklib.core.bukkit.service;
+package com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2;
 
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
+import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
 import net.minecraft.server.v1_9_R2.EnumBlockMirror;
 import net.minecraft.server.v1_9_R2.EnumBlockRotation;
+import net.minecraft.server.v1_9_R2.TileEntityStructure;
 
 public class TypeConversionServiceImpl implements TypeConversionService {
+    /**
+     * Converts the given handle to a {@link StructureMode}.
+     *
+     * @param handle NMS handle.
+     * @return {@link StructureMode}.
+     */
+    @Override
+    public StructureMode convertToStructureMode(Object handle) {
+        TileEntityStructure.UsageMode usageMode = (TileEntityStructure.UsageMode) handle;
+        switch (usageMode) {
+            case DATA:
+                return StructureMode.DATA;
+            case LOAD:
+                return StructureMode.LOAD;
+            case SAVE:
+                return StructureMode.SAVE;
+            default:
+                return StructureMode.CORNER;
+        }
+    }
+
     /**
      * Converts the given handle to a {@link StructureMirror}.
      *
@@ -44,6 +67,26 @@ public class TypeConversionServiceImpl implements TypeConversionService {
                 return StructureRotation.ROTATION_270;
             default:
                 return StructureRotation.NONE;
+        }
+    }
+
+    /**
+     * Converts the given {@link StructureMode} to a handle.
+     *
+     * @param mode {@link StructureMode}.
+     * @return NMS handle.
+     */
+    @Override
+    public Object convertToStructureModeHandle(StructureMode mode) {
+        switch (mode){
+            case SAVE:
+                return TileEntityStructure.UsageMode.SAVE;
+            case DATA:
+                return TileEntityStructure.UsageMode.DATA;
+            case LOAD:
+                return TileEntityStructure.UsageMode.LOAD;
+            default:
+                return TileEntityStructure.UsageMode.CORNER;
         }
     }
 

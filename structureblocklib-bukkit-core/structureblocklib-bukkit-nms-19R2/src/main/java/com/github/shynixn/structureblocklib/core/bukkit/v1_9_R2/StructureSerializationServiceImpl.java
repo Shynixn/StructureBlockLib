@@ -1,12 +1,9 @@
-package com.github.shynixn.structureblocklib.core.bukkit.service;
+package com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2;
 
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import net.minecraft.server.v1_9_R2.DefinedStructure;
-import net.minecraft.server.v1_9_R2.DefinedStructureManager;
 import net.minecraft.server.v1_9_R2.NBTCompressedStreamTools;
 import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,17 +13,6 @@ import java.io.OutputStream;
  * Serialization service.
  */
 public class StructureSerializationServiceImpl implements StructureSerializationService {
-    private final DefinedStructureManager structureManager;
-
-    /**
-     * Creates a new instance of the StructureSerializationServiceImpl.
-     *
-     * @param world world.
-     */
-    public StructureSerializationServiceImpl(World world) {
-        this.structureManager = (((CraftWorld) world).getHandle().y());
-    }
-
     /**
      * Deserializes the {@link InputStream} to an NMS handle of DefinedStructure.
      * This call is blocking.

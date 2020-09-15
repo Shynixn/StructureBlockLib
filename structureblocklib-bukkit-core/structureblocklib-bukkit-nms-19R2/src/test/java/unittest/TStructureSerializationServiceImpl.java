@@ -1,6 +1,6 @@
 package unittest;
 
-import com.github.shynixn.structureblocklib.core.bukkit.service.StructureSerializationServiceImpl;
+import com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2.StructureSerializationServiceImpl;
 import net.minecraft.server.v1_9_R2.DefinedStructure;
 import net.minecraft.server.v1_9_R2.DefinedStructureManager;
 import net.minecraft.server.v1_9_R2.NBTTagCompound;

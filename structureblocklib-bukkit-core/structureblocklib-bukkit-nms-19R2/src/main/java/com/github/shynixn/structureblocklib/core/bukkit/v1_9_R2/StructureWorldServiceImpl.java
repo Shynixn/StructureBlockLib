@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.core.bukkit.service;
+package com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2;
 
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;

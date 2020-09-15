@@ -171,7 +171,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverAbstract<L, V> sizeX(double x) {
+    public @NotNull StructureSaverAbstract<L, V> sizeX(int x) {
         if (offset == null) {
             offset = new PositionImpl();
         }
@@ -187,7 +187,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverAbstract<L, V> sizeY(double y) {
+    public @NotNull StructureSaverAbstract<L, V> sizeY(int y) {
         if (offset == null) {
             offset = new PositionImpl();
         }
@@ -203,7 +203,8 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * @return This instance.
      */
     @Override
-    public @NotNull StructureSaverAbstract<L, V> sizeZ(double z) {
+    public @NotNull StructureSaverAbstract<L, V> sizeZ(int
+                                                               z) {
         if (offset == null) {
             offset = new PositionImpl();
         }

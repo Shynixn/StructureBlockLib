@@ -1,5 +1,6 @@
 package com.github.shynixn.structureblocklib.api.block;
 
+import com.github.shynixn.structureblocklib.api.entity.StructureLoaderAbstract;
 import com.github.shynixn.structureblocklib.api.entity.StructureSaverAbstract;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +20,10 @@ public interface StructureBlockSaveAbstract<L, V> extends StructureBlockConstruc
     boolean isInvisibleBlocksEnabled();
 
     /**
-     * Creates a new instance of {@link StructureSaverAbstract} which
+     * Gets the associated {@link StructureSaverAbstract} instance which
      * contains the current block properties.
      *
-     * @return New instance.
+     * @return Saver.
      */
     @NotNull
     StructureSaverAbstract<L, V> saveStructure();

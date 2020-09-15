@@ -1,7 +1,9 @@
 package com.github.shynixn.structureblocklib.api.bukkit;
 
+import com.github.shynixn.structureblocklib.api.bukkit.block.StructureBlock;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureLoader;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureSaver;
+import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.InvocationTargetException;
@@ -10,9 +12,11 @@ import java.lang.reflect.Method;
 /**
  * Api Bukkit implementation.
  */
+@SuppressWarnings("ALL")
 public class StructureBlockLib implements StructureBlockLibApi {
     private final Method structureSaveCreate;
     private final Method structureLoadCreate;
+    private final Method structureBlockCreate;
 
     /**
      * Init.
@@ -23,7 +27,28 @@ public class StructureBlockLib implements StructureBlockLibApi {
                     .getDeclaredMethod("createStructureSaver", Plugin.class);
             structureLoadCreate = Class.forName("com.github.shynixn.structureblocklib.core.bukkit.Main")
                     .getDeclaredMethod("createStructureLoader", Plugin.class);
+            structureBlockCreate = Class.forName("com.github.shynixn.structureblocklib.core.bukkit.Main")
+                    .getDeclaredMethod("createStructureBlock", Plugin.class, Location.class);
         } catch (NoSuchMethodException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets or creates a {@link StructureBlock} at the given location.
+     * This instance hides all structure modes and can be access via simple type casting.
+     * StructureBlockSave save = (StructureBlockSave) structureBlock;
+     * etc.
+     *
+     * @param location Location of the block in the world.
+     * @param plugin   Plugin instance using this API.
+     * @return A new instance of the {@link StructureBlock}.
+     */
+    @Override
+    public <T extends StructureBlock> T getStructureBlockAt(Location location, Plugin plugin) {
+        try {
+            return (T) structureBlockCreate.invoke(null, plugin, location);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

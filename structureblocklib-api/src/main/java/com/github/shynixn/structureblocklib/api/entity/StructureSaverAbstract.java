@@ -101,7 +101,7 @@ public interface StructureSaverAbstract<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaverAbstract<L, V> sizeX(double x);
+    StructureSaverAbstract<L, V> sizeX(int x);
 
     /**
      * Sets the offset in y coordinate.
@@ -110,7 +110,7 @@ public interface StructureSaverAbstract<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaverAbstract<L, V> sizeY(double y);
+    StructureSaverAbstract<L, V> sizeY(int y);
 
     /**
      * Sets the offset in z coordinate.
@@ -119,7 +119,7 @@ public interface StructureSaverAbstract<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureSaverAbstract<L, V> sizeZ(double z);
+    StructureSaverAbstract<L, V> sizeZ(int z);
 
     /**
      * Sets the author.

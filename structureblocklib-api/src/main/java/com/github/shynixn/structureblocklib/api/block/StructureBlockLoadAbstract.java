@@ -79,10 +79,10 @@ public interface StructureBlockLoadAbstract<L, V> extends StructureBlockConstruc
     long getSeed();
 
     /**
-     * Creates a new instance of {@link StructureLoaderAbstract} which
+     * Gets the associated {@link StructureLoaderAbstract} instance which
      * contains the current block properties.
      *
-     * @return New instance.
+     * @return Loader.
      */
     @NotNull
     StructureLoaderAbstract<L, V> loadStructure();

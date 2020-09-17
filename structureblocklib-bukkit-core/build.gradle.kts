@@ -19,7 +19,7 @@ dependencies {
     implementation(project(":structureblocklib-api"))
     implementation(project(":structureblocklib-core"))
     implementation(project(":structureblocklib-bukkit-api"))
-    implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-19R2"))
+    implementation(project(":structureblocklib-bukkit-core:bukkit-nms-19R2"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-110R1"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-111R1"))
     implementation(project(":structureblocklib-bukkit-core:structureblocklib-bukkit-nms-112R1"))

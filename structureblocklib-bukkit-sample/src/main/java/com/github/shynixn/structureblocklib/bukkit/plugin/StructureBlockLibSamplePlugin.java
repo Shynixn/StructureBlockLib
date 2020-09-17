@@ -1,10 +1,7 @@
-package com.github.shynixn.structureblocklibsample;
+package com.github.shynixn.structureblocklib.bukkit.plugin;
 
 import com.github.shynixn.structureblocklib.api.bukkit.StructureBlockLibApi;
-import com.github.shynixn.structureblocklib.bukkit.api.StructureBlockApi;
-import com.github.shynixn.structureblocklibsample.commandexecutor.StructureBlockCommandExecutor;
-import com.github.shynixn.structureblocklibsample.commandexecutor.StructureCommandExecutor;
-import com.github.shynixn.structureblocklibsample.commandexecutor.StructureNCommandExecutor;
+import com.github.shynixn.structureblocklib.bukkit.plugin.commandexecutor.StructureNCommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,10 +47,7 @@ public class StructureBlockLibSamplePlugin extends JavaPlugin {
             this.getDataFolder().mkdir();
         }
 
-        this.getCommand("structure").setExecutor(new StructureCommandExecutor(this, StructureBlockApi.INSTANCE.getStructurePersistenceService()));
-        this.getCommand("structureblock").setExecutor(new StructureBlockCommandExecutor(StructureBlockApi.INSTANCE.getStructureBlockService()));
         this.getCommand("struct").setExecutor(new StructureNCommandExecutor(this, StructureBlockLibApi.INSTANCE));
-
 
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLibSample " + this.getDescription().getVersion() + " by Shynixn");
     }

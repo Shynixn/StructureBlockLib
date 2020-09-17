@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.core.bukkit.service;
+package com.github.shynixn.structureblocklib.bukkit.service;
 
 import com.github.shynixn.structureblocklib.api.entity.Position;
 import com.github.shynixn.structureblocklib.api.enumeration.Version;

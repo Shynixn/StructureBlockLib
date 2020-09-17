@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.core.bukkit;
+package com.github.shynixn.structureblocklib.bukkit;
 
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureLoader;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureSaver;
@@ -7,9 +7,9 @@ import com.github.shynixn.structureblocklib.api.service.StructureSerializationSe
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
 import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureLoaderImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureSaverImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.service.ProxyServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.entity.StructureLoaderImpl;
+import com.github.shynixn.structureblocklib.bukkit.entity.StructureSaverImpl;
+import com.github.shynixn.structureblocklib.bukkit.service.ProxyServiceImpl;
 import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.CraftStructureBlock;
 import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureSerializationServiceImpl;
 import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureWorldServiceImpl;

@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.core.bukkit.entity;
+package com.github.shynixn.structureblocklib.bukkit.entity;
 
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureSaver;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;

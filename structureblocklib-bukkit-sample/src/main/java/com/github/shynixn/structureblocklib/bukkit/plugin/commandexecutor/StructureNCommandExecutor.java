@@ -1,23 +1,12 @@
-package com.github.shynixn.structureblocklibsample.commandexecutor;
+package com.github.shynixn.structureblocklib.bukkit.plugin.commandexecutor;
 
 import com.github.shynixn.structureblocklib.api.bukkit.StructureBlockLibApi;
-import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
-import com.github.shynixn.structureblocklib.bukkit.api.business.service.PersistenceStructureService;
-import com.github.shynixn.structureblocklib.bukkit.api.persistence.entity.StructureSaveConfiguration;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
 
 /**
  * Created by Shynixn 2019.

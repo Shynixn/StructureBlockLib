@@ -18,7 +18,7 @@ public interface StructureBlockLoadAbstract<L, V> extends StructureBlockConstruc
      *
      * @param rotation rotation.
      */
-    void setRotation(@NotNull StructureRotation rotation);
+    void setRotationType(@NotNull StructureRotation rotation);
 
     /**
      * Returns the rotation of the structure when getting load.
@@ -26,7 +26,7 @@ public interface StructureBlockLoadAbstract<L, V> extends StructureBlockConstruc
      * @return rotation.
      */
     @NotNull
-    StructureRotation getRotation();
+    StructureRotation getRotationType();
 
     /**
      * Returns the mirrorType of the structure when getting load.

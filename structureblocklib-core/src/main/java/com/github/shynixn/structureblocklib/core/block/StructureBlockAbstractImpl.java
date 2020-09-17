@@ -20,7 +20,6 @@ public class StructureBlockAbstractImpl<L, V> implements StructureBlockDataAbstr
 
     private StructureMode mode = StructureMode.CORNER;
     private boolean boundingBox = true;
-    private Position position;
     private String saveName;
     private boolean invisibleBlocks = false;
     private String metaData;
@@ -70,7 +69,7 @@ public class StructureBlockAbstractImpl<L, V> implements StructureBlockDataAbstr
      * @param rotation rotation.
      */
     @Override
-    public void setRotation(@NotNull StructureRotation rotation) {
+    public void setRotationType(@NotNull StructureRotation rotation) {
         this.loader.rotation(rotation);
     }
 
@@ -80,7 +79,7 @@ public class StructureBlockAbstractImpl<L, V> implements StructureBlockDataAbstr
      * @return rotation.
      */
     @Override
-    public @NotNull StructureRotation getRotation() {
+    public @NotNull StructureRotation getRotationType() {
         return this.loader.getRotationType();
     }
 
@@ -181,7 +180,8 @@ public class StructureBlockAbstractImpl<L, V> implements StructureBlockDataAbstr
      */
     @Override
     public void setStructureLocation(@Nullable L location) {
-        this.position = proxyService.toPosition(location);
+        this.loader.at(location);
+        this.saver.at(location);
     }
 
     /**
@@ -192,7 +192,7 @@ public class StructureBlockAbstractImpl<L, V> implements StructureBlockDataAbstr
     @Nullable
     @Override
     public L getStructureLocation() {
-        return proxyService.toLocation(this.position);
+        return this.loader.getLocation();
     }
 
     /**

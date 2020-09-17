@@ -55,7 +55,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.setIntegrity(compound.getFloat("integrity"));
         this.setSeed(compound.getLong("seed"));
         this.setMirrorType(conversionService.convertToStructureMirror(EnumBlockMirror.valueOf(compound.getString("mirror"))));
-        this.setRotation(conversionService.convertToStructureRotation(EnumBlockRotation.valueOf(compound.getString("rotation"))));
+        this.setRotationType(conversionService.convertToStructureRotation(EnumBlockRotation.valueOf(compound.getString("rotation"))));
         this.setStructureMode(conversionService.convertToStructureMode(TileEntityStructure.UsageMode.valueOf(compound.getString("mode"))));
     }
 
@@ -69,31 +69,27 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     @Override
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
-
-        if (result) {
-            NBTTagCompound compound = new NBTTagCompound();
-            compound = this.tileEntityStructure.save(compound);
-            compound.setString("name", this.getSaveName());
-            compound.setString("author", this.getAuthor());
-            compound.setString("metadata", this.getBlockNameMetaData());
-            compound.setInt("posX", this.getStructureLocation().getBlockX());
-            compound.setInt("posY", this.getStructureLocation().getBlockY());
-            compound.setInt("posZ", this.getStructureLocation().getBlockZ());
-            compound.setInt("sizeX", this.getSizeX());
-            compound.setInt("sizeY", this.getSizeY());
-            compound.setInt("sizeZ", this.getSizeZ());
-            compound.setBoolean("showboundingbox", this.isBoundingBoxVisible());
-            compound.setBoolean("showair", this.isInvisibleBlocksEnabled());
-            compound.setBoolean("ignoreEntities", !this.isIncludeEntitiesEnabled());
-            compound.setFloat("integrity", this.getIntegrity());
-            compound.setLong("seed", this.getSeed());
-            compound.setString("rotation", conversionService.convertToRotationHandle(getRotation()).toString());
-            compound.setString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
-            compound.setString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());
-            this.tileEntityStructure.a(compound);
-            this.tileEntityStructure.update();
-        }
-
+        NBTTagCompound compound = new NBTTagCompound();
+        compound = this.tileEntityStructure.save(compound);
+        compound.setString("name", this.getSaveName());
+        compound.setString("author", this.getAuthor());
+        compound.setString("metadata", this.getBlockNameMetaData());
+        compound.setInt("posX", this.getStructureLocation().getBlockX());
+        compound.setInt("posY", this.getStructureLocation().getBlockY());
+        compound.setInt("posZ", this.getStructureLocation().getBlockZ());
+        compound.setInt("sizeX", this.getSizeX());
+        compound.setInt("sizeY", this.getSizeY());
+        compound.setInt("sizeZ", this.getSizeZ());
+        compound.setBoolean("showboundingbox", this.isBoundingBoxVisible());
+        compound.setBoolean("showair", this.isInvisibleBlocksEnabled());
+        compound.setBoolean("ignoreEntities", !this.isIncludeEntitiesEnabled());
+        compound.setFloat("integrity", this.getIntegrity());
+        compound.setLong("seed", this.getSeed());
+        compound.setString("rotation", conversionService.convertToRotationHandle(getRotationType()).toString());
+        compound.setString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
+        compound.setString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());
+        this.tileEntityStructure.a(compound);
+        this.tileEntityStructure.update();
         return result;
     }
 
@@ -114,8 +110,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      * @param rotation rotation.
      */
     @Override
-    public void setRotation(@NotNull StructureRotation rotation) {
-        this.internalBlock.setRotation(rotation);
+    public void setRotationType(@NotNull StructureRotation rotation) {
+        this.internalBlock.setRotationType(rotation);
     }
 
     /**
@@ -124,8 +120,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      * @return rotation.
      */
     @Override
-    public @NotNull StructureRotation getRotation() {
-        return internalBlock.getRotation();
+    public @NotNull StructureRotation getRotationType() {
+        return internalBlock.getRotationType();
     }
 
     /**

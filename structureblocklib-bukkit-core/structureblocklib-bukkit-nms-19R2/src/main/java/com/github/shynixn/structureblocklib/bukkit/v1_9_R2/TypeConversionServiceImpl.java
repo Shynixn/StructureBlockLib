@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_9_R2;
 
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;

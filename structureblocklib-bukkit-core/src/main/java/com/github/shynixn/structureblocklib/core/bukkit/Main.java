@@ -10,10 +10,10 @@ import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImp
 import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureLoaderImpl;
 import com.github.shynixn.structureblocklib.core.bukkit.entity.StructureSaverImpl;
 import com.github.shynixn.structureblocklib.core.bukkit.service.ProxyServiceImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2.CraftStructureBlock;
-import com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2.StructureSerializationServiceImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2.StructureWorldServiceImpl;
-import com.github.shynixn.structureblocklib.core.bukkit.v1_9_R2.TypeConversionServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.CraftStructureBlock;
+import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureSerializationServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureWorldServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.TypeConversionServiceImpl;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;

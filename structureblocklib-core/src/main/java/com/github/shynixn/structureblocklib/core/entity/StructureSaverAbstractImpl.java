@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
@@ -295,6 +296,14 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
         }
 
+        try {
+            Files.createDirectories(file.getParentFile().toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        author(author);
+
         return saveToFile(file);
     }
 
@@ -462,7 +471,11 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         readMeta.offset = new PositionImpl(this.offset);
         readMeta.includeEntities = this.includeEntities;
         readMeta.structureVoid = this.structureVoid;
-        readMeta.author = this.author;
+
+        if (this.author != null) {
+            readMeta.author = this.author;
+        }
+
         return readMeta;
     }
 
@@ -511,9 +524,5 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
             source.setZ(source.getZ() + offSet.getZ());
             offSet.setZ(offSet.getZ() * -1);
         }
-
-        offSet.setX(offSet.getX() + 1);
-        offSet.setY(offSet.getY() + 1);
-        offSet.setZ(offSet.getZ() + 1);
     }
 }

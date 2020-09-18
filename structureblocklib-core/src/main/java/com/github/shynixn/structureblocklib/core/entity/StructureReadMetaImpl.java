@@ -4,12 +4,14 @@ import com.github.shynixn.structureblocklib.api.entity.Position;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class StructureReadMetaImpl implements StructureReadMeta {
     public Position location;
     public Position offset;
     public boolean includeEntities;
     public String structureVoid;
-    public String author = "";
+    public String author = UUID.randomUUID().toString();
 
     /**
      * Gets the source Location.

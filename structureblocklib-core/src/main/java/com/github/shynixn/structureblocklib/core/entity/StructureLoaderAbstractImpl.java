@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
@@ -250,13 +251,12 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * {@link ProgressToken} ()} for cancellation or callbacks.
      *
      * @param worldName World where the structure file is stored.
-     * @param name      Name of the stored structure.
      * @param author    Name of the structure author.
+     * @param name      Name of the stored structure.
      * @return NotNull instance of {@link ProgressToken}.
      */
     @Override
-    @NotNull
-    public ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String name, @NotNull String author) {
+    public @NotNull ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String author, @NotNull String name) {
         Version version = proxyService.getServerVersion();
         File file;
 
@@ -264,6 +264,12 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
             file = new File(worldName + File.separator + "generated" + File.separator + author + File.separator + "structures" + File.separator + name + ".nbt");
         } else {
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
+        }
+
+        try {
+            Files.createDirectories(file.getParentFile().toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return loadFromFile(file);

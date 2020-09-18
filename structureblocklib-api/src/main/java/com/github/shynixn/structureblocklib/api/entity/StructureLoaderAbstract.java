@@ -148,12 +148,12 @@ public interface StructureLoaderAbstract<L, V> {
      * {@link ProgressToken} ()} for cancellation or callbacks.
      *
      * @param worldName World where the structure file is stored.
-     * @param name      Name of the stored structure.
      * @param author    Name of the structure author.
+     * @param name      Name of the stored structure.
      * @return NotNull instance of {@link ProgressToken}.
      */
     @NotNull
-    ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String name, @NotNull String author);
+    ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String author, @NotNull String name);
 
     /**
      * Loads the structure blocks and entities from the given source and places

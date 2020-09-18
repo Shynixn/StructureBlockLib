@@ -71,16 +71,16 @@ public class ProxyServiceImpl implements ProxyService {
         if (location instanceof Location) {
             Location l = (Location) location;
             position.setWorldName(l.getWorld().getName());
-            position.setX(l.getX());
-            position.setY(l.getY());
-            position.setZ(l.getZ());
+            position.setX(l.getBlockX());
+            position.setY(l.getBlockY());
+            position.setZ(l.getBlockZ());
         }
 
         if (location instanceof Vector) {
             Vector l = (Vector) location;
-            position.setX(l.getX());
-            position.setY(l.getY());
-            position.setZ(l.getZ());
+            position.setX(l.getBlockX());
+            position.setY(l.getBlockY());
+            position.setZ(l.getBlockZ());
         }
 
         return position;

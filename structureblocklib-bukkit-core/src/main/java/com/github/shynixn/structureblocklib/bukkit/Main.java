@@ -1,7 +1,9 @@
 package com.github.shynixn.structureblocklib.bukkit;
 
+import com.github.shynixn.structureblocklib.api.block.StructureBlockAbstract;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureLoader;
 import com.github.shynixn.structureblocklib.api.bukkit.entity.StructureSaver;
+import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
@@ -10,13 +12,12 @@ import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImp
 import com.github.shynixn.structureblocklib.bukkit.entity.StructureLoaderImpl;
 import com.github.shynixn.structureblocklib.bukkit.entity.StructureSaverImpl;
 import com.github.shynixn.structureblocklib.bukkit.service.ProxyServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.CraftStructureBlock;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureSerializationServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureWorldServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.TypeConversionServiceImpl;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class Main {
     /**
@@ -27,11 +28,20 @@ public class Main {
      */
     public static Object createStructureBlock(Plugin plugin, Location location) {
         ProxyService proxyService = new ProxyServiceImpl(plugin);
-        TypeConversionService typeConversionService = new TypeConversionServiceImpl();
-        StructureSaver saver = createStructureSaver(plugin);
-        StructureLoader loader = createStructureLoader(plugin);
-        StructureBlockAbstractImpl<Location, Vector> abstractBlock = new StructureBlockAbstractImpl<>(proxyService, loader, saver);
-        return new CraftStructureBlock(abstractBlock, typeConversionService, location.getBlock());
+        Version version = proxyService.getServerVersion();
+
+        try {
+            TypeConversionService typeConversionService = (TypeConversionService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.TypeConversionServiceImpl")
+                    .getDeclaredConstructor().newInstance();
+            StructureSaver saver = createStructureSaver(plugin);
+            StructureLoader loader = createStructureLoader(plugin);
+            StructureBlockAbstractImpl<Location, Vector> abstractBlock = new StructureBlockAbstractImpl<>(proxyService, loader, saver);
+            return findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.CraftStructureBlock")
+                    .getDeclaredConstructor(StructureBlockAbstract.class, TypeConversionService.class, Block.class)
+                    .newInstance(abstractBlock, typeConversionService, location.getBlock());
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -42,10 +52,20 @@ public class Main {
      */
     public static StructureSaver createStructureSaver(Plugin plugin) {
         ProxyService proxyService = new ProxyServiceImpl(plugin);
-        TypeConversionService typeConversionService = new TypeConversionServiceImpl();
-        StructureWorldService worldService = new StructureWorldServiceImpl(typeConversionService);
-        StructureSerializationService serializationService = new StructureSerializationServiceImpl();
-        return new StructureSaverImpl(proxyService, serializationService, worldService);
+        Version version = proxyService.getServerVersion();
+
+        try {
+            TypeConversionService typeConversionService = (TypeConversionService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.TypeConversionServiceImpl")
+                    .getDeclaredConstructor().newInstance();
+            StructureWorldService worldService = (StructureWorldService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.StructureWorldServiceImpl")
+                    .getDeclaredConstructor(TypeConversionService.class)
+                    .newInstance(typeConversionService);
+            StructureSerializationService serializationService = (StructureSerializationService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.StructureSerializationServiceImpl")
+                    .getDeclaredConstructor().newInstance();
+            return new StructureSaverImpl(proxyService, serializationService, worldService);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -56,9 +76,30 @@ public class Main {
      */
     public static StructureLoader createStructureLoader(Plugin plugin) {
         ProxyService proxyService = new ProxyServiceImpl(plugin);
-        TypeConversionService typeConversionService = new TypeConversionServiceImpl();
-        StructureWorldService worldService = new StructureWorldServiceImpl(typeConversionService);
-        StructureSerializationService serializationService = new StructureSerializationServiceImpl();
-        return new StructureLoaderImpl(proxyService, serializationService, worldService);
+        Version version = proxyService.getServerVersion();
+
+        try {
+            TypeConversionService typeConversionService = (TypeConversionService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.TypeConversionServiceImpl")
+                    .getDeclaredConstructor().newInstance();
+            StructureWorldService worldService = (StructureWorldService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.StructureWorldServiceImpl")
+                    .getDeclaredConstructor(TypeConversionService.class)
+                    .newInstance(typeConversionService);
+            StructureSerializationService serializationService = (StructureSerializationService) findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.StructureSerializationServiceImpl")
+                    .getDeclaredConstructor().newInstance();
+            return new StructureLoaderImpl(proxyService, serializationService, worldService);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Finds a version dependent clazz.
+     *
+     * @param version version.
+     * @param name    name.
+     * @return clazz.
+     */
+    private static Class<?> findClazz(Version version, String name) throws ClassNotFoundException {
+        return Class.forName(name.replace("VERSION", version.getBukkitId()));
     }
 }

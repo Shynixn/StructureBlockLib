@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.bukkit.v1_9_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_10_R1;
 
 import com.github.shynixn.structureblocklib.api.bukkit.block.StructureBlockData;
 import com.github.shynixn.structureblocklib.api.bukkit.block.StructureBlockLoad;
@@ -10,14 +10,14 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
 import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImpl;
-import net.minecraft.server.v1_9_R2.EnumBlockMirror;
-import net.minecraft.server.v1_9_R2.EnumBlockRotation;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import net.minecraft.server.v1_9_R2.TileEntityStructure;
+import net.minecraft.server.v1_10_R1.EnumBlockMirror;
+import net.minecraft.server.v1_10_R1.EnumBlockRotation;
+import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.TileEntityStructure;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_10_R1.block.CraftBlockState;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,6 +56,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.setIncludeEntities(!compound.getBoolean("ignoreEntities"));
         this.setBoundingBoxVisible(compound.getBoolean("showboundingbox"));
         this.setInvisibleBlocksEnabled(compound.getBoolean("showair"));
+        this.setIntegrity(compound.getFloat("integrity"));
+        this.setSeed(compound.getLong("seed"));
         this.setMirrorType(conversionService.convertToStructureMirror(EnumBlockMirror.valueOf(compound.getString("mirror"))));
         this.setRotationType(conversionService.convertToStructureRotation(EnumBlockRotation.valueOf(compound.getString("rotation"))));
         this.setStructureMode(conversionService.convertToStructureMode(TileEntityStructure.UsageMode.valueOf(compound.getString("mode"))));
@@ -85,6 +87,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         compound.setBoolean("showboundingbox", this.isBoundingBoxVisible());
         compound.setBoolean("showair", this.isInvisibleBlocksEnabled());
         compound.setBoolean("ignoreEntities", !this.isIncludeEntitiesEnabled());
+        compound.setFloat("integrity", this.getIntegrity());
+        compound.setLong("seed", this.getSeed());
         compound.setString("rotation", conversionService.convertToRotationHandle(getRotationType()).toString());
         compound.setString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
         compound.setString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());

@@ -1,13 +1,8 @@
 name: StructureBlockLibSample
 version: 1.13.0
 author: Shynixn
-main: com.github.shynixn.structureblocklibsample.StructureBlockLibSamplePlugin
+main: com.github.shynixn.structureblocklib.bukkit.plugin.StructureBlockLibSamplePlugin
 commands:
-  struct:
-    description: Manages structures.
-    useage: /<command>
-    permission: structureblocklibsample.admin
-    permission-message: You don't have permission.
   structure:
     description: Manages structures.
     useage: /<command>

@@ -40,6 +40,10 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.conversionService = conversionService;
         this.tileEntityStructure = (TileEntityStructure) world.getTileEntityAt(this.getX(), this.getY(), this.getZ());
 
+        if (tileEntityStructure == null) {
+            throw new IllegalArgumentException("The block at " + world.getName() + " " + this.getX() + " " + this.getY() + " " + this.getZ() + " is not a StructureBlock.");
+        }
+
         NBTTagCompound compound = new NBTTagCompound();
         compound = this.tileEntityStructure.save(compound);
         this.setSaveName(compound.getString("name"));

@@ -23,11 +23,11 @@ public class StructureBlockLib implements StructureBlockLibApi {
      */
     public StructureBlockLib() {
         try {
-            structureSaveCreate = Class.forName("com.github.shynixn.structureblocklib.core.bukkit.Main")
+            structureSaveCreate = Class.forName("com.github.shynixn.structureblocklib.bukkit.Main")
                     .getDeclaredMethod("createStructureSaver", Plugin.class);
-            structureLoadCreate = Class.forName("com.github.shynixn.structureblocklib.core.bukkit.Main")
+            structureLoadCreate = Class.forName("com.github.shynixn.structureblocklib.bukkit.Main")
                     .getDeclaredMethod("createStructureLoader", Plugin.class);
-            structureBlockCreate = Class.forName("com.github.shynixn.structureblocklib.core.bukkit.Main")
+            structureBlockCreate = Class.forName("com.github.shynixn.structureblocklib.bukkit.Main")
                     .getDeclaredMethod("createStructureBlock", Plugin.class, Location.class);
         } catch (NoSuchMethodException | ClassNotFoundException e) {
             throw new RuntimeException(e);

@@ -3,7 +3,7 @@ package helper;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
-import net.minecraft.server.v1_9_R2.DefinedStructure;
+import net.minecraft.server.v1_11_R1.DefinedStructure;
 
 public class MockedStructureWorldService implements StructureWorldService {
     /**

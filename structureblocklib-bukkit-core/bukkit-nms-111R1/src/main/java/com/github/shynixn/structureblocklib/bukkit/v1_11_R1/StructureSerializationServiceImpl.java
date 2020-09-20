@@ -1,9 +1,9 @@
-package com.github.shynixn.structureblocklib.bukkit.v1_9_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_11_R1;
 
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
-import net.minecraft.server.v1_9_R2.DefinedStructure;
-import net.minecraft.server.v1_9_R2.NBTCompressedStreamTools;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.DefinedStructure;
+import net.minecraft.server.v1_11_R1.NBTCompressedStreamTools;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,12 +1,12 @@
-package com.github.shynixn.structureblocklib.bukkit.v1_9_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_11_R1;
 
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import net.minecraft.server.v1_11_R1.*;
+import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 
 /**
  * Implementation to interact with structures in the world.
@@ -43,7 +43,12 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         info.a((EnumBlockMirror) conversionService.convertToMirrorHandle(meta.getMirrorType()));
         info.a((EnumBlockRotation) conversionService.convertToRotationHandle(meta.getRotationType()));
 
-        // Integrity and seed handling exists since 1.10.
+        if (meta.getIntegrity() < 1.0F) {
+            float processorRotation = MathHelper.a(meta.getIntegrity(), 0.0F, 1.0F);
+            info.a(processorRotation);
+            info.a((Long) meta.getSeed());
+        }
+
         definedStructure.a(world, cornerBlock, info);
     }
 

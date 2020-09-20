@@ -4,10 +4,10 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.TypeConversionServiceImpl;
-import net.minecraft.server.v1_9_R2.EnumBlockMirror;
-import net.minecraft.server.v1_9_R2.EnumBlockRotation;
-import net.minecraft.server.v1_9_R2.TileEntityStructure;
+import com.github.shynixn.structureblocklib.bukkit.v1_11_R1.TypeConversionServiceImpl;
+import net.minecraft.server.v1_11_R1.EnumBlockMirror;
+import net.minecraft.server.v1_11_R1.EnumBlockRotation;
+import net.minecraft.server.v1_11_R1.TileEntityStructure;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

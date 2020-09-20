@@ -9,22 +9,22 @@ import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.CraftStructureBlock;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureSerializationServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.TypeConversionServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_11_R1.CraftStructureBlock;
+import com.github.shynixn.structureblocklib.bukkit.v1_11_R1.StructureSerializationServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_11_R1.TypeConversionServiceImpl;
 import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImpl;
 import com.github.shynixn.structureblocklib.core.entity.StructureLoaderAbstractImpl;
 import com.github.shynixn.structureblocklib.core.entity.StructureSaverAbstractImpl;
 import helper.MockedProxyService;
 import helper.MockedStructureWorldService;
-import net.minecraft.server.v1_9_R2.EnumBlockMirror;
-import net.minecraft.server.v1_9_R2.EnumBlockRotation;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import net.minecraft.server.v1_9_R2.TileEntityStructure;
+import net.minecraft.server.v1_11_R1.EnumBlockMirror;
+import net.minecraft.server.v1_11_R1.EnumBlockRotation;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.TileEntityStructure;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.util.Vector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,6 +56,8 @@ public class CraftStructureBlockIT {
         compound.setBoolean("ignoreEntities", true);
         compound.setBoolean("showboundingbox", true);
         compound.setBoolean("showair", true);
+        compound.setFloat("integrity", 0.4F);
+        compound.setLong("seed", 50L);
 
         TileEntityStructure structure = Mockito.mock(TileEntityStructure.class);
         Mockito.when(structure.save(Mockito.any(NBTTagCompound.class))).thenReturn(compound);
@@ -79,6 +81,8 @@ public class CraftStructureBlockIT {
         Assertions.assertFalse(classUnderTest.isIncludeEntitiesEnabled());
         Assertions.assertTrue(classUnderTest.isBoundingBoxVisible());
         Assertions.assertTrue(classUnderTest.isInvisibleBlocksEnabled());
+        Assertions.assertEquals(0.4F, classUnderTest.getIntegrity());
+        Assertions.assertEquals(50L, classUnderTest.getSeed());
     }
 
     /**
@@ -110,6 +114,8 @@ public class CraftStructureBlockIT {
         classUnderTest.setIncludeEntities(true);
         classUnderTest.setBoundingBoxVisible(true);
         classUnderTest.setInvisibleBlocksEnabled(true);
+        classUnderTest.setIntegrity(0.4F);
+        classUnderTest.setSeed(50L);
 
         // Act
         Wrap<NBTTagCompound> wrap = new Wrap<>();
@@ -136,11 +142,13 @@ public class CraftStructureBlockIT {
         Assertions.assertFalse(actual.getBoolean("ignoreEntities"));
         Assertions.assertTrue(actual.getBoolean("showboundingbox"));
         Assertions.assertTrue(actual.getBoolean("showair"));
+        Assertions.assertEquals(0.4F, actual.getFloat("integrity"));
+        Assertions.assertEquals(50L, actual.getLong("seed"));
     }
 
     private CraftStructureBlock createWithDependencies(ProxyService proxyService, TileEntityStructure tileEntityStructure) {
         CraftWorld craftWorld = Mockito.mock(CraftWorld.class);
-        org.bukkit.block.Block block = Mockito.mock(org.bukkit.block.Block.class);
+        Block block = Mockito.mock(Block.class);
         Mockito.when(block.getWorld()).thenReturn(craftWorld);
         Mockito.when(craftWorld.getTileEntityAt(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(tileEntityStructure);
 
@@ -166,6 +174,6 @@ public class CraftStructureBlockIT {
     }
 
     private static class Wrap<T> {
-        public volatile T item;
+        public T item;
     }
 }

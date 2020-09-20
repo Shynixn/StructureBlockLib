@@ -1,13 +1,12 @@
 package unittest;
 
-import com.github.shynixn.structureblocklib.bukkit.v1_9_R2.StructureSerializationServiceImpl;
-import net.minecraft.server.v1_9_R2.DefinedStructure;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
+import com.github.shynixn.structureblocklib.bukkit.v1_11_R1.StructureSerializationServiceImpl;
+import net.minecraft.server.v1_11_R1.DefinedStructure;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -38,28 +37,6 @@ public class TStructureSerializationServiceImpl {
             Assertions.fail(e);
         }
     }
-
-    /**
-     * Given a valid defined Structure
-     * when deSerialize is called
-     * then the content should be read from the input stream.
-     */
-    @Test
-    public void deSerialize_ValidDefinedStructure_ShouldCorrectlyDeSerialize() {
-        // Arrange
-        StructureSerializationServiceImpl classUnderTest = createWithDependencies();
-        byte[] input = Base64.getDecoder().decode("H4sIAAAAAAAAAONiYGAAAHg/+U4EAAAA");
-
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(input)) {
-            // Act
-            DefinedStructure definedStructure = (DefinedStructure) classUnderTest.deSerialize(inputStream);
-            // Assert.
-            Assertions.assertNotNull(definedStructure);
-        } catch (IOException e) {
-            Assertions.fail(e);
-        }
-    }
-
     /**
      * Given a invalid defined Structure
      * when serialize is called

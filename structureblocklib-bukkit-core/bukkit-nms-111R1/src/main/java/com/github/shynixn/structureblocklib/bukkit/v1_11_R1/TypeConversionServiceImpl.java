@@ -1,12 +1,12 @@
-package com.github.shynixn.structureblocklib.bukkit.v1_9_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_11_R1;
 
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import net.minecraft.server.v1_9_R2.EnumBlockMirror;
-import net.minecraft.server.v1_9_R2.EnumBlockRotation;
-import net.minecraft.server.v1_9_R2.TileEntityStructure;
+import net.minecraft.server.v1_11_R1.EnumBlockMirror;
+import net.minecraft.server.v1_11_R1.EnumBlockRotation;
+import net.minecraft.server.v1_11_R1.TileEntityStructure;
 
 public class TypeConversionServiceImpl implements TypeConversionService {
     /**
@@ -78,7 +78,7 @@ public class TypeConversionServiceImpl implements TypeConversionService {
      */
     @Override
     public Object convertToStructureModeHandle(StructureMode mode) {
-        switch (mode){
+        switch (mode) {
             case SAVE:
                 return TileEntityStructure.UsageMode.SAVE;
             case DATA:

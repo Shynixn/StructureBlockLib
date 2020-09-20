@@ -7,6 +7,7 @@ cache:
   directories:
   - $HOME/.m2/repository/org/spigotmc
 before_install:
+  - chmod +x travis-status.sh
   - chmod +x gradlew
   - sudo /etc/init.d/mysql stop
   - if [[ $TRAVIS_COMMIT_MESSAGE == *"--refresh-dependencies"* ]]; then ./gradlew downloadDependencies; fi ;
@@ -16,7 +17,7 @@ install:
   - ./gradlew assemble || ./gradlew downloadDependencies
 script:
   - ./gradlew clean build
-  - if [[ $TRAVIS_COMMIT_MESSAGE == *"--snapshot"* ]]; then ./gradlew clean publish > /dev/null; fi ;
+  - if [[ $TRAVIS_COMMIT_MESSAGE == *"--snapshot"* ]]; then ./gradlew publish > /dev/null; fi ;
   - if [[ $TRAVIS_COMMIT_MESSAGE == *"--release"* && $TRAVIS_BRANCH == *"master"* ]]; then ./gradlew clean publishToNexus > /dev/null; fi ;
   - if [[ $TRAVIS_COMMIT_MESSAGE == *"--release"* && $TRAVIS_BRANCH == *"master"* ]]; then ./gradlew closeAndReleaseRepository; fi ;
   - if [[ $TRAVIS_BRANCH == *"master"* ]]; then rm -rf docs/build && rm -rf docs/apidocs; fi ;
@@ -26,3 +27,6 @@ script:
 after_success:
   - ./gradlew jacocoRootReport
   - bash <(curl -s https://codecov.io/bash)
+  - ./travis-status.sh success $DISCORD_TOKEN
+after_failure:
+  - ./travis-status.sh failure $DISCORD_TOKEN

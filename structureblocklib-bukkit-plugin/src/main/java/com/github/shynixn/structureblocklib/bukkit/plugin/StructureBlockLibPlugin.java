@@ -1,6 +1,5 @@
 package com.github.shynixn.structureblocklib.bukkit.plugin;
 
-import com.github.shynixn.structureblocklib.bukkit.core.VersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,10 +40,6 @@ public final class StructureBlockLibPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        if (!VersionSupport.isServerVersionSupported(PLUGIN_NAME, PREFIX_CONSOLE)) {
-            return;
-        }
-
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Loading StructureBlockLib...");
         Bukkit.getConsoleSender().sendMessage(PREFIX_CONSOLE + ChatColor.GREEN + "Enabled StructureBlockLib " + this.getDescription().getVersion() + " by Shynixn");
     }

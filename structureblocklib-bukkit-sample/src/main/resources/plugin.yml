@@ -1,7 +1,7 @@
 name: StructureBlockLibSample
-version: 1.13.0
+version: 2.0.0
 author: Shynixn
-main: com.github.shynixn.structureblocklibsample.StructureBlockLibSamplePlugin
+main: com.github.shynixn.structureblocklib.bukkit.plugin.StructureBlockLibSamplePlugin
 commands:
   structure:
     description: Manages structures.

@@ -1,14 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    id("com.github.johnrengelman.shadow") version("2.0.4")
-}
-
-tasks.withType<ShadowJar> {
-    archiveName = "$baseName-$version.$extension"
-
-    // Change the output folder of the plugin.
-    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+    id("com.github.johnrengelman.shadow") version ("2.0.4")
 }
 
 publishing {
@@ -17,19 +10,21 @@ publishing {
     }
 }
 
-tasks.register<Exec>("dockerJar") {
-    dependsOn("shadowJar")
+tasks.withType<ShadowJar> {
+    dependsOn("jar")
+    archiveName = "$baseName-$version.$extension"
 
-    commandLine = if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-        listOf("cmd", "/c", "docker cp build/libs/. structureblocklib-1.15:/minecraft/plugins")
-    } else {
-        listOf("sh", "-c", "docker cp build/libs/. structureblocklib-1.15:/minecraft/plugins")
-    }
+    // Change the output folder of the plugin.
+    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+
+    relocate("org.intellij", "com.github.shynixn.structureblocklib.lib.org.intellij")
+    relocate("org.jetbrains", "com.github.shynixn.structureblocklib.lib.org.jetbrains")
 }
 
 dependencies {
+    implementation(project(":structureblocklib-api"))
+    implementation(project(":structureblocklib-core"))
     implementation(project(":structureblocklib-bukkit-api"))
     implementation(project(":structureblocklib-bukkit-core"))
-
     compileOnly("org.spigotmc:spigot114R1:1.14.4-R1.0")
 }

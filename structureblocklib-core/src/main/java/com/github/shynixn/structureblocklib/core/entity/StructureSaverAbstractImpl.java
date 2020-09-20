@@ -511,17 +511,17 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      */
     private void changeOffSetToPositivOffset(Position source, Position offSet) {
         if (offSet.getX() < 0) {
-            source.setX(source.getX() + offSet.getX());
+            source.setX(source.getX() + offSet.getX() + 1);
             offSet.setX(offSet.getX() * -1);
         }
 
         if (offSet.getY() < 0) {
-            source.setY(source.getY() + offSet.getY());
+            source.setY(source.getY() + offSet.getY() + 1);
             offSet.setY(offSet.getY() * -1);
         }
 
         if (offSet.getZ() < 0) {
-            source.setZ(source.getZ() + offSet.getZ());
+            source.setZ(source.getZ() + offSet.getZ() + 1);
             offSet.setZ(offSet.getZ() * -1);
         }
     }

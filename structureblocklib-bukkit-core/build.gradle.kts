@@ -30,6 +30,5 @@ dependencies {
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-116R2"))
 
     compileOnly("org.spigotmc:spigot114R1:1.14.4-R1.0")
-
     testCompile("org.spigotmc:spigot112R1:1.12.0-R1.0")
 }

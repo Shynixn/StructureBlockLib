@@ -14,6 +14,9 @@ tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveName = "$baseName-$version.$extension"
 
+    // Change the output folder of the plugin.
+    // destinationDir = File("D:\\Benutzer\\Temp\\plugins")
+
     relocate("org.intellij", "com.github.shynixn.structureblocklib.lib.org.intellij")
     relocate("org.jetbrains", "com.github.shynixn.structureblocklib.lib.org.jetbrains")
 }

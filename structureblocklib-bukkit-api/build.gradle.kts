@@ -4,14 +4,18 @@ plugins {
     id("com.github.johnrengelman.shadow") version ("2.0.4")
 }
 
-tasks.withType<ShadowJar> {
-    archiveName = "$baseName-$version.$extension"
-}
-
 publishing {
     publications {
         (findByName("mavenJava") as MavenPublication).artifact(tasks.findByName("shadowJar")!!)
     }
+}
+
+tasks.withType<ShadowJar> {
+    dependsOn("jar")
+    archiveName = "$baseName-$version.$extension"
+
+    relocate("org.intellij", "com.github.shynixn.structureblocklib.lib.org.intellij")
+    relocate("org.jetbrains", "com.github.shynixn.structureblocklib.lib.org.jetbrains")
 }
 
 dependencies {

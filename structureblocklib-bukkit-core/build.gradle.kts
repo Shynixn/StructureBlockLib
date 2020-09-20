@@ -13,6 +13,9 @@ publishing {
 tasks.withType<ShadowJar> {
     dependsOn("jar")
     archiveName = "$baseName-$version.$extension"
+
+    relocate("org.intellij", "com.github.shynixn.structureblocklib.lib.org.intellij")
+    relocate("org.jetbrains", "com.github.shynixn.structureblocklib.lib.org.jetbrains")
 }
 
 dependencies {

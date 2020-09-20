@@ -1,5 +1,5 @@
 name: StructureBlockLibSample
-version: 1.13.0
+version: 2.0.0-SNAPSHOT
 author: Shynixn
 main: com.github.shynixn.structureblocklib.bukkit.plugin.StructureBlockLibSamplePlugin
 commands:

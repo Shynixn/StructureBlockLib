@@ -196,8 +196,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.0.0")
     implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.0.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.0.0")
 }
 ```
  

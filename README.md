@@ -17,7 +17,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 * API to save or load structures without an actual structure block. 
 * Asynchronous implementation and API.
 * Fluent API.
-* Version support 1.9.R1 - 1.16.R2
+* Version support 1.9.R1 - 1.16.R3
 
 ## Installation
 
@@ -28,7 +28,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.0.0</version>
+     <version>2.1.0</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -36,7 +36,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.0.0")
+    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.1.0")
 }
 ```
 
@@ -182,13 +182,13 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.0.0</version>
+     <version>2.1.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>2.0.0</version>
+     <version>2.1.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -196,8 +196,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.0.0")
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.0.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.1.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.1.0")
 }
 ```
  
@@ -215,6 +215,8 @@ dependencies {
 ```xml
 [./gradlew|gradlew.bat] downloadDependencies
 ```
+
+(If the downloadDependencies task fails for some reason, you can manually download [BuildTools.jar](https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar) and execute [the commands on this page](https://github.com/Shynixn/StructureBlockLib/blob/8a9bf2a402ba30118205ec400b7d1ab6562ecbf8/build.gradle#L224).)
 
 * Build the module files by executing the following gradle task.
 

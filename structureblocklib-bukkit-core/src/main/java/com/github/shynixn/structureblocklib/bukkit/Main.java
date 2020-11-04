@@ -37,7 +37,7 @@ public class Main {
             StructureLoader loader = createStructureLoader(plugin);
             StructureBlockAbstractImpl<Location, Vector> abstractBlock = new StructureBlockAbstractImpl<>(proxyService, loader, saver);
             return findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.CraftStructureBlock")
-                    .getDeclaredConstructor(StructureBlockAbstract.class, TypeConversionService.class, Block.class)
+                    .getDeclaredConstructor(StructureBlockAbstractImpl.class, TypeConversionService.class, Block.class)
                     .newInstance(abstractBlock, typeConversionService, location.getBlock());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
             throw new RuntimeException(e);

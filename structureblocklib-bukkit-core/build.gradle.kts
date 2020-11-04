@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-115R1"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-116R1"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-116R2"))
+    implementation(project(":structureblocklib-bukkit-core:bukkit-nms-116R3"))
 
     compileOnly("org.spigotmc:spigot114R1:1.14.4-R1.0")
     testCompile("org.spigotmc:spigot112R1:1.12.0-R1.0")

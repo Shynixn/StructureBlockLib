@@ -9,9 +9,9 @@ import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import com.github.shynixn.structureblocklib.bukkit.v1_16_R2.CraftStructureBlock;
-import com.github.shynixn.structureblocklib.bukkit.v1_16_R2.StructureSerializationServiceImpl;
-import com.github.shynixn.structureblocklib.bukkit.v1_16_R2.TypeConversionServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_16_R3.CraftStructureBlock;
+import com.github.shynixn.structureblocklib.bukkit.v1_16_R3.StructureSerializationServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_16_R3.TypeConversionServiceImpl;
 import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImpl;
 import com.github.shynixn.structureblocklib.core.entity.StructureLoaderAbstractImpl;
 import com.github.shynixn.structureblocklib.core.entity.StructureSaverAbstractImpl;
@@ -26,7 +26,6 @@ import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.util.Vector;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class CraftStructureBlockIT {

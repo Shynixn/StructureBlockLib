@@ -4,7 +4,7 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import com.github.shynixn.structureblocklib.bukkit.v1_16_R2.TypeConversionServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_16_R3.TypeConversionServiceImpl;
 import net.minecraft.server.v1_16_R3.BlockPropertyStructureMode;
 import net.minecraft.server.v1_16_R3.EnumBlockMirror;
 import net.minecraft.server.v1_16_R3.EnumBlockRotation;

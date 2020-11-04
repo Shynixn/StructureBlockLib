@@ -1,6 +1,6 @@
 package unittest;
 
-import com.github.shynixn.structureblocklib.bukkit.v1_16_R2.StructureSerializationServiceImpl;
+import com.github.shynixn.structureblocklib.bukkit.v1_16_R3.StructureSerializationServiceImpl;
 import net.minecraft.server.v1_16_R3.DefinedStructure;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import org.junit.jupiter.api.Assertions;

@@ -1,4 +1,4 @@
-package com.github.shynixn.structureblocklib.bukkit.v1_16_R2;
+package com.github.shynixn.structureblocklib.bukkit.v1_16_R3;
 
 import com.github.shynixn.structureblocklib.api.bukkit.block.StructureBlockData;
 import com.github.shynixn.structureblocklib.api.bukkit.block.StructureBlockLoad;

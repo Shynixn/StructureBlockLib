@@ -50,8 +50,8 @@ public interface StructureLoaderAbstract<L, V> {
     /**
      * Gets the target integrity.
      * Default 1.0.
-     * 1.0 ->  Every block which is present in the structure file is placed in the world.
-     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
+     * 1.0 Every block which is present in the structure file is placed in the world.
+     * 1.0 Blocks get randomly removed by loading depending on the given {@code getSeed}.
      *
      * @return integrity.
      */
@@ -108,8 +108,8 @@ public interface StructureLoaderAbstract<L, V> {
     /**
      * Sets the target integrity.
      * Default 1.0.
-     * 1.0 ->  Every block which is present in the structure file is placed in the world.
-     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code setSeed}.
+     * 1.0 Every block which is present in the structure file is placed in the world.
+     * 1.0 Blocks get randomly removed by loading depending on the given {@code setSeed}.
      *
      * @param integrity Integrity.
      * @return This instance.

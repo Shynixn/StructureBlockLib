@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  Build:
+  Build-JDK16:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -33,10 +33,22 @@ jobs:
           path: /home/runner/.m2/repository/org/spigotmc
           key: spigot-dependencies
 
+      - name: Build Spigot Dependencies
+        if: hashFiles('~/m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar') == ''
+        run: |
+          mkdir -p ~/.m2/repository/org/spigotmc/
+          docker build --target dependencies-jdk8 -t structureblocklib-dependencies-jdk8 .
+          docker create --name structureblocklib-dependencies-jdk8 structureblocklib-dependencies-jdk8 bash
+          docker cp structureblocklib-dependencies-jdk8:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
+          docker rm -f structureblocklib-dependencies-jdk8
+          docker build --target dependencies-jdk16 -t structureblocklib-dependencies-jdk16 .
+          docker create --name structureblocklib-dependencies-jdk16 structureblocklib-dependencies-jdk16 bash
+          docker cp structureblocklib-dependencies-jdk16:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
+          docker rm -f structureblocklib-dependencies-jdk16
+
       - name: Build Java Application
         run: |
           chmod +x gradlew
-          ./gradlew assemble || ./gradlew downloadDependencies
           ./gradlew clean build pluginJar
 
       - name: Publish Test Report

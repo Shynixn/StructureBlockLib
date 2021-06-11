@@ -38,6 +38,10 @@ jobs:
           test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar && echo "DEPENDENCIES=true" >> $GITHUB_ENV
           echo ${{ env.DEPENDENCIES }}
 
+      - name: Demo2
+        run: |
+          echo ${{ env.DEPENDENCIES }}
+
       - name: Build Spigot Dependencies
         if: ${{ env.DEPENDENCIES == 'true' }}
         run: |

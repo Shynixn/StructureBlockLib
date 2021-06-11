@@ -39,9 +39,13 @@ allprojects {
     apply plugin: 'jacoco'
 }
 
+tasks.register("printVersion") {
+    println(this.subprojects.getAt(0).version)
+}
+
 subprojects {
     group 'com.github.shynixn.structureblocklib'
-    version '2.1.0'
+    version '2.1.1'
 
     sourceCompatibility = 1.8
 

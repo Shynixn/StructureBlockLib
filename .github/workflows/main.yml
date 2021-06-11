@@ -33,8 +33,12 @@ jobs:
           path: /home/runner/.m2/repository/org/spigotmc
           key: spigot-dependency
 
+      - name: Demo
+        run: |
+          test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar && echo "DEPENDENCIES=true" >> $GITHUB_ENV
+
       - name: Build Spigot Dependencies
-        if: ${{ test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar }}
+        if: ${{ env.DEPENDENCIES == 'true' }}
         run: |
           mkdir -p ~/.m2/repository/org/spigotmc/
           docker build --target dependencies-jdk8 -t structureblocklib-dependencies-jdk8 .
@@ -47,7 +51,7 @@ jobs:
           docker rm -f structureblocklib-dependencies-jdk16
 
       - name: Publish Release to Maven Central
-        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}

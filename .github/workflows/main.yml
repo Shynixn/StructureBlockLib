@@ -26,6 +26,13 @@ jobs:
         with:
           java-version: '8'
 
+      - name: Cache Spigot Dependencies
+        id: cache-spigot-dependencies
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/.m2/repository/org/spigotmc
+          key: spigot-dependencies
+
       - name: Build Java Application
         run: |
           chmod +x gradlew

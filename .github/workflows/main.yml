@@ -34,7 +34,7 @@ jobs:
           key: spigot-dependency
 
       - name: Build Spigot Dependencies
-        if: hashFiles("~/m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar") == ''
+        if: hashFiles('~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar') == ''
         run: |
           mkdir -p ~/.m2/repository/org/spigotmc/
           docker build --target dependencies-jdk8 -t structureblocklib-dependencies-jdk8 .

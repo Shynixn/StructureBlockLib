@@ -57,7 +57,7 @@ tasks.register("pluginJar", Exec::class.java) {
     if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
         commandLine = listOf("cmd", "/c", obsMapping.replace("\$HOME", "%userprofile%"))
     } else {
-        commandLine = listOf("sh", "-c", obsMapping.replace("\$HOME", "~"))
+        commandLine = listOf("sh", "-c", obsMapping)
     }
 }
 

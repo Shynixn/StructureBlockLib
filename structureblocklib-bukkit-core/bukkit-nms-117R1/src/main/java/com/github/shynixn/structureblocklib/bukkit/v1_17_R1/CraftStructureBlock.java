@@ -10,12 +10,11 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
 import com.github.shynixn.structureblocklib.core.block.StructureBlockAbstractImpl;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.level.block.EnumBlockMirror;
-import net.minecraft.world.level.block.EnumBlockRotation;
-import net.minecraft.world.level.block.entity.TileEntityStructure;
-import net.minecraft.world.level.block.state.properties.BlockPropertyStructureMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.StructureBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
@@ -27,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
     public StructureBlockAbstractImpl<Location, Vector> internalBlock;
     public TypeConversionService conversionService;
-    public TileEntityStructure tileEntityStructure;
+    public StructureBlockEntity tileEntityStructure;
 
     /**
      * Creates a new instance with dependencies.
@@ -40,13 +39,13 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         final CraftWorld world = (CraftWorld) block.getWorld();
         this.internalBlock = structure;
         this.conversionService = conversionService;
-        this.tileEntityStructure = (TileEntityStructure) world.getHandle().getTileEntity(new BlockPosition(this.getX(), this.getY(), this.getZ()));
+        this.tileEntityStructure = (StructureBlockEntity) world.getHandle().getTileEntity(new BlockPos(this.getX(), this.getY(), this.getZ()), true);
 
         if (tileEntityStructure == null) {
             throw new IllegalArgumentException("The block at " + world.getName() + " " + this.getX() + " " + this.getY() + " " + this.getZ() + " is not a StructureBlock.");
         }
 
-        NBTTagCompound compound = new NBTTagCompound();
+        CompoundTag compound = new CompoundTag();
         compound = this.tileEntityStructure.save(compound);
         this.setSaveName(compound.getString("name"));
         this.setAuthor(compound.getString("author"));
@@ -60,9 +59,9 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         this.setInvisibleBlocksEnabled(compound.getBoolean("showair"));
         this.setIntegrity(compound.getFloat("integrity"));
         this.setSeed(compound.getLong("seed"));
-        this.setMirrorType(conversionService.convertToStructureMirror(EnumBlockMirror.valueOf(compound.getString("mirror"))));
-        this.setRotationType(conversionService.convertToStructureRotation(EnumBlockRotation.valueOf(compound.getString("rotation"))));
-        this.setStructureMode(conversionService.convertToStructureMode(BlockPropertyStructureMode.valueOf(compound.getString("mode"))));
+        this.setMirrorType(conversionService.convertToStructureMirror(Mirror.valueOf(compound.getString("mirror"))));
+        this.setRotationType(conversionService.convertToStructureRotation(Rotation.valueOf(compound.getString("rotation"))));
+        this.setStructureMode(conversionService.convertToStructureMode(net.minecraft.world.level.block.state.properties.StructureMode.valueOf(compound.getString("mode"))));
     }
 
     /**
@@ -75,27 +74,28 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     @Override
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
-        NBTTagCompound compound = new NBTTagCompound();
+        CompoundTag compound = new CompoundTag();
         compound = this.tileEntityStructure.save(compound);
-        compound.setString("name", this.getSaveName());
-        compound.setString("author", this.getAuthor());
-        compound.setString("metadata", this.getBlockNameMetaData());
-        compound.setInt("posX", this.getStructureLocation().getBlockX());
-        compound.setInt("posY", this.getStructureLocation().getBlockY());
-        compound.setInt("posZ", this.getStructureLocation().getBlockZ());
-        compound.setInt("sizeX", this.getSizeX());
-        compound.setInt("sizeY", this.getSizeY());
-        compound.setInt("sizeZ", this.getSizeZ());
-        compound.setBoolean("showboundingbox", this.isBoundingBoxVisible());
-        compound.setBoolean("showair", this.isInvisibleBlocksEnabled());
-        compound.setBoolean("ignoreEntities", !this.isIncludeEntitiesEnabled());
-        compound.setFloat("integrity", this.getIntegrity());
-        compound.setLong("seed", this.getSeed());
-        compound.setString("rotation", conversionService.convertToRotationHandle(getRotationType()).toString());
-        compound.setString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
-        compound.setString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());
+        compound.putString("name", this.getSaveName());
+        compound.putString("author", this.getAuthor());
+        compound.putString("metadata", this.getBlockNameMetaData());
+        compound.putInt("posX", this.getStructureLocation().getBlockX());
+        compound.putInt("posY", this.getStructureLocation().getBlockY());
+        compound.putInt("posZ", this.getStructureLocation().getBlockZ());
+        compound.putInt("sizeX", this.getSizeX());
+        compound.putInt("sizeY", this.getSizeY());
+        compound.putInt("sizeZ", this.getSizeZ());
+        compound.putBoolean("showboundingbox", this.isBoundingBoxVisible());
+        compound.putBoolean("showair", this.isInvisibleBlocksEnabled());
+        compound.putBoolean("ignoreEntities", !this.isIncludeEntitiesEnabled());
+        compound.putFloat("integrity", this.getIntegrity());
+        compound.putLong("seed", this.getSeed());
+        compound.putString("rotation", conversionService.convertToRotationHandle(getRotationType()).toString());
+        compound.putString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
+        compound.putString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());
         this.tileEntityStructure.load(compound);
-        this.tileEntityStructure.update();
+        this.tileEntityStructure.setChanged();
+
         return result;
     }
 

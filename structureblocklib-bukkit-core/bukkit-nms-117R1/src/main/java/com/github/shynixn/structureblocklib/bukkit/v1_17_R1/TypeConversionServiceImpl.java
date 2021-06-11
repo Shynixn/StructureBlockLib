@@ -4,9 +4,8 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureMode;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
-import net.minecraft.world.level.block.EnumBlockMirror;
-import net.minecraft.world.level.block.EnumBlockRotation;
-import net.minecraft.world.level.block.state.properties.BlockPropertyStructureMode;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 
 public class TypeConversionServiceImpl implements TypeConversionService {
     /**
@@ -17,13 +16,13 @@ public class TypeConversionServiceImpl implements TypeConversionService {
      */
     @Override
     public StructureMode convertToStructureMode(Object handle) {
-        BlockPropertyStructureMode usageMode = (BlockPropertyStructureMode) handle;
+        net.minecraft.world.level.block.state.properties.StructureMode usageMode = (net.minecraft.world.level.block.state.properties.StructureMode) handle;
         switch (usageMode) {
-            case d:
+            case DATA:
                 return StructureMode.DATA;
-            case b:
+            case LOAD:
                 return StructureMode.LOAD;
-            case a:
+            case SAVE:
                 return StructureMode.SAVE;
             default:
                 return StructureMode.CORNER;
@@ -38,11 +37,11 @@ public class TypeConversionServiceImpl implements TypeConversionService {
      */
     @Override
     public StructureMirror convertToStructureMirror(Object handle) {
-        EnumBlockMirror mirror = (EnumBlockMirror) handle;
+        Mirror mirror = (Mirror) handle;
         switch (mirror) {
-            case c:
+            case FRONT_BACK:
                 return StructureMirror.FRONT_BACK;
-            case b:
+            case LEFT_RIGHT:
                 return StructureMirror.LEFT_RIGHT;
             default:
                 return StructureMirror.NONE;
@@ -57,13 +56,13 @@ public class TypeConversionServiceImpl implements TypeConversionService {
      */
     @Override
     public StructureRotation convertToStructureRotation(Object handle) {
-        EnumBlockRotation rotation = (EnumBlockRotation) handle;
+        Rotation rotation = (Rotation) handle;
         switch (rotation) {
-            case b:
+            case CLOCKWISE_90:
                 return StructureRotation.ROTATION_90;
-            case c:
+            case CLOCKWISE_180:
                 return StructureRotation.ROTATION_180;
-            case d:
+            case COUNTERCLOCKWISE_90:
                 return StructureRotation.ROTATION_270;
             default:
                 return StructureRotation.NONE;
@@ -80,13 +79,13 @@ public class TypeConversionServiceImpl implements TypeConversionService {
     public Object convertToStructureModeHandle(StructureMode mode) {
         switch (mode) {
             case SAVE:
-                return BlockPropertyStructureMode.a;
+                return net.minecraft.world.level.block.state.properties.StructureMode.SAVE;
             case DATA:
-                return BlockPropertyStructureMode.d;
+                return net.minecraft.world.level.block.state.properties.StructureMode.DATA;
             case LOAD:
-                return BlockPropertyStructureMode.b;
+                return net.minecraft.world.level.block.state.properties.StructureMode.LOAD;
             default:
-                return BlockPropertyStructureMode.c;
+                return net.minecraft.world.level.block.state.properties.StructureMode.CORNER;
         }
     }
 
@@ -100,11 +99,11 @@ public class TypeConversionServiceImpl implements TypeConversionService {
     public Object convertToMirrorHandle(StructureMirror mirror) {
         switch (mirror) {
             case FRONT_BACK:
-                return EnumBlockMirror.c;
+                return Mirror.FRONT_BACK;
             case LEFT_RIGHT:
-                return EnumBlockMirror.b;
+                return Mirror.LEFT_RIGHT;
             default:
-                return EnumBlockMirror.a;
+                return Mirror.NONE;
         }
     }
 
@@ -118,13 +117,13 @@ public class TypeConversionServiceImpl implements TypeConversionService {
     public Object convertToRotationHandle(StructureRotation rotation) {
         switch (rotation) {
             case ROTATION_90:
-                return EnumBlockRotation.b;
+                return Rotation.CLOCKWISE_90;
             case ROTATION_180:
-                return EnumBlockRotation.c;
+                return Rotation.CLOCKWISE_180;
             case ROTATION_270:
-                return EnumBlockRotation.d;
+                return Rotation.COUNTERCLOCKWISE_90;
             default:
-                return EnumBlockRotation.a;
+                return Rotation.NONE;
         }
     }
 }

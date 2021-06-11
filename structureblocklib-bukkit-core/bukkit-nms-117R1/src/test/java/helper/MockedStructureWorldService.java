@@ -3,7 +3,7 @@ package helper;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class MockedStructureWorldService implements StructureWorldService {
     /**
@@ -24,6 +24,6 @@ public class MockedStructureWorldService implements StructureWorldService {
      */
     @Override
     public Object readStructureFromWorld(StructureReadMeta meta) throws Exception {
-        return new DefinedStructure();
+        return new StructureTemplate();
     }
 }

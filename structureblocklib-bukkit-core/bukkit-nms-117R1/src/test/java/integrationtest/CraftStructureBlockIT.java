@@ -17,13 +17,11 @@ import com.github.shynixn.structureblocklib.core.entity.StructureLoaderAbstractI
 import com.github.shynixn.structureblocklib.core.entity.StructureSaverAbstractImpl;
 import helper.MockedProxyService;
 import helper.MockedStructureWorldService;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.level.block.EnumBlockMirror;
-import net.minecraft.world.level.block.EnumBlockRotation;
-import net.minecraft.world.level.block.entity.TileEntityStructure;
-import net.minecraft.world.level.block.state.IBlockData;
-import net.minecraft.world.level.block.state.properties.BlockPropertyStructureMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.StructureBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -45,27 +43,27 @@ public class CraftStructureBlockIT {
     public void create_NBTTags_ShouldCorrectlyRetrieve() {
         // Arrange
         MockedProxyService proxyService = new MockedProxyService();
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setString("author", "Mario");
-        compound.setString("mirror", "LEFT_RIGHT");
-        compound.setString("rotation", "CLOCKWISE_90");
-        compound.setString("mode", "SAVE");
-        compound.setString("name", "Thisismysavename");
-        compound.setString("metadata", "Thisismetadata");
-        compound.setInt("posX", 50);
-        compound.setInt("posY", 550);
-        compound.setInt("posZ", -30);
-        compound.setInt("sizeX", 20);
-        compound.setInt("sizeY", -40);
-        compound.setInt("sizeZ", -70);
-        compound.setBoolean("ignoreEntities", true);
-        compound.setBoolean("showboundingbox", true);
-        compound.setBoolean("showair", true);
-        compound.setFloat("integrity", 0.4F);
-        compound.setLong("seed", 50L);
+        CompoundTag compound = new CompoundTag();
+        compound.putString("author", "Mario");
+        compound.putString("mirror", "LEFT_RIGHT");
+        compound.putString("rotation", "CLOCKWISE_90");
+        compound.putString("mode", "SAVE");
+        compound.putString("name", "Thisismysavename");
+        compound.putString("metadata", "Thisismetadata");
+        compound.putInt("posX", 50);
+        compound.putInt("posY", 550);
+        compound.putInt("posZ", -30);
+        compound.putInt("sizeX", 20);
+        compound.putInt("sizeY", -40);
+        compound.putInt("sizeZ", -70);
+        compound.putBoolean("ignoreEntities", true);
+        compound.putBoolean("showboundingbox", true);
+        compound.putBoolean("showair", true);
+        compound.putFloat("integrity", 0.4F);
+        compound.putLong("seed", 50L);
 
-        TileEntityStructure structure = Mockito.mock(TileEntityStructure.class);
-        Mockito.when(structure.save(Mockito.any(NBTTagCompound.class))).thenReturn(compound);
+        StructureBlockEntity structure = Mockito.mock(StructureBlockEntity.class);
+        Mockito.when(structure.save(Mockito.any(CompoundTag.class))).thenReturn(compound);
 
         // Act
         CraftStructureBlock classUnderTest = createWithDependencies(proxyService, structure);
@@ -100,12 +98,12 @@ public class CraftStructureBlockIT {
     public void update_ChangedStructureBlock_ShouldCorrectlyGenerateNBT() {
         // Arrange
         MockedProxyService proxyService = new MockedProxyService();
-        NBTTagCompound input = new NBTTagCompound();
-        input.setString("mirror", "LEFT_RIGHT");
-        input.setString("rotation", "CLOCKWISE_90");
-        input.setString("mode", "SAVE");
-        TileEntityStructure structure = Mockito.mock(TileEntityStructure.class);
-        Mockito.when(structure.save(Mockito.any(NBTTagCompound.class))).thenReturn(input);
+        CompoundTag input = new CompoundTag();
+        input.putString("mirror", "LEFT_RIGHT");
+        input.putString("rotation", "CLOCKWISE_90");
+        input.putString("mode", "SAVE");
+        StructureBlockEntity structure = Mockito.mock(StructureBlockEntity.class);
+        Mockito.when(structure.save(Mockito.any(CompoundTag.class))).thenReturn(input);
         CraftStructureBlock classUnderTest = createWithDependencies(proxyService, structure);
         classUnderTest.setMirrorType(StructureMirror.LEFT_RIGHT);
         classUnderTest.setRotationType(StructureRotation.ROTATION_90);
@@ -124,18 +122,18 @@ public class CraftStructureBlockIT {
         classUnderTest.setSeed(50L);
 
         // Act
-        Wrap<NBTTagCompound> wrap = new Wrap<>();
+        Wrap<CompoundTag> wrap = new Wrap<>();
         Mockito.doAnswer(invocation -> {
             wrap.item = invocation.getArgument(0);
             return null;
-        }).when(structure).load(Mockito.any(NBTTagCompound.class));
+        }).when(structure).load(Mockito.any(CompoundTag.class));
         classUnderTest.update();
-        NBTTagCompound actual = wrap.item;
+        CompoundTag actual = wrap.item;
 
         // Assert
-        Assertions.assertEquals(EnumBlockMirror.b.toString(), actual.getString("mirror"));
-        Assertions.assertEquals(EnumBlockRotation.b.toString(), actual.getString("rotation"));
-        Assertions.assertEquals(BlockPropertyStructureMode.a.toString(), actual.getString("mode"));
+        Assertions.assertEquals(Mirror.LEFT_RIGHT.toString(), actual.getString("mirror"));
+        Assertions.assertEquals(Rotation.CLOCKWISE_90.toString(), actual.getString("rotation"));
+        Assertions.assertEquals(StructureMode.SAVE.toString(), actual.getString("mode"));
         Assertions.assertEquals("Mario", actual.getString("author"));
         Assertions.assertEquals("Thisismysavename", actual.getString("name"));
         Assertions.assertEquals("Thisismetadata", actual.getString("metadata"));
@@ -152,13 +150,13 @@ public class CraftStructureBlockIT {
         Assertions.assertEquals(50L, actual.getLong("seed"));
     }
 
-    private CraftStructureBlock createWithDependencies(ProxyService proxyService, TileEntityStructure tileEntityStructure) {
+    private CraftStructureBlock createWithDependencies(ProxyService proxyService,StructureBlockEntity tileEntityStructure) {
         CraftWorld craftWorld = Mockito.mock(CraftWorld.class);
         CraftBlock block = Mockito.mock(CraftBlock.class);
         Mockito.when(block.getWorld()).thenReturn(craftWorld);
-        net.minecraft.world.level.World world = Mockito.mock(net.minecraft.world.level.World.class);
-        Mockito.when(block.getPosition()).thenReturn(new BlockPosition(2, 2, 2));
-        Mockito.when(world.getTileEntity(Mockito.any(BlockPosition.class))).thenReturn(tileEntityStructure);
+        net.minecraft.world.level.Level world = Mockito.mock(net.minecraft.world.level.Level.class);
+        Mockito.when(block.getPosition()).thenReturn(new BlockPos(2, 2, 2));
+        Mockito.when(world.getTileEntity(Mockito.any(BlockPos.class), Mockito.any(Boolean.class))).thenReturn(tileEntityStructure);
 
         StructureWorldService worldService = new MockedStructureWorldService();
         StructureSerializationService serializationService = new StructureSerializationServiceImpl();

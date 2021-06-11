@@ -1,9 +1,8 @@
 package com.github.shynixn.structureblocklib.bukkit.v1_17_R1;
 
 import com.github.shynixn.structureblocklib.api.service.StructureSerializationService;
-import net.minecraft.nbt.NBTCompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
+import net.minecraft.nbt.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,34 +13,34 @@ import java.io.OutputStream;
  */
 public class StructureSerializationServiceImpl implements StructureSerializationService {
     /**
-     * Deserializes the {@link InputStream} to an NMS handle of DefinedStructure.
+     * Deserializes the {@link InputStream} to an NMS handle of StructureTemplate.
      * This call is blocking.
      *
      * @param inputStream Opened inputStream. Does not close the stream after processing.
-     * @return A new NMS instance of DefinedStructure.
+     * @return A new NMS instance of StructureTemplate.
      */
     @Override
     public Object deSerialize(InputStream inputStream) throws IOException {
-        NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(inputStream);
-        DefinedStructure var4 = new DefinedStructure();
-        var4.b(nbttagcompound);
-        return var4;
+        CompoundTag compound = NbtIo.readCompressed(inputStream);
+        StructureTemplate template = new StructureTemplate();
+        template.load(compound);
+        return template;
     }
 
     /**
-     * Serializes the NMS handle of DefinedStructure to an {@link OutputStream}.
+     * Serializes the NMS handle of StructureTemplate to an {@link OutputStream}.
      * This call is blocking.
      *
-     * @param definedStructure NMS handle.
+     * @param structureTemplate NMS handle.
      * @param outputStream     Opened outputStream. Does not close the stream after processing.
      */
     @Override
-    public void serialize(Object definedStructure, OutputStream outputStream) throws IOException {
-        if (!(definedStructure instanceof DefinedStructure)) {
-            throw new IllegalArgumentException("DefinedStructure has to be an NMS handle!");
+    public void serialize(Object structureTemplate, OutputStream outputStream) throws IOException {
+        if (!(structureTemplate instanceof StructureTemplate)) {
+            throw new IllegalArgumentException("StructureTemplate has to be an NMS handle!");
         }
 
-        NBTTagCompound nbttagcompound = (((DefinedStructure) definedStructure)).a(new NBTTagCompound());
-        NBTCompressedStreamTools.a(nbttagcompound, outputStream);
+        CompoundTag compound = (((StructureTemplate) structureTemplate)).save(new CompoundTag());
+        NbtIo.writeCompressed(compound, outputStream);
     }
 }

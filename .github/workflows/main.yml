@@ -43,7 +43,7 @@ jobs:
           echo ${{ env.DEPENDENCIES }}
 
       - name: Build Spigot Dependencies
-        if: ${{ env.DEPENDENCIES == 'true' }}
+        if: "contains(env.DEPENDENCIES, 'true')"
         run: |
           mkdir -p ~/.m2/repository/org/spigotmc/
           docker build --target dependencies-jdk8 -t structureblocklib-dependencies-jdk8 .

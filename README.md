@@ -232,6 +232,7 @@ docker rm -f structureblocklib-dependencies-jdk16
 
 * Setup your own minecraft server
 * Change ``// val destinationDir = File("C:/temp/plugins")`` to your plugins folder in the ``structureblocklib-bukkit-sample/build.gradle.kts`` file.
+* Run the ``pluginJar`` task to generate a plugin.jar file.
 * Run your minecraft server
 
 #### Option 2 

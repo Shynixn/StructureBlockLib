@@ -33,7 +33,7 @@ jobs:
           path: /home/runner/.m2/repository/org/spigotmc
           key: spigot-dependency
 
-      - name: Test dependency
+      - name: Test Spigot Dependency
         run: |
           test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar && echo "DEPENDENCIES=true" >> $GITHUB_ENV
 
@@ -49,6 +49,16 @@ jobs:
           docker create --name structureblocklib-dependencies-jdk16 structureblocklib-dependencies-jdk16 bash
           docker cp structureblocklib-dependencies-jdk16:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
           docker rm -f structureblocklib-dependencies-jdk16
+
+      - name: Build Java Application
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build pluginJar
+
+      - name: Publish Test Report
+        run: |
+          ./gradlew jacocoTestReport
+          bash <(curl -s https://codecov.io/bash)
 
       - name: Publish Release to Maven Central
         if: ${{ github.ref == 'refs/heads/main' }}

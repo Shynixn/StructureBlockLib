@@ -35,8 +35,8 @@ jobs:
 
       - name: Demo
         run: |
-          demo=$(test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar)
-          echo $demo
+          test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar && echo "Yes"
+          test -f ~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar || echo "No"
 
       - name: Build Spigot Dependencies
         if: hashFiles('~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar') == ''

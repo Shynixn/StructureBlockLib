@@ -43,10 +43,16 @@ tasks.register("pluginJar", Exec::class.java) {
     if (!file.exists()) {
         URL("https://repo.maven.apache.org/maven2/net/md-5/SpecialSource/1.10.0/SpecialSource-1.10.0-shaded.jar").openStream()
             .use {
-                Files.copy(it, file.toPath())
+                try{
+                    Files.copy(it, file.toPath())
+                }catch (e : Exception){
+                    e.printStackTrace()
+                }
             }
+        println("Downloaded " + file.absolutePath)
     }
 
+    println("Download")
     val shadowJar = tasks.findByName("shadowJar")!! as ShadowJar
     val obfArchiveName = "${shadowJar.baseName}-${shadowJar.version}-obfuscated.${shadowJar.extension}"
     val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"

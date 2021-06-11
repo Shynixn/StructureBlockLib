@@ -53,7 +53,7 @@ jobs:
       - name: Build Java Application
         run: |
           chmod +x gradlew
-          ./gradlew clean build pluginJar
+          ./gradlew build pluginJar
 
       - name: Publish Test Report
         run: |

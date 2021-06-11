@@ -43,16 +43,10 @@ tasks.register("pluginJar", Exec::class.java) {
     if (!file.exists()) {
         URL("https://repo.maven.apache.org/maven2/net/md-5/SpecialSource/1.10.0/SpecialSource-1.10.0-shaded.jar").openStream()
             .use {
-                try{
-                    Files.copy(it, file.toPath())
-                }catch (e : Exception){
-                    e.printStackTrace()
-                }
+                Files.copy(it, file.toPath())
             }
-        println("Downloaded " + file.absolutePath)
     }
 
-    println("Download")
     val shadowJar = tasks.findByName("shadowJar")!! as ShadowJar
     val obfArchiveName = "${shadowJar.baseName}-${shadowJar.version}-obfuscated.${shadowJar.extension}"
     val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"
@@ -61,7 +55,7 @@ tasks.register("pluginJar", Exec::class.java) {
     val targetJarFile = File(destinationDir, archiveName)
 
     val obsMapping =
-        "chmod +x ${file.absolutePath} && java -jar ${file.absolutePath} -i \"$sourceJarFile\" -o \"$obfJarFile\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt\" --reverse" +
+        "java -jar ${file.absolutePath} -i \"$sourceJarFile\" -o \"$obfJarFile\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt\" --reverse" +
                 "&& java -jar ${file.absolutePath} -i \"$obfJarFile\" -o \"$targetJarFile\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg\""
 
     if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {

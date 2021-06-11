@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.StructureBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,6 +23,8 @@ import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlockState;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Method;
 
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
     public StructureBlockAbstractImpl<Location, Vector> internalBlock;
@@ -46,7 +49,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         }
 
         CompoundTag compound = new CompoundTag();
-        compound = this.tileEntityStructure.save(compound);
+        compound = saveCompoundTileEntityStructure(this.tileEntityStructure, compound);
         this.setSaveName(compound.getString("name"));
         this.setAuthor(compound.getString("author"));
         this.setBlockNameMetaData(compound.getString("metadata"));
@@ -75,7 +78,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     public boolean update(boolean force, boolean applyPhysics) {
         final boolean result = super.update(force, applyPhysics);
         CompoundTag compound = new CompoundTag();
-        compound = this.tileEntityStructure.save(compound);
+        compound = saveCompoundTileEntityStructure(this.tileEntityStructure, compound);
         compound.putString("name", this.getSaveName());
         compound.putString("author", this.getAuthor());
         compound.putString("metadata", this.getBlockNameMetaData());
@@ -93,8 +96,8 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
         compound.putString("rotation", conversionService.convertToRotationHandle(getRotationType()).toString());
         compound.putString("mirror", conversionService.convertToMirrorHandle(getMirrorType()).toString());
         compound.putString("mode", conversionService.convertToStructureModeHandle(getStructureMode()).toString());
-        this.tileEntityStructure.load(compound);
-        this.tileEntityStructure.setChanged();
+        this.loadCompoundTileEntityStructure(this.tileEntityStructure, compound);
+        this.setChangedTileEntityStructure(this.tileEntityStructure);
 
         return result;
     }
@@ -425,5 +428,41 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
     @Override
     public @NotNull StructureSaverAbstract<Location, Vector> saveStructure() {
         return internalBlock.saveStructure();
+    }
+
+    /**
+     * The mapping for StructureBlockEntity save is broken in spigot. This is a workaround.
+     */
+    private CompoundTag saveCompoundTileEntityStructure(StructureBlockEntity tileEntityStructure, CompoundTag compoundTag) {
+        try {
+            Method method = StructureBlockEntity.class.getDeclaredMethod("save", CompoundTag.class);
+            return (CompoundTag) method.invoke(tileEntityStructure, compoundTag);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * The mapping for StructureBlockEntity load is broken in spigot. This is a workaround.
+     */
+    private void loadCompoundTileEntityStructure(StructureBlockEntity tileEntityStructure, CompoundTag compoundTag) {
+        try {
+            Method method = StructureBlockEntity.class.getDeclaredMethod("load", CompoundTag.class);
+            method.invoke(tileEntityStructure, compoundTag);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * The mapping for StructureBlockEntity setChanged is broken in spigot. This is a workaround.
+     */
+    private void setChangedTileEntityStructure(StructureBlockEntity tileEntityStructure) {
+        try {
+            Method method = BlockEntity.class.getDeclaredMethod("update");
+            method.invoke(tileEntityStructure);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

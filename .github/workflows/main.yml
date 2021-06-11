@@ -35,7 +35,7 @@ jobs:
 
       - name: Demo
         run: |
-          demo=hashFiles("~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar")
+          demo=hashFiles('~/.m2/repository/org/spigotmc/spigot/1.9.4-R0.1-SNAPSHOT/spigot-1.9.4-R0.1-SNAPSHOT.jar')
           echo $demo
 
       - name: Build Spigot Dependencies

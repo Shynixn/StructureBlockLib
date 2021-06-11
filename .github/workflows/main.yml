@@ -46,11 +46,6 @@ jobs:
           docker cp structureblocklib-dependencies-jdk16:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
           docker rm -f structureblocklib-dependencies-jdk16
 
-      - name: Build Java Application
-        run: |
-          chmod +x gradlew
-          ./gradlew clean build pluginJar
-
       - name: Publish Test Report
         run: |
           ./gradlew jacocoTestReport

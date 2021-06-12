@@ -161,7 +161,7 @@ jobs:
           git pull
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
-          mkdir -r docs/apidocs
+          mkdir -p docs/apidocs
           chmod +x gradlew
           ./gradlew generateJavaDocPages
           git add docs

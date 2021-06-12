@@ -94,7 +94,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * Gets the target integrity.
      * Default 1.0.
      * 1.0 ->  Every block which is present in the structure file is placed in the world.
-     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
+     * smnaller 1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
      *
      * @return integrity.
      */
@@ -173,7 +173,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * Sets the target integrity.
      * Default 1.0.
      * 1.0 ->  Every block which is present in the structure file is placed in the world.
-     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code setSeed}.
+     * smaller 1.0 -> Blocks get randomly removed by loading depending on the given {@code setSeed}.
      *
      * @param integrity Integrity.
      * @return This instance.

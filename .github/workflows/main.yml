@@ -161,8 +161,9 @@ jobs:
           git pull
           git config --global user.email "shynixn@email.com" && git config --global user.name "Shynixn CI Actions"
           rm -rf docs/apidocs
+          mkdir -r docs/apidocs
           chmod +x gradlew
-          ./gradlew generateJavaDocPages > /dev/null
+          ./gradlew generateJavaDocPages
           git add docs
           git commit --message "Automatic CI Documentation."
           git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/StructureBlockLib.git HEAD:master

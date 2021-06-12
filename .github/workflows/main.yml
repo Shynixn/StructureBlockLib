@@ -61,7 +61,7 @@ jobs:
           bash <(curl -s https://codecov.io/bash)
 
       - name: Publish Release to Maven Central
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
         env:
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}

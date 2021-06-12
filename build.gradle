@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.3.72'
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.32"
     }
 }
 
@@ -18,8 +18,6 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.20.0'
     id "de.marcphilipp.nexus-publish" version '0.2.0'
 }
-
-apply plugin: 'org.jetbrains.dokka'
 
 repositories {
     mavenCentral()
@@ -37,6 +35,7 @@ nexusStaging {
 
 allprojects {
     apply plugin: 'jacoco'
+    apply plugin: 'org.jetbrains.dokka'
 }
 
 tasks.register("printVersion") {
@@ -83,12 +82,11 @@ subprojects {
         classifier = 'sources'
     }
 
-    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-        outputFormat = 'javadoc'
-        outputDirectory = "$buildDir/javadoc"
+    tasks.named("dokkaHtml") {
+        outputDirectory = file("$buildDir/javadoc")
     }
 
-    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    task javadocJar(type: Jar, dependsOn: dokkaHtml) {
         from javadoc
         classifier = 'javadoc'
     }
@@ -180,10 +178,11 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 }
 
 task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "docs/apidocs"
-    sourceDirs = files(new File(this.projectDir as File, '/structureblocklib-bukkit-api/src/main/java')
-            , new File(this.projectDir as File, '/structureblocklib-bukkit-core/src/main/java')
-            , new File(this.projectDir as File, '/structureblocklib-bukkit-plugin/src/main/java')
-            , new File(this.projectDir as File, '/structureblocklib-bukkit-sample/src/main/java'))
+    dokkaSourceSets {
+        named("main") {
+            outputDirectory = file("docs/apidocs")
+            sourceRoots.from(file("/structureblocklib-api/src/main/java"))
+            sourceRoots.from(file("/structureblocklib-bukkit-api/src/main/java"))
+        }
+    }
 }

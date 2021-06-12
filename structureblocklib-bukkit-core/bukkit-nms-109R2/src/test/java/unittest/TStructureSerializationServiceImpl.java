@@ -25,15 +25,17 @@ public class TStructureSerializationServiceImpl {
         DefinedStructure definedStructure = Mockito.mock(DefinedStructure.class);
         Mockito.when(definedStructure.a(Mockito.any(NBTTagCompound.class)))
                 .thenReturn(new NBTTagCompound());
-        String expected = "H4sIAAAAAAAAAONiYGAAAHg/+U4EAAAA";
+        byte[] expected = new byte[]{
+                31, -117, 8, 0, 0, 0, 0, 0, 0, -1, -29, 98, 96, 96, 0, 0, 120, 63, -7, 78, 4, 0, 0, 0
+        };
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             // Act
             classUnderTest.serialize(definedStructure, outputStream);
-            String actual = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+            byte[] actual = outputStream.toByteArray();
 
             // Assert.
-            Assertions.assertEquals(expected, actual);
+            Assertions.assertArrayEquals(expected, actual);
         } catch (IOException e) {
             Assertions.fail(e);
         }

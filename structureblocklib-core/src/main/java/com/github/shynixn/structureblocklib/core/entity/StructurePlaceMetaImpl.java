@@ -51,7 +51,7 @@ public class StructurePlaceMetaImpl implements StructurePlaceMeta {
      * Gets the target integrity.
      * Default 1.0.
      * 1.0 ->  Every block which is present in the structure file is placed in the world.
-     * <1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
+     * smaller 1.0 -> Blocks get randomly removed by loading depending on the given {@code getSeed}.
      *
      * @return integrity.
      */

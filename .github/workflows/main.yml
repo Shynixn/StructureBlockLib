@@ -73,6 +73,8 @@ jobs:
           echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
           ./gradlew clean publishToNexus
           ./gradlew closeAndReleaseRepository
+          ./gradlew clean
+          ./gradlew pluginJar
 
       - name: Publish Snapshot
         if: "contains(github.event.head_commit.message, '--snapshot')"
@@ -165,5 +167,5 @@ jobs:
           chmod +x gradlew
           ./gradlew generateJavaDocPages
           git add docs
-          git commit --message "Automatic CI Documentation."
-          git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/StructureBlockLib.git HEAD:master
+          git commit --message "Automatic CI Documentation." || echo "Documentation up to date."
+          git push --quiet https://Shynixn:${{ secrets.GITHUB_TOKEN }}@github.com/Shynixn/StructureBlockLib.git HEAD:master || echo "Documentation up to date."

@@ -176,7 +176,7 @@ with your plugin**.
 #### Shipping the implementation with your plugin
 
 * Include both dependencies and shade them in your plugin jar file. If you do not know how to do that, you should
-go with the option above instead. There are several tutorials on spigotmc.org.
+go with the option above instead. There are several tutorials on spigotmc.org. 
 
 **Maven**
 ```xml

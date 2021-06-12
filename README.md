@@ -13,11 +13,12 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 
 ## Features
 
-* Full blown Bukkit Api for the StructureBlock.
+* Bukkit API for the StructureBlock.
 * API to save or load structures without an actual structure block. 
 * Asynchronous implementation and API.
 * Fluent API.
-* Version support 1.9.R1 - 1.16.R3
+* Version support 1.9.R1 - 1.17.R1
+* Java support 8 - Latest
 
 ## Installation
 
@@ -207,7 +208,7 @@ dependencies {
 
 * Install Java 16 or higher
 * Fork the StructureBlockLib project on github and clone it to your local environment.
-* StructureBlockLib requires spigot server implementations from 1.9.4 to 1.17 correctly installed in your local Maven cache. 
+* StructureBlockLib requires spigot server implementations from 1.9.4 to 1.17 to be correctly installed in your local Maven cache. 
   As this requires multiple java version to build different versions, a Dockerfile is provided to build these dependencies in a docker container
   and then copy it to your local Maven cache.
   
@@ -235,7 +236,7 @@ docker rm -f structureblocklib-dependencies-jdk16
 * Run the ``pluginJar`` task to generate a plugin.jar file.
 * Run your minecraft server
 
-#### Option 2 
+#### Option 2 :whale: 
 
 * Run the provided docker file. 
 * The source code is copied to a new docker container and built to a plugin.
@@ -243,7 +244,7 @@ docker rm -f structureblocklib-dependencies-jdk16
 
 ````sh
 docker build -t structureblocklib .
-docker run --name=structureblocklib -p 25565:25565 -p 5005:5005 structureblocklib"
+docker run --name=structureblocklib -p 25565:25565 -p 5005:5005 structureblocklib
 ````
 
 ## Licence

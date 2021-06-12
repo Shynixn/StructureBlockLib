@@ -181,8 +181,8 @@ task generateJavaDocPages(type: org.jetbrains.dokka.gradle.DokkaTask) {
     dokkaSourceSets {
         named("main") {
             outputDirectory = file("docs/apidocs")
-            sourceRoots.from(file("/structureblocklib-api/src/main/java"))
-            sourceRoots.from(file("/structureblocklib-bukkit-api/src/main/java"))
+            sourceRoots.from(file("structureblocklib-api/src/main/java"))
+            sourceRoots.from(file("structureblocklib-bukkit-api/src/main/java"))
         }
     }
 }

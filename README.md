@@ -2,8 +2,8 @@
 
 | branch        | status        | version | download |
 | ------------- | ------------- | -------- | --------| 
-| master        | [![Build Status](https://img.shields.io/travis/Shynixn/StructureBlockLib/master.svg?style=flat-square)](https://travis-ci.org/Shynixn/StructureBlockLib) |![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square)  |[Download latest release](https://github.com/Shynixn/StructureBlockLib/releases)|
-| development  | [![Build Status](https://img.shields.io/travis/Shynixn/StructureBlockLib/development.svg?style=flat-square)](https://travis-ci.org/Shynixn/StructureBlockLib)|![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/structureblocklib-bukkit-plugin/) |
+| master        | [![Build Status](https://github.com/Shynixn/StructureBlockLib/workflows/CI/badge.svg?branch=master)](https://github.com/Shynixn/StructureBlockLib/actions) |![GitHub license](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square)  |[Download latest release](https://github.com/Shynixn/StructureBlockLib/releases)|
+| development  | [![Build Status](https://github.com/Shynixn/StructureBlockLib/workflows/CI/badge.svg?branch=development)](https://github.com/Shynixn/StructureBlockLib/actions)|![GitHub license](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.shynixn.structureblocklib/structureblocklib-bukkit-plugin.svg?style=flat-square) |  [Download snapshots](https://oss.sonatype.org/content/repositories/snapshots/com/github/shynixn/structureblocklib/structureblocklib-bukkit-plugin/) |
 
 JavaDocs: https://shynixn.github.io/StructureBlockLib/apidocs/
 
@@ -29,7 +29,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.1.0</version>
+     <version>2.2.0</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -37,7 +37,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.1.0")
+    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.0")
 }
 ```
 
@@ -183,13 +183,13 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.1.0</version>
+     <version>2.2.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>2.1.0</version>
+     <version>2.2.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -197,8 +197,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.1.0")
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.1.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.2.0")
 }
 ```
  

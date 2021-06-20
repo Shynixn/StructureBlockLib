@@ -44,7 +44,7 @@ tasks.register("printVersion") {
 
 subprojects {
     group 'com.github.shynixn.structureblocklib'
-    version '2.2.2-SNAPSHOT'
+    version '2.2.2'
 
     apply plugin: 'kotlin-platform-jvm'
     apply plugin: 'signing'

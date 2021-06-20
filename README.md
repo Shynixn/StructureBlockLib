@@ -29,7 +29,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.2.1</version>
+     <version>2.2.2</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -37,7 +37,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.1")
+    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.2")
 }
 ```
 
@@ -183,13 +183,13 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.2.1</version>
+     <version>2.2.2</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>2.2.1</version>
+     <version>2.2.2</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -197,8 +197,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.1")
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.2.1")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.2")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.2.2")
 }
 ```
  

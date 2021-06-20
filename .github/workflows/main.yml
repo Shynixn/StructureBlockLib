@@ -73,8 +73,6 @@ jobs:
           echo "RELEASE_VERSION=$(./gradlew -q printVersion)" >> $GITHUB_ENV
           ./gradlew publishToNexus
           ./gradlew closeAndReleaseRepository
-          ./gradlew clean
-          ./gradlew pluginJar
 
       - name: Publish Snapshot
         if: "contains(github.event.head_commit.message, '--snapshot')"
@@ -86,7 +84,7 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
           gpg2 --batch --cipher-algo AES256 --passphrase ${{ secrets.SIGNING_KEY_PASSWORD }} travis_secret_key.gpg
-          ./gradlew publish > /dev/null
+          ./gradlew publish
 
       - name: Create Github Release
         if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"

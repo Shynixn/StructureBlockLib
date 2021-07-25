@@ -166,8 +166,19 @@ structureBlock.update();
 ## Shipping and Running
 
 * In order to use the StructureBlockLib Api on your server, you need to put the implementation of the Api on your server.
-This can be achieved by either **installing the standalone plugin**  ``StructureBlockLib.jar`` **or shipping the implementation
-with your plugin**. 
+
+### For version >= 1.17
+
+* Add the dependencies to the libraries tag
+
+**plugin.yml**
+```yaml
+libraries:
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.2.2
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.2.2
+```
+
+### For version < 1.17
 
 #### Installing the StructureBlockLib.jar
 

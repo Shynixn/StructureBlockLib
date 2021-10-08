@@ -33,7 +33,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class StructureBlockLibPlugin extends JavaPlugin {
     private static final String PREFIX_CONSOLE = ChatColor.YELLOW + "[StBLi] ";
-    private static final String PLUGIN_NAME = "StructureBlockLib";
 
     /**
      * Initializes the plugin.

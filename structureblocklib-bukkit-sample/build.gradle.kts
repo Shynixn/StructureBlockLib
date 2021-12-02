@@ -42,21 +42,47 @@ tasks.register("pluginJar", Exec::class.java) {
     }
 
     val shadowJar = tasks.findByName("shadowJar")!! as ShadowJar
-    val obfArchiveName = "${shadowJar.baseName}-${shadowJar.version}-obfuscated.${shadowJar.extension}"
-    val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"
     val sourceJarFile = File(buildDir, "libs/" + shadowJar.archiveName)
-    val obfJarFile = File(buildDir, "libs/$obfArchiveName")
+    val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"
     val targetJarFile = File(destinationDir, archiveName)
 
-    val obsMapping =
-        "java -jar ${file.absolutePath} -i \"$sourceJarFile\" -o \"$obfJarFile\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-mojang.txt\" --reverse" +
-                "&& java -jar ${file.absolutePath} -i \"$obfJarFile\" -o \"$targetJarFile\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/1.17-R0.1-SNAPSHOT/minecraft-server-1.17-R0.1-SNAPSHOT-maps-spigot.csrg\""
+    var obsMapping = createCommand(
+        "1.17.1-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_17_R1",
+        file,
+        shadowJar,
+        sourceJarFile,
+        targetJarFile
+    )
+    obsMapping = "$obsMapping && " + createCommand(
+        "1.18-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_18_R1",
+        file,
+        shadowJar,
+        targetJarFile,
+        targetJarFile
+    )
 
     if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
         commandLine = listOf("cmd", "/c", obsMapping.replace("\$HOME", "%userprofile%"))
     } else {
         commandLine = listOf("sh", "-c", obsMapping)
     }
+}
+
+fun createCommand(
+    version: String,
+    include: String,
+    file: File,
+    shadowJar: ShadowJar,
+    sourceJarFile: File,
+    targetJarFile: File
+): String {
+    val obfArchiveName = "${shadowJar.baseName}-${shadowJar.version}-obfuscated.${shadowJar.extension}"
+    val obfJarFile = File(buildDir, "libs/$obfArchiveName")
+
+    return "java -jar ${file.absolutePath} -i \"$sourceJarFile\" -o \"$obfJarFile\"  -only \"$include\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/${version}/minecraft-server-${version}-maps-mojang.txt\" --reverse" +
+            "&& java -jar ${file.absolutePath} -i \"$obfJarFile\" -o \"$targetJarFile\"  -only \"$include\" -m \"\$HOME/.m2/repository/org/spigotmc/minecraft-server/${version}/minecraft-server-${version}-maps-spigot.csrg\""
 }
 
 dependencies {

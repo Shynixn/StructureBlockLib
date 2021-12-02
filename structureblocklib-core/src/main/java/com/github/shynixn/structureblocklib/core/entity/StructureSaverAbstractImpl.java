@@ -46,7 +46,9 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         this.serializationService = serializationService;
         this.worldService = worldService;
 
-        if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_17_R1)) {
+        if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_18_R1)) {
+            structureVoid = "b";
+        } else if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_17_R1)) {
             structureVoid = "jb";
         } else if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_13_R2)) {
             structureVoid = "STRUCTURE_VOID";

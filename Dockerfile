@@ -42,7 +42,7 @@ RUN ./gradlew build pluginJar --no-daemon
 # 4. Launch a minecraft server with jdk17 and plugin
 FROM amazoncorretto:17
 # Change to the current plugin version present in build.gradle
-ENV PLUGIN_VERSION=2.2.2
+ENV PLUGIN_VERSION=2.3.0
 # Change to the server version you want to test.
 ENV SERVER_VERSION=spigot-1.18.jar
 # Port of the Minecraft Server.

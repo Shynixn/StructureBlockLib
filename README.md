@@ -231,7 +231,7 @@ docker create --name structureblocklib-dependencies-jdk8 structureblocklib-depen
 docker cp structureblocklib-dependencies-jdk8:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
 docker rm -f structureblocklib-dependencies-jdk8
 docker build --target dependencies-jdk17 -t structureblocklib-dependencies-jdk17 .
-docker create --name structureblocklib-dependencies-jdk17 structureblocklib-dependencies-jdk16 bash
+docker create --name structureblocklib-dependencies-jdk17 structureblocklib-dependencies-jdk17 bash
 docker cp structureblocklib-dependencies-jdk17:/root/.m2/repository/org/spigotmc ~/.m2/repository/org/
 docker rm -f structureblocklib-dependencies-jdk17
 ````

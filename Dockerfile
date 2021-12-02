@@ -26,7 +26,7 @@ RUN wget "https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/ar
 RUN java -jar BuildTools.jar --rev 1.17.1 --remapped
 RUN java -jar BuildTools.jar --rev 1.18 --remapped
 
-# 3. Build plugin for 1.8 - 1.17 with jdk16
+# 3. Build plugin for 1.8 - 1.17 with jdk17
 FROM amazoncorretto:17 AS plugin-jdk17
 WORKDIR /tmp
 RUN yum update -y

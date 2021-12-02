@@ -435,8 +435,10 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      */
     private CompoundTag saveCompoundTileEntityStructure(StructureBlockEntity tileEntityStructure, CompoundTag compoundTag) {
         try {
-            Method method = StructureBlockEntity.class.getDeclaredMethod("save", CompoundTag.class);
-            return (CompoundTag) method.invoke(tileEntityStructure, compoundTag);
+            Method method = StructureBlockEntity.class.getDeclaredMethod("b", CompoundTag.class);
+            method.setAccessible(true);
+            method.invoke(tileEntityStructure, compoundTag);
+            return compoundTag;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -447,7 +449,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      */
     private void loadCompoundTileEntityStructure(StructureBlockEntity tileEntityStructure, CompoundTag compoundTag) {
         try {
-            Method method = StructureBlockEntity.class.getDeclaredMethod("load", CompoundTag.class);
+            Method method = StructureBlockEntity.class.getDeclaredMethod("a", CompoundTag.class);
             method.invoke(tileEntityStructure, compoundTag);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -459,7 +461,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      */
     private void setChangedTileEntityStructure(StructureBlockEntity tileEntityStructure) {
         try {
-            Method method = BlockEntity.class.getDeclaredMethod("update");
+            Method method = BlockEntity.class.getDeclaredMethod("e");
             method.invoke(tileEntityStructure);
         } catch (Exception e) {
             throw new RuntimeException(e);

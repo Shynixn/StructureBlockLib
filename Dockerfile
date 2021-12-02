@@ -44,7 +44,7 @@ FROM amazoncorretto:17
 # Change to the current plugin version present in build.gradle
 ENV PLUGIN_VERSION=2.2.2
 # Change to the server version you want to test.
-ENV SERVER_VERSION=1.18-R0.1-SNAPSHOT/1.18-R0.1-SNAPSHOT
+ENV SERVER_VERSION=spigot-1.18.jar
 # Port of the Minecraft Server.
 EXPOSE 25565
 # Port for Remote Debugging
@@ -54,6 +54,7 @@ RUN yum update -y
 RUN echo "eula=true" > eula.txt && mkdir plugins
 COPY ./structureblocklib-tools/world-1.14 /app/
 COPY ./structureblocklib-tools/ops.json /app/
-COPY --from=dependencies-jdk17 /root/.m2/repository/org/spigotmc/spigot/$SERVER_VERSION /app/spigot.jar
+# For < 1.18 COPY --from=dependencies-jdk17 /root/.m2/repository/org/spigotmc/spigot/$SERVER_VERSION /app/spigot.jar
+COPY --from=dependencies-jdk17 /tmp/$SERVER_VERSION /app/spigot.jar
 COPY --from=plugin-jdk17 /tmp/structureblocklib-bukkit-sample/build/libs/structureblocklib-bukkit-sample-$PLUGIN_VERSION.jar /app/plugins/Structureblocklib.jar
 CMD ["sh","-c","java -DIReallyKnowWhatIAmDoingISwear -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar spigot.jar"]

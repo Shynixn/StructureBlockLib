@@ -47,7 +47,7 @@ public class StructureBlockCommandExecutor implements CommandExecutor {
 
             final StructureBlockSave structureBlock = structureBlockLibApi.getStructureBlockAt(location, plugin);
             structureBlock.setStructureMode(StructureMode.SAVE);
-            structureBlock.setSaveName("SampleSave");
+            structureBlock.setSaveName("SampleSave".toLowerCase());
             structureBlock.setSizeX(31);
             structureBlock.setSizeY(15);
             structureBlock.setSizeZ(12);

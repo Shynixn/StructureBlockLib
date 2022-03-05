@@ -37,16 +37,9 @@ public interface StructureReadMeta {
     boolean isIncludeEntitiesEnabled();
 
     /**
-     * Gets the name of the block type
-     * which is being used as a Structure_Void.
-     * <p>
-     * Default STRUCTURE_VOID in 1.10 - Latest, BARRIER_BLOCK in 1.9.
-     * <p>
-     * If the selected structure contains blocks with this typename.
-     * They are going to get ignored.
-     *
-     * @return Name of the block type.
+     * Deprecated as this internal value is no longer exposed since 1.18.2.
      */
     @NotNull
+    @Deprecated()
     String getStructureVoidTypeName();
 }

@@ -46,6 +46,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         this.serializationService = serializationService;
         this.worldService = worldService;
 
+        // Note: Since 1.18.2. The value is determined internally.
         if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_18_R1)) {
             structureVoid = "b";
         } else if (proxyService.getServerVersion().isVersionSameOrGreaterThan(Version.VERSION_1_17_R1)) {

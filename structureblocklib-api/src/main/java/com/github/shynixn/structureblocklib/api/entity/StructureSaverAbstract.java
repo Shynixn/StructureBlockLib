@@ -59,17 +59,10 @@ public interface StructureSaverAbstract<L, V> {
     StructureRestriction getRestriction();
 
     /**
-     * Gets the name of the block type
-     * which is being used as a Structure_Void.
-     * <p>
-     * Default STRUCTURE_VOID in 1.10 - Latest, BARRIER_BLOCK in 1.9.
-     * <p>
-     * If the selected structure contains blocks with this typename.
-     * They are going to get ignored.
-     *
-     * @return Name of the block type.
+     * This internal value is no longer exposed since 1.18.2.
      */
     @NotNull
+    @Deprecated
     String getStructureVoidTypeName();
 
     /**
@@ -152,14 +145,10 @@ public interface StructureSaverAbstract<L, V> {
     StructureSaverAbstract<L, V> restriction(@NotNull StructureRestriction structureRestriction);
 
     /**
-     * Sets the name of the block type
-     * which is being used as a Structure_Void.
-     * Default STRUCTURE_VOID in 1.10 - Latest, BARRIER_BLOCK in 1.9.
-     *
-     * @param name Name of the block type.
-     * @return This instance.
+     * This value is no longer used since 1.18.2.
      */
     @NotNull
+    @Deprecated
     StructureSaverAbstract<L, V> structureVoidTypeName(String name);
 
     /**

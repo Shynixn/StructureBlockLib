@@ -78,11 +78,11 @@ public class StructureWorldServiceImpl implements StructureWorldService {
      * @return A new NMS Structure definition.
      */
     @Override
-    public Object readStructureFromWorld(StructureReadMeta meta) throws Exception {
+    public Object readStructureFromWorld(StructureReadMeta meta) {
         ServerLevel world = ((CraftWorld) Bukkit.getWorld(meta.getLocation().getWorldName())).getHandle();
         BlockPos cornerBlock = new BlockPos((int) meta.getLocation().getX(), (int) meta.getLocation().getY(), (int) meta.getLocation().getZ());
         BlockPos offsetBlock = new BlockPos((int) meta.getOffset().getX(), (int) meta.getOffset().getY(), (int) meta.getOffset().getZ());
-        Block structureVoid = (Block) Blocks.class.getDeclaredField(meta.getStructureVoidTypeName()).get(null);
+        Block structureVoid = Blocks.STRUCTURE_VOID;
 
         StructureTemplate template = new StructureTemplate();
         template.fillFromWorld(world, cornerBlock, offsetBlock, meta.isIncludeEntitiesEnabled(), structureVoid);

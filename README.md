@@ -20,9 +20,9 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 * Version support 1.9.R1 - 1.18.R2
 * Java support 8 - Latest
 
-## Donation :heart:
+## Donation 
 
-Support development with a small tip :coffee:.
+Support development with a small tip :heart: :coffee:.
 
 * Dogecoin Address: ``DAzt6RGAapkhbKD9uFKJgSR5vpfT9nSvKi``
 

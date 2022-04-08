@@ -414,10 +414,11 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         StructureReadMeta meta = validate();
         ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
 
-        progressToken.progress(0.0);
         CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
+                progressToken.progress(0.0);
                 final Object definedStructure = worldService.readStructureFromWorld(meta);
+                progressToken.progress(0.5);
                 return CompletableFuture.completedFuture(null).thenComposeAsync(e1_ -> {
                     try {
                         serializationService.serialize(definedStructure, target);

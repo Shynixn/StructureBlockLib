@@ -373,23 +373,23 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
         meta.mirror = this.mirror;
         meta.rotation = this.rotation;
 
-        progressToken.progress(0.0);
-        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
-            try {
-                Object definedStructure = serializationService.deSerialize(source);
-                return CompletableFuture.runAsync(() -> {
+        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null)
+                .thenAcceptAsync(e_ -> progressToken.progress(0.0), proxyService.getSyncExecutor()).thenComposeAsync(e_ -> {
                     try {
-                        progressToken.progress(0.5);
-                        worldService.placeStructureToWorld(meta, definedStructure);
-                        progressToken.progress(1.0);
-                    } catch (Exception e) {
+                        Object definedStructure = serializationService.deSerialize(source);
+                        return CompletableFuture.runAsync(() -> {
+                            try {
+                                progressToken.progress(0.5);
+                                worldService.placeStructureToWorld(meta, definedStructure);
+                                progressToken.progress(1.0);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }, proxyService.getSyncExecutor());
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }, proxyService.getSyncExecutor());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }, proxyService.getAsyncExecutor());
+                }, proxyService.getAsyncExecutor());
         progressToken.setCompletionStage(completableFuture);
 
         return progressToken;

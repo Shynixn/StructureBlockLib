@@ -5,6 +5,8 @@ import com.github.shynixn.structureblocklib.api.enumeration.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Executor;
+
 /**
  * Proxies small framework specific actions.
  */
@@ -37,18 +39,30 @@ public interface ProxyService {
     @Nullable <L> Position toPosition(@Nullable L location);
 
     /**
-     * Runs an async task.
-     *
-     * @param runnable Runnable.
+     * Deprecated. Use getAsyncExecutor().execute instead.
      */
+    @Deprecated
     void runAsyncTask(@NotNull Runnable runnable);
 
     /**
-     * Runs a sync task.
-     *
-     * @param runnable Runnable.
+     * Deprecated. Use getSyncExecutor().execute instead.
      */
+    @Deprecated
     void runSyncTask(@NotNull Runnable runnable);
+
+    /**
+     * Gets an execute to schedule tasks on the synchronous bukkit thread.
+     *
+     * @return {@link Executor}.
+     */
+    Executor getSyncExecutor();
+
+    /**
+     * Gets an execute to schedule tasks on the asynchronous bukkit threadPool.
+     *
+     * @return {@link Executor}.
+     */
+    Executor getAsyncExecutor();
 
     /**
      * Gets the running minecraft version.

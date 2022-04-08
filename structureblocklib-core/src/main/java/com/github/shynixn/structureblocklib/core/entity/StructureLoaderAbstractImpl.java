@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstract<L, V> {
     private final ProxyService proxyService;
@@ -210,36 +211,25 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      */
     @Override
     public @NotNull ProgressToken<Void> loadFromSaver(@NotNull StructureSaverAbstract<L, V> source) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        progressToken.progress(0.0);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ProgressToken<Void> innerToken = source.saveToOutputStream(outputStream);
-        rootToken.progress(0.0);
-        innerToken.getCompletionStage().thenAccept(e_ -> {
-            rootToken.progress(0.5);
+        CompletionStage<Void> completableFuture = source.saveToOutputStream(outputStream).getCompletionStage().thenComposeAsync(e_ -> {
+            progressToken.progress(0.5);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-            ProgressToken<Void> finalToken = this.loadFromInputStream(inputStream);
-            finalToken.getCompletionStage().exceptionally(e -> {
-                completableFuture.completeExceptionally(e);
-                return null;
-            });
-            finalToken.getCompletionStage().thenAccept(a_ -> {
-                try {
-                    outputStream.close();
-                    inputStream.close();
-                    rootToken.progress(1.0);
-                    completableFuture.complete(a_);
-                } catch (IOException ioException) {
-                    completableFuture.completeExceptionally(ioException);
-                }
-            });
-        });
-        innerToken.getCompletionStage().exceptionally(e -> {
-            completableFuture.completeExceptionally(e);
-            return null;
-        });
-
-        return rootToken;
+            return loadFromInputStream(inputStream).getCompletionStage()
+                    .thenAcceptAsync(e1_ -> {
+                        progressToken.progress(1.0);
+                        try {
+                            inputStream.close();
+                            outputStream.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }, proxyService.getSyncExecutor());
+        }, proxyService.getSyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
+        return progressToken;
     }
 
     /**
@@ -259,19 +249,24 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
     public @NotNull ProgressToken<Void> loadFromWorld(@NotNull String worldName, @NotNull String author, @NotNull String name) {
         Version version = proxyService.getServerVersion();
         File file;
-
         if (version.isVersionSameOrGreaterThan(Version.VERSION_1_13_R2)) {
             file = new File(worldName + File.separator + "generated" + File.separator + author + File.separator + "structures" + File.separator + name + ".nbt");
         } else {
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
         }
 
-        try {
-            Files.createDirectories(file.getParentFile().toPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
+            try {
+                Files.createDirectories(file.getParentFile().toPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ProgressToken<Void> childProgressToken = loadFromFile(file);
+            childProgressToken.onProgress(progressToken::progress);
+            return childProgressToken.getCompletionStage();
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completionStage);
         return loadFromFile(file);
     }
 
@@ -288,27 +283,22 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
     @Override
     @NotNull
     public ProgressToken<Void> loadFromString(@NotNull String source) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
-        byte[] content = Base64.getDecoder().decode(source);
-
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(content);
-        ProgressToken<Void> innerToken = loadFromInputStream(byteArrayInputStream);
-        innerToken.onProgress(rootToken::progress);
-        innerToken.getCompletionStage().thenAccept(e -> {
-            try {
-                byteArrayInputStream.close();
-                completableFuture.complete(e);
-            } catch (IOException ioException) {
-                completableFuture.completeExceptionally(ioException);
-            }
-        });
-        innerToken.getCompletionStage().exceptionally(e -> {
-            completableFuture.completeExceptionally(e);
-            return null;
-        });
-
-        return rootToken;
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
+            byte[] content = Base64.getDecoder().decode(source);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
+            ProgressToken<Void> childProgressToken = loadFromInputStream(inputStream);
+            childProgressToken.onProgress(progressToken::progress);
+            return childProgressToken.getCompletionStage().thenAcceptAsync(e1_ -> {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }, proxyService.getAsyncExecutor());
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
+        return progressToken;
     }
 
     /**
@@ -340,32 +330,25 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
     @Override
     @NotNull
     public ProgressToken<Void> loadFromFile(@NotNull File source) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
-
-        proxyService.runAsyncTask(() -> {
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 FileInputStream inputStream = new FileInputStream(source);
-                ProgressToken<Void> progressToken = loadFromInputStream(inputStream);
-                progressToken.onProgress(rootToken::progress);
-                progressToken.getCompletionStage().thenAccept(c -> {
+                ProgressToken<Void> childProgressToken = loadFromInputStream(inputStream);
+                childProgressToken.onProgress(progressToken::progress);
+                return childProgressToken.getCompletionStage().thenAcceptAsync(e1_ -> {
                     try {
                         inputStream.close();
-                        completableFuture.complete(c);
                     } catch (IOException e) {
-                        completableFuture.completeExceptionally(e);
+                        throw new RuntimeException(e);
                     }
-                });
-                progressToken.getCompletionStage().exceptionally(throwable -> {
-                    completableFuture.completeExceptionally(throwable);
-                    return null;
-                });
-            } catch (IOException e) {
-                proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
+                }, proxyService.getAsyncExecutor());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        });
-
-        return rootToken;
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
+        return progressToken;
     }
 
     /**
@@ -381,8 +364,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
     @Override
     @NotNull
     public ProgressToken<Void> loadFromInputStream(@NotNull InputStream source) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(completableFuture);
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
         StructurePlaceMetaImpl meta = new StructurePlaceMetaImpl();
         meta.location = this.location;
         meta.includeEntities = this.includeEntities;
@@ -392,23 +374,23 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
         meta.rotation = this.rotation;
 
         progressToken.progress(0.0);
-        proxyService.runAsyncTask(() -> {
+        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 Object definedStructure = serializationService.deSerialize(source);
-                proxyService.runSyncTask(() -> {
-                    progressToken.progress(0.5);
+                return CompletableFuture.runAsync(() -> {
                     try {
+                        progressToken.progress(0.5);
                         worldService.placeStructureToWorld(meta, definedStructure);
-                        completableFuture.complete(null);
                         progressToken.progress(1.0);
                     } catch (Exception e) {
-                        completableFuture.completeExceptionally(e);
+                        throw new RuntimeException(e);
                     }
-                });
+                }, proxyService.getSyncExecutor());
             } catch (IOException e) {
-                proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
+                throw new RuntimeException(e);
             }
-        });
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
 
         return progressToken;
     }

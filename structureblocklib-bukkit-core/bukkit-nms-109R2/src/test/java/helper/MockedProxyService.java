@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -92,6 +93,26 @@ public class MockedProxyService implements ProxyService {
     @Override
     public void runSyncTask(@NotNull Runnable runnable) {
         concurrentList.add(runnable);
+    }
+
+    /**
+     * Gets an execute to schedule tasks on the synchronous bukkit thread.
+     *
+     * @return {@link Executor}.
+     */
+    @Override
+    public Executor getSyncExecutor() {
+        return c -> concurrentList.add(c);
+    }
+
+    /**
+     * Gets an execute to schedule tasks on the asynchronous bukkit threadPool.
+     *
+     * @return {@link Executor}.
+     */
+    @Override
+    public Executor getAsyncExecutor() {
+        return executor;
     }
 
     /**

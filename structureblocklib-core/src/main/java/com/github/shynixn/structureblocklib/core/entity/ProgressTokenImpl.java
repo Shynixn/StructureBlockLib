@@ -14,17 +14,9 @@ import java.util.function.Consumer;
  */
 public class ProgressTokenImpl<T> implements ProgressToken<T> {
     private final Set<Consumer<Double>> progressConsumers = new HashSet<>();
-    private final CompletionStage<T> item;
-    private volatile boolean cancelled = false;
 
-    /**
-     * Creates a new instance of {@link ProgressTokenImpl}.
-     *
-     * @param item Not null completionState.
-     */
-    public ProgressTokenImpl(CompletionStage<T> item) {
-        this.item = item;
-    }
+    private CompletionStage<T> item;
+    private volatile boolean cancelled = false;
 
     /**
      * Calls the progress consumers with the progress update.
@@ -33,6 +25,15 @@ public class ProgressTokenImpl<T> implements ProgressToken<T> {
      */
     public void progress(double progress) {
         progressConsumers.forEach(e -> e.accept(progress));
+    }
+
+    /**
+     * Sets the completion stage.
+     *
+     * @param item {@link CompletionStage}
+     */
+    public void setCompletionStage(CompletionStage<T> item) {
+        this.item = item;
     }
 
     /**

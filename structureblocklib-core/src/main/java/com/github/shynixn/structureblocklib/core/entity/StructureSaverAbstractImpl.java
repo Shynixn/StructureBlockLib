@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Interface fluent API to save structures from the world into
@@ -301,15 +302,22 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
         }
 
-        try {
-            Files.createDirectories(file.getParentFile().toPath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         author(author);
 
-        return saveToFile(file);
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e1 -> {
+            try {
+                Files.createDirectories(file.getParentFile().toPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            ProgressToken<Void> childToken = saveToFile(file);
+            childToken.onProgress(progressToken::progress);
+            return childToken.getCompletionStage();
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
+        return progressToken;
     }
 
 
@@ -324,27 +332,22 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      */
     @Override
     public @NotNull ProgressToken<String> saveToString() {
-        CompletableFuture<String> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<String> rootToken = new ProgressTokenImpl<>(completableFuture);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
+        ProgressTokenImpl<String> progressToken = new ProgressTokenImpl<>();
         ProgressToken<Void> innerToken = saveToOutputStream(byteArrayOutputStream);
-        innerToken.onProgress(rootToken::progress);
-        innerToken.getCompletionStage().thenAccept(e -> {
-            try {
-                String data = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-                byteArrayOutputStream.close();
-                completableFuture.complete(data);
-            } catch (IOException ioException) {
-                completableFuture.completeExceptionally(ioException);
-            }
-        });
-        innerToken.getCompletionStage().exceptionally(e -> {
-            completableFuture.completeExceptionally(e);
-            return null;
-        });
+        innerToken.onProgress(progressToken::progress);
 
-        return rootToken;
+        CompletionStage<String> completableFuture = innerToken.getCompletionStage().thenApplyAsync(e_ -> {
+            String data = Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
+            try {
+                byteArrayOutputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return data;
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completableFuture);
+        return progressToken;
     }
 
     /**
@@ -374,32 +377,26 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      */
     @Override
     public @NotNull ProgressToken<Void> saveToFile(@NotNull File target) {
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> rootToken = new ProgressTokenImpl<>(completableFuture);
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
 
-        proxyService.runAsyncTask(() -> {
+        CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 FileOutputStream outputStream = new FileOutputStream(target);
-                ProgressToken<Void> progressToken = saveToOutputStream(outputStream);
-                progressToken.onProgress(rootToken::progress);
-                progressToken.getCompletionStage().thenAccept(c -> {
+                ProgressToken<Void> childProgressToken = saveToOutputStream(outputStream);
+                childProgressToken.onProgress(progressToken::progress);
+                return childProgressToken.getCompletionStage().thenAcceptAsync(e1_ -> {
                     try {
                         outputStream.close();
-                        completableFuture.complete(c);
                     } catch (IOException e) {
-                        completableFuture.completeExceptionally(e);
+                        throw new RuntimeException(e);
                     }
-                });
-                progressToken.getCompletionStage().exceptionally(throwable -> {
-                    completableFuture.completeExceptionally(throwable);
-                    return null;
-                });
-            } catch (IOException e) {
-                proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
+                }, proxyService.getAsyncExecutor());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
-        });
-
-        return rootToken;
+        }, proxyService.getAsyncExecutor());
+        progressToken.setCompletionStage(completionStage);
+        return progressToken;
     }
 
     /**
@@ -415,32 +412,26 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
     @Override
     public @NotNull ProgressToken<Void> saveToOutputStream(@NotNull OutputStream target) {
         StructureReadMeta meta = validate();
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(completableFuture);
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
 
-        proxyService.runSyncTask(() -> {
-            progressToken.progress(0.0);
-            Object definedStructure;
+        CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
-                definedStructure = worldService.readStructureFromWorld(meta);
+                progressToken.progress(0.0);
+                final Object definedStructure = worldService.readStructureFromWorld(meta);
+                progressToken.progress(0.5);
+                return CompletableFuture.completedFuture(null).thenComposeAsync(e1_ -> {
+                    try {
+                        serializationService.serialize(definedStructure, target);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return CompletableFuture.runAsync(() -> progressToken.progress(1.0), proxyService.getSyncExecutor());
+                }, proxyService.getAsyncExecutor());
             } catch (Exception e) {
-                completableFuture.completeExceptionally(e);
-                return;
+                throw new RuntimeException(e);
             }
-            progressToken.progress(0.5);
-            Object finalDefinedStructure = definedStructure;
-            proxyService.runAsyncTask(() -> {
-                try {
-                    serializationService.serialize(finalDefinedStructure, target);
-                    proxyService.runSyncTask(() -> {
-                        completableFuture.complete(null);
-                        progressToken.progress(1.0);
-                    });
-                } catch (IOException e) {
-                    proxyService.runSyncTask(() -> completableFuture.completeExceptionally(e));
-                }
-            });
-        });
+        }, proxyService.getSyncExecutor());
+        progressToken.setCompletionStage(completionStage);
 
         return progressToken;
     }
@@ -458,7 +449,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
         }
 
         StructureReadMeta structureReadMeta = createReadMeta();
-        changeOffSetToPositivOffset(structureReadMeta.getLocation(), structureReadMeta.getOffset());
+        changeOffSetToPositiveOffset(structureReadMeta.getLocation(), structureReadMeta.getOffset());
         validateDirection("x", structureReadMeta.getLocation().getX(), structureReadMeta.getOffset().getX());
         validateDirection("y", structureReadMeta.getLocation().getY(), structureReadMeta.getOffset().getY());
         validateDirection("z", structureReadMeta.getLocation().getZ(), structureReadMeta.getOffset().getZ());
@@ -514,7 +505,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      * @param source source.
      * @param offSet fofset.
      */
-    private void changeOffSetToPositivOffset(Position source, Position offSet) {
+    private void changeOffSetToPositiveOffset(Position source, Position offSet) {
         if (offSet.getX() < 0) {
             source.setX(source.getX() + offSet.getX() + 1);
             offSet.setX(offSet.getX() * -1);

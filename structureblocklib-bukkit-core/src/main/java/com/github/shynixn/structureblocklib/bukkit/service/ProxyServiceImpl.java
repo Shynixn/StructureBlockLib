@@ -11,6 +11,8 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Executor;
+
 @SuppressWarnings("unchecked")
 public class ProxyServiceImpl implements ProxyService {
     private Plugin plugin;
@@ -104,6 +106,34 @@ public class ProxyServiceImpl implements ProxyService {
     @Override
     public void runSyncTask(@NotNull Runnable runnable) {
         plugin.getServer().getScheduler().runTask(plugin, runnable);
+    }
+
+    /**
+     * Gets an execute to schedule tasks on the synchronous bukkit thread.
+     *
+     * @return {@link Executor}.
+     */
+    @Override
+    public Executor getSyncExecutor() {
+        if (!plugin.isEnabled()) {
+            return Runnable::run;
+        }
+
+        return command -> plugin.getServer().getScheduler().runTask(plugin, command);
+    }
+
+    /**
+     * Gets an execute to schedule tasks on the asynchronous bukkit threadpool.
+     *
+     * @return {@link Executor}.
+     */
+    @Override
+    public Executor getAsyncExecutor() {
+        if (!plugin.isEnabled()) {
+            return Runnable::run;
+        }
+
+        return command -> plugin.getServer().getScheduler().runTaskAsynchronously(plugin, command);
     }
 
     /**

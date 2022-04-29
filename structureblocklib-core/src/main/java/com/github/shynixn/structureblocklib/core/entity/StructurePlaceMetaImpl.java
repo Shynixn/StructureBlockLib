@@ -6,6 +6,10 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 public class StructurePlaceMetaImpl implements StructurePlaceMeta {
     public Position location;
     public boolean includeEntities;
@@ -13,6 +17,7 @@ public class StructurePlaceMetaImpl implements StructurePlaceMeta {
     public StructureMirror mirror = StructureMirror.NONE;
     public float integrity = 1.0F;
     public long seed = 0L;
+    public List<Function<?, Boolean>> processors = new ArrayList<>();
 
     /**
      * Should entities be loaded.
@@ -80,5 +85,15 @@ public class StructurePlaceMetaImpl implements StructurePlaceMeta {
     @Override
     public @NotNull Position getLocation() {
         return location;
+    }
+
+    /**
+     * Gets the processors when placing this structure.
+     *
+     * @return processors.
+     */
+    @Override
+    public @NotNull List<Function<?, Boolean>> getProcessors() {
+        return processors;
     }
 }

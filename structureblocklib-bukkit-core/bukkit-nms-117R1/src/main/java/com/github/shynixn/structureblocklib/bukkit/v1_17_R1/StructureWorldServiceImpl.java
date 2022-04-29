@@ -1,23 +1,34 @@
 package com.github.shynixn.structureblocklib.bukkit.v1_17_R1;
 
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
+import com.github.shynixn.structureblocklib.api.entity.StructurePlacePart;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
 import com.github.shynixn.structureblocklib.api.service.StructureWorldService;
 import com.github.shynixn.structureblocklib.api.service.TypeConversionService;
+import com.github.shynixn.structureblocklib.core.entity.GenericWrapper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockRotProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_17_R1.block.data.CraftBlockData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * Implementation to interact with structures in the world.
@@ -47,7 +58,8 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         }
 
         StructureTemplate template = (StructureTemplate) structure;
-        ServerLevel world = ((CraftWorld) Bukkit.getWorld(meta.getLocation().getWorldName())).getHandle();
+        World bukkitWorld = Bukkit.getWorld(meta.getLocation().getWorldName());
+        ServerLevel world = ((CraftWorld) bukkitWorld).getHandle();
         BlockPos cornerBlock = new BlockPos((int) meta.getLocation().getX(), (int) meta.getLocation().getY(), (int) meta.getLocation().getZ());
         StructurePlaceSettings info = new StructurePlaceSettings();
         info.setIgnoreEntities(!meta.isIncludeEntitiesEnabled());
@@ -68,6 +80,7 @@ public class StructureWorldServiceImpl implements StructureWorldService {
             info.setRandom(random);
         }
 
+        executeProcessors(bukkitWorld, meta, info);
         template.placeInWorld(world, cornerBlock, cornerBlock, info, new Random(), 2);
     }
 
@@ -88,5 +101,72 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         template.fillFromWorld(world, cornerBlock, offsetBlock, meta.isIncludeEntitiesEnabled(), structureVoid);
         template.setAuthor(meta.getAuthor());
         return template;
+    }
+
+    /**
+     * Executes attached processors.
+     *
+     * @param bukkitWorld World.
+     * @param meta        Meta.
+     * @param info        Info.
+     */
+    private void executeProcessors(World bukkitWorld, StructurePlaceMeta meta, StructurePlaceSettings info) {
+        info.addProcessor(new StructureProcessor() {
+            @Nullable
+            @Override
+            public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader, BlockPos blockPos, BlockPos blockPos1, StructureTemplate.StructureBlockInfo structureBlockInfo, StructureTemplate.StructureBlockInfo structureBlockInfo1, StructurePlaceSettings structurePlaceSettings) {
+                // Source and target contain the same block state.
+                GenericWrapper<BlockState> targetBlockState = new GenericWrapper<>(structureBlockInfo.state);
+                CraftBlock sourceCraftBlock = new CraftBlock(null, structureBlockInfo.pos) {
+                    @Override
+                    public BlockState getNMS() {
+                        return targetBlockState.item;
+                    }
+
+                    @Override
+                    public void setBlockData(BlockData data, boolean applyPhysics) {
+                        targetBlockState.item = ((CraftBlockData) data).getState();
+                    }
+                };
+
+                // noinspection UnnecessaryLocalVariable Explicit cast is necessary because otherwise the spigot mappings do not work.
+                Vec3i sourcePos = blockPos1;
+                org.bukkit.block.Block targetBlock = bukkitWorld.getBlockAt(new Location(bukkitWorld, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ()));
+                StructurePlacePart<org.bukkit.block.Block, World> structurePlacePart = new StructurePlacePart<org.bukkit.block.Block, World>() {
+                    @NotNull
+                    @Override
+                    public org.bukkit.block.Block getSourceBlock() {
+                        return sourceCraftBlock;
+                    }
+
+                    @NotNull
+                    @Override
+                    public org.bukkit.block.Block getTargetBlock() {
+                        return targetBlock;
+                    }
+
+                    @Override
+                    public @NotNull World getWorld() {
+                        return bukkitWorld;
+                    }
+                };
+
+                for (Function<?, Boolean> processor : meta.getProcessors()) {
+                    Function<Object, Boolean> processHandle = (Function<Object, Boolean>) processor;
+                    boolean result = processHandle.apply(structurePlacePart);
+
+                    if (!result) {
+                        return null;
+                    }
+                }
+
+                return new StructureTemplate.StructureBlockInfo(structureBlockInfo1.pos, targetBlockState.item, structureBlockInfo1.nbt);
+            }
+
+            @Override
+            protected StructureProcessorType<?> getType() {
+                return (StructureProcessorType<StructureProcessor>) () -> null;
+            }
+        });
     }
 }

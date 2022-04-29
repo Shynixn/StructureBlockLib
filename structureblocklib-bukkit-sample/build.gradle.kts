@@ -16,8 +16,8 @@ tasks.withType<ShadowJar> {
 
 tasks.register("pluginJar", Exec::class.java) {
     // Change the output folder of the plugin.
-    // val destinationDir = File("C:/temp/plugins")
-    val destinationDir = File(buildDir, "libs")
+    val destinationDir = File("C:/temp/plugins")
+    // val destinationDir = File(buildDir, "libs")
 
     dependsOn("shadowJar")
     workingDir = buildDir

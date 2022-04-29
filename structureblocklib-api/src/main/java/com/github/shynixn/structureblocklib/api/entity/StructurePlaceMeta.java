@@ -4,6 +4,9 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.function.Function;
+
 public interface StructurePlaceMeta {
     /**
      * Gets the source Location.
@@ -12,6 +15,14 @@ public interface StructurePlaceMeta {
      */
     @NotNull
     Position getLocation();
+
+    /**
+     * Gets the processors when placing this structure.
+     *
+     * @return processors.
+     */
+    @NotNull
+    List<Function<?, Boolean>> getProcessors();
 
     /**
      * Should entities be loaded.

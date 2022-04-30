@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Random;
+
 public class StructureCommandExecutor implements CommandExecutor {
     private final String prefix = ChatColor.YELLOW + "[Structure] ";
     private final StructureBlockLibApi structureBlockLibApi;
@@ -75,9 +77,17 @@ public class StructureCommandExecutor implements CommandExecutor {
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("loadfile")) {
+            Random random = new Random();
+
             structureBlockLibApi
                     .loadStructure(plugin)
                     .at(player.getLocation())
+                    .onProcessBlock(part -> {
+                        if (random.nextInt(10) < 3) {
+                            return false;
+                        }
+                        return true;
+                    })
                     .loadFromPath(plugin.getDataFolder().toPath().resolve(args[1]))
                     .onProgress(c -> System.out.println(String.format("Percentage %.2f", c)))
                     .onException(c -> c.printStackTrace())

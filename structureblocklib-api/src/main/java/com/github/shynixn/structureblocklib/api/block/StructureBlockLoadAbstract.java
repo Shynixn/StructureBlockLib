@@ -5,7 +5,7 @@ import com.github.shynixn.structureblocklib.api.enumeration.StructureMirror;
 import com.github.shynixn.structureblocklib.api.enumeration.StructureRotation;
 import org.jetbrains.annotations.NotNull;
 
-public interface StructureBlockLoadAbstract<L, V> extends StructureBlockConstructionAbstract<L> {
+public interface StructureBlockLoadAbstract<L, V, B, W> extends StructureBlockConstructionAbstract<L> {
     /**
      * Sets the mirrorType of the structure when getting load.
      *
@@ -85,5 +85,5 @@ public interface StructureBlockLoadAbstract<L, V> extends StructureBlockConstruc
      * @return Loader.
      */
     @NotNull
-    StructureLoaderAbstract<L, V> loadStructure();
+    StructureLoaderAbstract<L, V, B, W> loadStructure();
 }

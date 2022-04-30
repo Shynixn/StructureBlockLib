@@ -8,12 +8,13 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 /**
  * Interface fluent API to load structures from sources into
  * the world
  */
-public interface StructureLoaderAbstract<L, V> {
+public interface StructureLoaderAbstract<L, V, B, W> {
     /**
      * Gets the target Location.
      *
@@ -75,7 +76,7 @@ public interface StructureLoaderAbstract<L, V> {
      * @return This instance.
      */
     @NotNull
-    StructureLoaderAbstract<L, V> at(@Nullable L location);
+    StructureLoaderAbstract<L, V, B, W> at(@Nullable L location);
 
     /**
      * Should entities which may or may not be included in the
@@ -85,7 +86,7 @@ public interface StructureLoaderAbstract<L, V> {
      * @param enabled Flag.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V> includeEntities(boolean enabled);
+    StructureLoaderAbstract<L, V, B, W> includeEntities(boolean enabled);
 
     /**
      * Sets the target mirror type.
@@ -94,7 +95,7 @@ public interface StructureLoaderAbstract<L, V> {
      * @param mirror Mirror.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V> mirror(StructureMirror mirror);
+    StructureLoaderAbstract<L, V, B, W> mirror(StructureMirror mirror);
 
     /**
      * Sets the target rotation type.
@@ -103,7 +104,7 @@ public interface StructureLoaderAbstract<L, V> {
      * @param rotation Rotation.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V> rotation(StructureRotation rotation);
+    StructureLoaderAbstract<L, V, B, W> rotation(StructureRotation rotation);
 
     /**
      * Sets the target integrity.
@@ -114,7 +115,7 @@ public interface StructureLoaderAbstract<L, V> {
      * @param integrity Integrity.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V> integrity(float integrity);
+    StructureLoaderAbstract<L, V, B, W> integrity(float integrity);
 
     /**
      * Sets the target seed.
@@ -124,7 +125,19 @@ public interface StructureLoaderAbstract<L, V> {
      * @param seed Seed.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V> seed(long seed);
+    StructureLoaderAbstract<L, V, B, W> seed(long seed);
+
+    /**
+     * Attaches a new function to the structure processor which is called for each block being placed in the world.
+     * If true, the block is getting placed in the world. If false, the block is not getting placed.
+     * Multiple processor can be attached to a single structure load (e.g. executed in the order they are added).
+     * If one processor returns false, subsequent processor are no longer being called.
+     *
+     * @param onStructurePlace A function being called for each block being placed.
+     * @return This instance.
+     */
+    @NotNull
+    StructureLoaderAbstract<L, V, B, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace);
 
     /**
      * Loads the structure blocks and entities from the given source and places

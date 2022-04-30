@@ -35,7 +35,7 @@ Support development with a small tip :heart: :coffee:.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.5.0</version>
+     <version>2.6.0</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -43,7 +43,7 @@ Support development with a small tip :heart: :coffee:.
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.5.0")
+    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.6.0")
 }
 ```
 
@@ -154,6 +154,31 @@ StructureBlockLibApi.INSTANCE
     .onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Loaded structure 'mystructure'."));
 ```
 
+#### Load a structure on your server and manipulate the blocks
+
+```java
+// Minimal configuration
+Plugin plugin;
+
+StructureBlockLibApi.INSTANCE
+    .loadStructure(plugin)
+    .at(new Location(Bukkit.getWorld("world"), 100, 100, 100))
+    .onProcessBlock(part -> {
+      // onProcessBlock is called for every block before it is placed.  
+      if (part.getSourceBlock().getBlockData().getMaterial() == Material.AIR) {
+        // When the block in the structure file equals AIR, we do not want to place it -> return false.  
+        return false;
+      }
+  
+      // When the block in the structure file is something else, we do want to place it -> return true.
+      return true;
+    })
+    .loadFromWorld("world", "me", "mystructure")
+    .onException(e -> plugin.getLogger().log(Level.SEVERE, "Failed to load structure.", e))
+    .onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Loaded structure 'mystructure'."));
+```
+
+
 ##### Modify and use an existing structure block
 ```java
 Plugin plugin;
@@ -180,8 +205,8 @@ structureBlock.update();
 **plugin.yml**
 ```yaml
 libraries:
-  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.5.0
-  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.5.0
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.6.0
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.6.0
 ```
 
 ### For version < 1.17
@@ -200,13 +225,13 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.5.0</version>
+     <version>2.6.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>2.5.0</version>
+     <version>2.6.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -214,8 +239,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.5.0")
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.5.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.6.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.6.0")
 }
 ```
  

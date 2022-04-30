@@ -13,11 +13,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstract<L, V> {
+public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderAbstract<L, V, B, W> {
     private final ProxyService proxyService;
     private final StructureSerializationService serializationService;
     private final StructureWorldService worldService;
@@ -28,6 +31,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
     private StructureMirror mirror = StructureMirror.NONE;
     private float integrity = 1.0F;
     private long seed = 0L;
+    protected List<Function<?, Boolean>> processors = new ArrayList<>();
 
     /**
      * Creates a new raw structure load instance.
@@ -125,7 +129,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<L, V> at(@Nullable L location) {
+    public @NotNull StructureLoaderAbstract<L, V, B, W> at(@Nullable L location) {
         this.location = this.proxyService.toPosition(location);
         return this;
     }
@@ -139,7 +143,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V> includeEntities(boolean enabled) {
+    public StructureLoaderAbstract<L, V, B, W> includeEntities(boolean enabled) {
         this.includeEntities = enabled;
         return this;
     }
@@ -152,7 +156,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V> mirror(StructureMirror mirror) {
+    public StructureLoaderAbstract<L, V, B, W> mirror(StructureMirror mirror) {
         this.mirror = mirror;
         return this;
     }
@@ -165,7 +169,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V> rotation(StructureRotation rotation) {
+    public StructureLoaderAbstract<L, V, B, W> rotation(StructureRotation rotation) {
         this.rotation = rotation;
         return this;
     }
@@ -180,7 +184,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V> integrity(float integrity) {
+    public StructureLoaderAbstract<L, V, B, W> integrity(float integrity) {
         this.integrity = integrity;
         return this;
     }
@@ -194,8 +198,23 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V> seed(long seed) {
+    public StructureLoaderAbstract<L, V, B, W> seed(long seed) {
         this.seed = seed;
+        return this;
+    }
+
+    /**
+     * Attaches a new function to the structure processor which is called for each block being placed in the world.
+     * If true, the block is getting placed in the world. If false, the block is not getting placed.
+     * Multiple processor can be attached to a single structure load (e.g. executed in the order they are added).
+     * If one processor returns false, subsequent processor are no longer being called.
+     *
+     * @param onStructurePlace A function being called for each block being placed.
+     * @return This instance.
+     */
+    @Override
+    public @NotNull StructureLoaderAbstract<L, V, B, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace) {
+        this.processors.add(onStructurePlace);
         return this;
     }
 
@@ -372,6 +391,7 @@ public class StructureLoaderAbstractImpl<L, V> implements StructureLoaderAbstrac
         meta.seed = this.seed;
         meta.mirror = this.mirror;
         meta.rotation = this.rotation;
+        meta.processors = this.processors;
 
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null)
                 .thenAcceptAsync(e_ -> progressToken.progress(0.0), proxyService.getSyncExecutor()).thenComposeAsync(e_ -> {

@@ -154,7 +154,7 @@ StructureBlockLibApi.INSTANCE
     .onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Loaded structure 'mystructure'."));
 ```
 
-#### Load a structure on your server and manipulate the blocks
+##### Load a structure on your server and manipulate the blocks
 
 ```java
 // Minimal configuration
@@ -178,7 +178,7 @@ StructureBlockLibApi.INSTANCE
     .onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Loaded structure 'mystructure'."));
 ```
 
-#### Load a structure on your server and manipulate the entities
+##### Load a structure on your server and manipulate the entities
 
 ```java
 // Minimal configuration
@@ -205,7 +205,7 @@ StructureBlockLibApi.INSTANCE
     .onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Loaded structure 'mystructure'."));
 ```
 
-#### Load entities in memory and iterate them
+##### Load entities in memory and iterate them
 
 ```java
 List<StructureEntity<Entity, Location>> entities = new ArrayList<>();
@@ -228,7 +228,7 @@ StructureBlockLibApi.INSTANCE
   });
 ```
 
-#### Load blocks in memory and iterate them
+##### Load blocks in memory and iterate them
 
 ```java
 List<StructurePlacePart<Block, World>> blocks = new ArrayList<>();

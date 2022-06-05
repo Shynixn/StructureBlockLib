@@ -17,12 +17,27 @@ public interface StructurePlaceMeta {
     Position getLocation();
 
     /**
-     * Gets the processors when placing this structure.
+     * Deprecated, use getBlockProcessors instead.
+     */
+    @NotNull
+    @Deprecated
+    List<Function<?, Boolean>> getProcessors();
+
+    /**
+     * Gets the block processors when placing this structure.
      *
      * @return processors.
      */
     @NotNull
-    List<Function<?, Boolean>> getProcessors();
+    List<Function<?, Boolean>> getBlockProcessors();
+
+    /**
+     * Gets the Entity processors when placing this structure.
+     *
+     * @return processors.
+     */
+    @NotNull
+    List<Function<?, Boolean>> getEntityProcessors();
 
     /**
      * Should entities be loaded.
@@ -31,6 +46,14 @@ public interface StructurePlaceMeta {
      * @return flag.
      */
     boolean isIncludeEntitiesEnabled();
+
+    /**
+     * Should blocks be loaded.
+     * Default false.
+     *
+     * @return flag.
+     */
+    boolean isIncludeBlockEnabled();
 
     /**
      * Gets the target mirror type.

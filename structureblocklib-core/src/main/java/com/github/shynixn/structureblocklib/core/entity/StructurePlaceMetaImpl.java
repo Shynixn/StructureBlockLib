@@ -13,11 +13,13 @@ import java.util.function.Function;
 public class StructurePlaceMetaImpl implements StructurePlaceMeta {
     public Position location;
     public boolean includeEntities;
+    public boolean includeBlocks;
     public StructureRotation rotation = StructureRotation.NONE;
     public StructureMirror mirror = StructureMirror.NONE;
     public float integrity = 1.0F;
     public long seed = 0L;
-    public List<Function<?, Boolean>> processors = new ArrayList<>();
+    public List<Function<?, Boolean>> blockProcessors = new ArrayList<>();
+    public List<Function<?, Boolean>> entityProcessors = new ArrayList<>();
 
     /**
      * Should entities be loaded.
@@ -28,6 +30,17 @@ public class StructurePlaceMetaImpl implements StructurePlaceMeta {
     @Override
     public boolean isIncludeEntitiesEnabled() {
         return includeEntities;
+    }
+
+    /**
+     * Should blocks be loaded.
+     * Default false.
+     *
+     * @return flag.
+     */
+    @Override
+    public boolean isIncludeBlockEnabled() {
+        return includeBlocks;
     }
 
     /**
@@ -87,13 +100,29 @@ public class StructurePlaceMetaImpl implements StructurePlaceMeta {
         return location;
     }
 
+    @Override
+    @Deprecated
+    public @NotNull List<Function<?, Boolean>> getProcessors() {
+        return getBlockProcessors();
+    }
+
     /**
-     * Gets the processors when placing this structure.
+     * Gets the block processors when placing this structure.
      *
      * @return processors.
      */
     @Override
-    public @NotNull List<Function<?, Boolean>> getProcessors() {
-        return processors;
+    public @NotNull List<Function<?, Boolean>> getBlockProcessors() {
+        return blockProcessors;
+    }
+
+    /**
+     * Gets the Entity processors when placing this structure.
+     *
+     * @return processors.
+     */
+    @Override
+    public @NotNull List<Function<?, Boolean>> getEntityProcessors() {
+        return entityProcessors;
     }
 }

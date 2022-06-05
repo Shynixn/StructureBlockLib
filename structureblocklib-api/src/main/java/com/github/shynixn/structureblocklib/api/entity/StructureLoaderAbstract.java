@@ -14,7 +14,7 @@ import java.util.function.Function;
  * Interface fluent API to load structures from sources into
  * the world
  */
-public interface StructureLoaderAbstract<L, V, B, W> {
+public interface StructureLoaderAbstract<L, V, B, E, W> {
     /**
      * Gets the target Location.
      *
@@ -31,6 +31,15 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @return flag.
      */
     boolean isIncludeEntitiesEnabled();
+
+    /**
+     * Should blocks which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default true.
+     *
+     * @return flag.
+     */
+    boolean isIncludeBlocksEnabled();
 
     /**
      * Gets the target mirror type.
@@ -76,7 +85,7 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @return This instance.
      */
     @NotNull
-    StructureLoaderAbstract<L, V, B, W> at(@Nullable L location);
+    StructureLoaderAbstract<L, V, B, E, W> at(@Nullable L location);
 
     /**
      * Should entities which may or may not be included in the
@@ -86,7 +95,17 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @param enabled Flag.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V, B, W> includeEntities(boolean enabled);
+    StructureLoaderAbstract<L, V, B, E, W> includeEntities(boolean enabled);
+
+    /**
+     * Should blocks which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default true.
+     *
+     * @param enabled Flag.
+     * @return This instance.
+     */
+    StructureLoaderAbstract<L, V, B, E, W> includeBlocks(boolean enabled);
 
     /**
      * Sets the target mirror type.
@@ -95,7 +114,7 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @param mirror Mirror.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V, B, W> mirror(StructureMirror mirror);
+    StructureLoaderAbstract<L, V, B, E, W> mirror(StructureMirror mirror);
 
     /**
      * Sets the target rotation type.
@@ -104,7 +123,7 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @param rotation Rotation.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V, B, W> rotation(StructureRotation rotation);
+    StructureLoaderAbstract<L, V, B, E, W> rotation(StructureRotation rotation);
 
     /**
      * Sets the target integrity.
@@ -115,7 +134,7 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @param integrity Integrity.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V, B, W> integrity(float integrity);
+    StructureLoaderAbstract<L, V, B, E, W> integrity(float integrity);
 
     /**
      * Sets the target seed.
@@ -125,7 +144,7 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @param seed Seed.
      * @return This instance.
      */
-    StructureLoaderAbstract<L, V, B, W> seed(long seed);
+    StructureLoaderAbstract<L, V, B, E, W> seed(long seed);
 
     /**
      * Attaches a new function to the structure processor which is called for each block being placed in the world.
@@ -137,7 +156,19 @@ public interface StructureLoaderAbstract<L, V, B, W> {
      * @return This instance.
      */
     @NotNull
-    StructureLoaderAbstract<L, V, B, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace);
+    StructureLoaderAbstract<L, V, B, E, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace);
+
+    /**
+     * Attaches a new function to the structure processor which is called for each entity being placed in the world.
+     * If true, the entity is getting placed in the world. If false, the entity is not getting placed.
+     * Multiple processor can be attached to a single structure load (e.g. executed in the order they are added).
+     * If one processor returns false, subsequent processor are no longer being called.
+     *
+     * @param onStructurePlace A function being called for each entity being placed.
+     * @return This instance.
+     */
+    @NotNull
+    StructureLoaderAbstract<L, V, B, E, W> onProcessEntity(Function<StructureEntity<E, L>, Boolean> onStructurePlace);
 
     /**
      * Loads the structure blocks and entities from the given source and places

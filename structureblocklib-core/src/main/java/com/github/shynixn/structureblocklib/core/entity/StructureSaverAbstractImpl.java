@@ -304,7 +304,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
 
         author(author);
 
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e1 -> {
             try {
                 Files.createDirectories(file.getParentFile().toPath());
@@ -333,7 +333,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
     @Override
     public @NotNull ProgressToken<String> saveToString() {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ProgressTokenImpl<String> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<String> progressToken = new ProgressTokenImpl<>(proxyService);
         ProgressToken<Void> innerToken = saveToOutputStream(byteArrayOutputStream);
         innerToken.onProgress(progressToken::progress);
 
@@ -377,7 +377,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
      */
     @Override
     public @NotNull ProgressToken<Void> saveToFile(@NotNull File target) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
 
         CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
@@ -412,7 +412,7 @@ public class StructureSaverAbstractImpl<L, V> implements StructureSaverAbstract<
     @Override
     public @NotNull ProgressToken<Void> saveToOutputStream(@NotNull OutputStream target) {
         StructureReadMeta meta = validate();
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
 
         CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {

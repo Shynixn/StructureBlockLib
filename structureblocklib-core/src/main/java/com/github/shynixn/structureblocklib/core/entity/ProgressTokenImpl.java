@@ -1,6 +1,7 @@
 package com.github.shynixn.structureblocklib.core.entity;
 
 import com.github.shynixn.structureblocklib.api.entity.ProgressToken;
+import com.github.shynixn.structureblocklib.api.service.ProxyService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,13 @@ import java.util.function.Consumer;
  */
 public class ProgressTokenImpl<T> implements ProgressToken<T> {
     private final Set<Consumer<Double>> progressConsumers = new HashSet<>();
-
+    private final ProxyService proxyService;
     private CompletionStage<T> item;
     private volatile boolean cancelled = false;
+
+    public ProgressTokenImpl(ProxyService proxyService) {
+        this.proxyService = proxyService;
+    }
 
     /**
      * Calls the progress consumers with the progress update.
@@ -88,7 +93,7 @@ public class ProgressTokenImpl<T> implements ProgressToken<T> {
      */
     @Override
     public ProgressToken<T> onResult(Consumer<T> result) {
-        this.item.thenAccept(result);
+        this.item.thenAcceptAsync(result, proxyService.getSyncExecutor());
         return this;
     }
 

@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 
 public class CraftStructureBlock extends CraftBlockState implements StructureBlockData, StructureBlockSave, StructureBlockLoad {
-    public StructureBlockAbstractImpl<Location, Vector, Block, World> internalBlock;
+    public StructureBlockAbstractImpl<Location, Vector, Block,org.bukkit.entity.Entity, World> internalBlock;
     public TypeConversionService conversionService;
     public StructureBlockEntity tileEntityStructure;
 
@@ -38,7 +38,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      * @param structure dependency.
      * @param block     dependency.
      */
-    public CraftStructureBlock(StructureBlockAbstractImpl<Location, Vector, Block, World> structure, TypeConversionService conversionService, Block block) {
+    public CraftStructureBlock(StructureBlockAbstractImpl<Location, Vector, Block,org.bukkit.entity.Entity, World> structure, TypeConversionService conversionService, Block block) {
         super(block);
         final CraftWorld world = (CraftWorld) block.getWorld();
         this.internalBlock = structure;
@@ -416,7 +416,7 @@ public class CraftStructureBlock extends CraftBlockState implements StructureBlo
      * @return New instance.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<Location, Vector, Block, World> loadStructure() {
+    public @NotNull StructureLoaderAbstract<Location, Vector, Block,org.bukkit.entity.Entity, World> loadStructure() {
         return internalBlock.loadStructure();
     }
 

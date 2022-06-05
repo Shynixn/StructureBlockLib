@@ -20,18 +20,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderAbstract<L, V, B, W> {
+public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoaderAbstract<L, V, B, E, W> {
     private final ProxyService proxyService;
     private final StructureSerializationService serializationService;
     private final StructureWorldService worldService;
-
+    private boolean includeBlocks = true;
     private Position location;
     private boolean includeEntities = false;
     private StructureRotation rotation = StructureRotation.NONE;
     private StructureMirror mirror = StructureMirror.NONE;
     private float integrity = 1.0F;
     private long seed = 0L;
-    protected List<Function<?, Boolean>> processors = new ArrayList<>();
+    protected List<Function<?, Boolean>> blockProcessors = new ArrayList<>();
+    protected List<Function<?, Boolean>> entityProcessors = new ArrayList<>();
 
     /**
      * Creates a new raw structure load instance.
@@ -71,6 +72,18 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
     @Override
     public boolean isIncludeEntitiesEnabled() {
         return this.includeEntities;
+    }
+
+    /**
+     * Should blocks which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default true.
+     *
+     * @return flag.
+     */
+    @Override
+    public boolean isIncludeBlocksEnabled() {
+        return includeBlocks;
     }
 
     /**
@@ -129,7 +142,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<L, V, B, W> at(@Nullable L location) {
+    public @NotNull StructureLoaderAbstract<L, V, B, E, W> at(@Nullable L location) {
         this.location = this.proxyService.toPosition(location);
         return this;
     }
@@ -143,8 +156,22 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V, B, W> includeEntities(boolean enabled) {
+    public StructureLoaderAbstract<L, V, B, E, W> includeEntities(boolean enabled) {
         this.includeEntities = enabled;
+        return this;
+    }
+
+    /**
+     * Should blocks which may or may not be included in the
+     * saved file be included in the loaded structure.
+     * Default true.
+     *
+     * @param enabled Flag.
+     * @return This instance.
+     */
+    @Override
+    public StructureLoaderAbstract<L, V, B, E, W> includeBlocks(boolean enabled) {
+        this.includeBlocks = enabled;
         return this;
     }
 
@@ -156,7 +183,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V, B, W> mirror(StructureMirror mirror) {
+    public StructureLoaderAbstract<L, V, B, E, W> mirror(StructureMirror mirror) {
         this.mirror = mirror;
         return this;
     }
@@ -169,7 +196,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V, B, W> rotation(StructureRotation rotation) {
+    public StructureLoaderAbstract<L, V, B, E, W> rotation(StructureRotation rotation) {
         this.rotation = rotation;
         return this;
     }
@@ -184,7 +211,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V, B, W> integrity(float integrity) {
+    public StructureLoaderAbstract<L, V, B, E, W> integrity(float integrity) {
         this.integrity = integrity;
         return this;
     }
@@ -198,7 +225,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public StructureLoaderAbstract<L, V, B, W> seed(long seed) {
+    public StructureLoaderAbstract<L, V, B, E, W> seed(long seed) {
         this.seed = seed;
         return this;
     }
@@ -213,8 +240,23 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      * @return This instance.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<L, V, B, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace) {
-        this.processors.add(onStructurePlace);
+    public @NotNull StructureLoaderAbstract<L, V, B, E, W> onProcessBlock(Function<StructurePlacePart<B, W>, Boolean> onStructurePlace) {
+        this.blockProcessors.add(onStructurePlace);
+        return this;
+    }
+
+    /**
+     * Attaches a new function to the structure processor which is called for each entity being placed in the world.
+     * If true, the entity is getting placed in the world. If false, the entity is not getting placed.
+     * Multiple processor can be attached to a single structure load (e.g. executed in the order they are added).
+     * If one processor returns false, subsequent processor are no longer being called.
+     *
+     * @param onStructurePlace A function being called for each entity being placed.
+     * @return This instance.
+     */
+    @Override
+    public @NotNull StructureLoaderAbstract<L, V, B, E, W> onProcessEntity(Function<StructureEntity<E, L>, Boolean> onStructurePlace) {
+        this.entityProcessors.add(onStructurePlace);
         return this;
     }
 
@@ -230,7 +272,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
      */
     @Override
     public @NotNull ProgressToken<Void> loadFromSaver(@NotNull StructureSaverAbstract<L, V> source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         progressToken.progress(0.0);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CompletionStage<Void> completableFuture = source.saveToOutputStream(outputStream).getCompletionStage().thenComposeAsync(e_ -> {
@@ -274,7 +316,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
         }
 
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 Files.createDirectories(file.getParentFile().toPath());
@@ -302,7 +344,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
     @Override
     @NotNull
     public ProgressToken<Void> loadFromString(@NotNull String source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             byte[] content = Base64.getDecoder().decode(source);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
@@ -349,7 +391,7 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
     @Override
     @NotNull
     public ProgressToken<Void> loadFromFile(@NotNull File source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 FileInputStream inputStream = new FileInputStream(source);
@@ -383,15 +425,17 @@ public class StructureLoaderAbstractImpl<L, V, B, W> implements StructureLoaderA
     @Override
     @NotNull
     public ProgressToken<Void> loadFromInputStream(@NotNull InputStream source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         StructurePlaceMetaImpl meta = new StructurePlaceMetaImpl();
         meta.location = this.location;
         meta.includeEntities = this.includeEntities;
+        meta.includeBlocks = this.includeBlocks;
         meta.integrity = this.integrity;
         meta.seed = this.seed;
         meta.mirror = this.mirror;
         meta.rotation = this.rotation;
-        meta.processors = this.processors;
+        meta.blockProcessors = this.blockProcessors;
+        meta.entityProcessors = this.entityProcessors;
 
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null)
                 .thenAcceptAsync(e_ -> progressToken.progress(0.0), proxyService.getSyncExecutor()).thenComposeAsync(e_ -> {

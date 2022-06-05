@@ -15,6 +15,7 @@ import com.github.shynixn.structureblocklib.bukkit.service.ProxyServiceImpl;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
@@ -36,7 +37,7 @@ public class Main {
                     .getDeclaredConstructor().newInstance();
             StructureSaver saver = createStructureSaver(plugin);
             StructureLoader loader = createStructureLoader(plugin);
-            StructureBlockAbstractImpl<Location, Vector, Block, World> abstractBlock = new StructureBlockAbstractImpl<>(proxyService, loader, saver);
+            StructureBlockAbstractImpl<Location, Vector, Block, Entity,World> abstractBlock = new StructureBlockAbstractImpl<>(proxyService, loader, saver);
             return findClazz(version, "com.github.shynixn.structureblocklib.bukkit.VERSION.CraftStructureBlock")
                     .getDeclaredConstructor(StructureBlockAbstractImpl.class, TypeConversionService.class, Block.class)
                     .newInstance(abstractBlock, typeConversionService, location.getBlock());

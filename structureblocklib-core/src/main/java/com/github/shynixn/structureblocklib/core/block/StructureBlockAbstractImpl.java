@@ -13,9 +13,9 @@ import com.github.shynixn.structureblocklib.api.service.ProxyService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class StructureBlockAbstractImpl<L, V, B, W> implements StructureBlockDataAbstract, StructureBlockSaveAbstract<L, V>, StructureBlockLoadAbstract<L, V, B, W> {
+public class StructureBlockAbstractImpl<L, V, B, E, W> implements StructureBlockDataAbstract, StructureBlockSaveAbstract<L, V>, StructureBlockLoadAbstract<L, V, B, E, W> {
     private final ProxyService proxyService;
-    private final StructureLoaderAbstract<L, V, B, W> loader;
+    private final StructureLoaderAbstract<L, V, B, E, W> loader;
     private final StructureSaverAbstract<L, V> saver;
 
     private StructureMode mode = StructureMode.CORNER;
@@ -27,7 +27,7 @@ public class StructureBlockAbstractImpl<L, V, B, W> implements StructureBlockDat
     /**
      * Creates a new instance with dependencies.
      */
-    public StructureBlockAbstractImpl(ProxyService proxyService, StructureLoaderAbstract<L, V, B, W> loader, StructureSaverAbstract<L, V> saver) {
+    public StructureBlockAbstractImpl(ProxyService proxyService, StructureLoaderAbstract<L, V, B, E, W> loader, StructureSaverAbstract<L, V> saver) {
         this.proxyService = proxyService;
         this.loader = loader;
         this.saver = saver;
@@ -376,7 +376,7 @@ public class StructureBlockAbstractImpl<L, V, B, W> implements StructureBlockDat
      * @return Loader.
      */
     @Override
-    public @NotNull StructureLoaderAbstract<L, V, B, W> loadStructure() {
+    public @NotNull StructureLoaderAbstract<L, V, B, E, W> loadStructure() {
         return loader;
     }
 }

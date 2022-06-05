@@ -1,5 +1,6 @@
 package com.github.shynixn.structureblocklib.bukkit.v1_18_R2;
 
+import com.github.shynixn.structureblocklib.api.entity.StructureEntity;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlacePart;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
@@ -10,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -24,10 +26,15 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -81,6 +88,8 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         }
 
         executeProcessors(bukkitWorld, meta, info);
+        executeEntityProcessor(meta, bukkitWorld, template.entityInfoList);
+
         template.placeInWorld(world, cornerBlock, cornerBlock, info, new Random(), 2);
     }
 
@@ -160,6 +169,10 @@ public class StructureWorldServiceImpl implements StructureWorldService {
                     }
                 }
 
+                if (!meta.isIncludeBlockEnabled()) {
+                    return null;
+                }
+
                 return new StructureTemplate.StructureBlockInfo(structureBlockInfo1.pos, targetBlockState.item, structureBlockInfo1.nbt);
             }
 
@@ -168,5 +181,64 @@ public class StructureWorldServiceImpl implements StructureWorldService {
                 return (StructureProcessorType<StructureProcessor>) () -> null;
             }
         });
+    }
+
+    /**
+     * Executes the entity processors.
+     */
+    private void executeEntityProcessor(StructurePlaceMeta meta, World bukkitWorld, List<StructureTemplate.StructureEntityInfo> structureEntityInfos) {
+        for (StructureTemplate.StructureEntityInfo entityInfo : structureEntityInfos.toArray(new StructureTemplate.StructureEntityInfo[0])) {
+            final GenericWrapper<Entity> peekEntity = new GenericWrapper<>(null);
+            StructureEntity<Entity, Location> structureEntity = new StructureEntity<Entity, Location>() {
+                @Override
+                public Optional<Entity> spawnEntity(Location location) {
+                    Optional<net.minecraft.world.entity.Entity> optEntity = EntityType.create(entityInfo.nbt, ((CraftWorld) location.getWorld()).getHandle());
+                    if (optEntity.isPresent()) {
+                        optEntity.get().setUUID(UUID.randomUUID());
+                        ((CraftWorld) location.getWorld()).addEntity(optEntity.get(), CreatureSpawnEvent.SpawnReason.CUSTOM);
+                        optEntity.get().getBukkitEntity().teleport(location);
+                        return Optional.of(optEntity.get().getBukkitEntity());
+                    }
+                    return Optional.empty();
+                }
+
+                @Override
+                public Optional<Entity> getEntity() {
+                    if (peekEntity.item == null) {
+                        Optional<net.minecraft.world.entity.Entity> optEntity = EntityType.create(entityInfo.nbt, ((CraftWorld) bukkitWorld).getHandle());
+                        if (optEntity.isPresent()) {
+                            peekEntity.item = optEntity.get().getBukkitEntity();
+                        }
+                    }
+
+                    return Optional.ofNullable(peekEntity.item);
+                }
+
+                @Override
+                public Location getSourceLocation() {
+                    // noinspection UnnecessaryLocalVariable Explicit cast is necessary because otherwise the spigot mappings do not work.
+                    Vec3i sourcePos = entityInfo.blockPos;
+                    return new Location(null, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ());
+                }
+
+                @Override
+                public String getNbtData() {
+                    return entityInfo.nbt.toString();
+                }
+            };
+
+            for (Function<?, Boolean> processor : meta.getEntityProcessors()) {
+                Function<Object, Boolean> processHandle = (Function<Object, Boolean>) processor;
+                boolean result = processHandle.apply(structureEntity);
+
+                if (!result) {
+                    structureEntityInfos.remove(entityInfo);
+                }
+            }
+
+            if (peekEntity.item != null) {
+                peekEntity.item.remove();
+            }
+        }
     }
 }

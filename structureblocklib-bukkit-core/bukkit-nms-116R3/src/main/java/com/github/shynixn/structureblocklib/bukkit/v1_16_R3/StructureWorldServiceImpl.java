@@ -1,5 +1,6 @@
 package com.github.shynixn.structureblocklib.bukkit.v1_16_R3;
 
+import com.github.shynixn.structureblocklib.api.entity.StructureEntity;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlaceMeta;
 import com.github.shynixn.structureblocklib.api.entity.StructurePlacePart;
 import com.github.shynixn.structureblocklib.api.entity.StructureReadMeta;
@@ -13,10 +14,16 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_16_R3.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -47,8 +54,8 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         }
 
         DefinedStructure definedStructure = (DefinedStructure) structure;
-        org.bukkit.World bukkitWorld =  Bukkit.getWorld(meta.getLocation().getWorldName());
-        World world = ((CraftWorld)bukkitWorld).getHandle();
+        org.bukkit.World bukkitWorld = Bukkit.getWorld(meta.getLocation().getWorldName());
+        World world = ((CraftWorld) bukkitWorld).getHandle();
         BlockPosition cornerBlock = new BlockPosition((int) meta.getLocation().getX(), (int) meta.getLocation().getY(), (int) meta.getLocation().getZ());
         DefinedStructureInfo info = new DefinedStructureInfo();
         info.a(!meta.isIncludeEntitiesEnabled());
@@ -70,6 +77,7 @@ public class StructureWorldServiceImpl implements StructureWorldService {
         }
 
         executeProcessors(bukkitWorld, meta, info);
+        executeEntityProcessor(meta, bukkitWorld, definedStructure);
         definedStructure.a((WorldAccess) world, cornerBlock, info, new Random());
     }
 
@@ -147,6 +155,10 @@ public class StructureWorldServiceImpl implements StructureWorldService {
                     }
                 }
 
+                if (!meta.isIncludeBlockEnabled()) {
+                    return null;
+                }
+
                 return new DefinedStructure.BlockInfo(blockInfo1.a, targetBlockState.item, blockInfo1.c);
             }
 
@@ -155,5 +167,72 @@ public class StructureWorldServiceImpl implements StructureWorldService {
                 return () -> null;
             }
         });
+    }
+
+    /**
+     * Executes the entity processors.
+     */
+    private void executeEntityProcessor(StructurePlaceMeta meta, org.bukkit.World bukkitWorld, DefinedStructure definedStructure) {
+        List<DefinedStructure.EntityInfo> structureEntityInfos;
+        try {
+            Field field = DefinedStructure.class.getDeclaredField("b");
+            field.setAccessible(true);
+            structureEntityInfos = (List<DefinedStructure.EntityInfo>) field.get(definedStructure);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (DefinedStructure.EntityInfo entityInfo : structureEntityInfos) {
+            final GenericWrapper<org.bukkit.entity.Entity> peekEntity = new GenericWrapper<>(null);
+            StructureEntity<org.bukkit.entity.Entity, Location> structureEntity = new StructureEntity<org.bukkit.entity.Entity, Location>() {
+                @Override
+                public Optional<org.bukkit.entity.Entity> spawnEntity(Location location) {
+                    Optional<net.minecraft.server.v1_16_R3.Entity> optEntity = EntityTypes.a(entityInfo.c, ((CraftWorld) location.getWorld()).getHandle());
+                    if (optEntity.isPresent()) {
+                        optEntity.get().a_(UUID.randomUUID());
+                        ((CraftWorld) location.getWorld()).addEntity(optEntity.get(), CreatureSpawnEvent.SpawnReason.CUSTOM);
+                        optEntity.get().getBukkitEntity().teleport(location);
+                        return Optional.of(optEntity.get().getBukkitEntity());
+                    }
+                    return Optional.empty();
+                }
+
+                @Override
+                public Optional<Entity> getEntity() {
+                    if (peekEntity.item == null) {
+                        Optional<net.minecraft.server.v1_16_R3.Entity> optEntity = EntityTypes.a(entityInfo.c, ((CraftWorld) bukkitWorld).getHandle());
+                        if (optEntity.isPresent()) {
+                            peekEntity.item = optEntity.get().getBukkitEntity();
+                        }
+                    }
+
+                    return Optional.ofNullable(peekEntity.item);
+                }
+
+                @Override
+                public Location getSourceLocation() {
+                    BlockPosition sourcePos = entityInfo.b;
+                    return new Location(null, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ());
+                }
+
+                @Override
+                public String getNbtData() {
+                    return entityInfo.c.toString();
+                }
+            };
+
+            for (Function<?, Boolean> processor : meta.getEntityProcessors()) {
+                Function<Object, Boolean> processHandle = (Function<Object, Boolean>) processor;
+                boolean result = processHandle.apply(structureEntity);
+
+                if (!result) {
+                    structureEntityInfos.remove(entityInfo);
+                }
+            }
+
+            if (peekEntity.item != null) {
+                peekEntity.item.remove();
+            }
+        }
     }
 }

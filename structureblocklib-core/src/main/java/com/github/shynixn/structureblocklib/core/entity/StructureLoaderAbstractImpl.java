@@ -272,7 +272,7 @@ public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoad
      */
     @Override
     public @NotNull ProgressToken<Void> loadFromSaver(@NotNull StructureSaverAbstract<L, V> source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         progressToken.progress(0.0);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CompletionStage<Void> completableFuture = source.saveToOutputStream(outputStream).getCompletionStage().thenComposeAsync(e_ -> {
@@ -316,7 +316,7 @@ public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoad
             file = new File(worldName + File.separator + "structures" + File.separator + name + ".nbt");
         }
 
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletionStage<Void> completionStage = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 Files.createDirectories(file.getParentFile().toPath());
@@ -344,7 +344,7 @@ public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoad
     @Override
     @NotNull
     public ProgressToken<Void> loadFromString(@NotNull String source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             byte[] content = Base64.getDecoder().decode(source);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(content);
@@ -391,7 +391,7 @@ public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoad
     @Override
     @NotNull
     public ProgressToken<Void> loadFromFile(@NotNull File source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         CompletableFuture<Void> completableFuture = CompletableFuture.completedFuture(null).thenComposeAsync(e_ -> {
             try {
                 FileInputStream inputStream = new FileInputStream(source);
@@ -425,7 +425,7 @@ public class StructureLoaderAbstractImpl<L, V, B, E, W> implements StructureLoad
     @Override
     @NotNull
     public ProgressToken<Void> loadFromInputStream(@NotNull InputStream source) {
-        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>();
+        ProgressTokenImpl<Void> progressToken = new ProgressTokenImpl<>(proxyService);
         StructurePlaceMetaImpl meta = new StructurePlaceMetaImpl();
         meta.location = this.location;
         meta.includeEntities = this.includeEntities;

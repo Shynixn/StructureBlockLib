@@ -160,16 +160,16 @@ public class CraftStructureBlockIT {
 
         StructureWorldService worldService = new MockedStructureWorldService();
         StructureSerializationService serializationService = new StructureSerializationServiceImpl();
-        StructureLoaderAbstract<Location, Vector, Block, World> structureLoader = new StructureLoaderAbstractImpl<>(proxyService, serializationService, worldService);
+        StructureLoaderAbstract<Location, Vector, Block,org.bukkit.entity.Entity, World> structureLoader = new StructureLoaderAbstractImpl<>(proxyService, serializationService, worldService);
         StructureSaverAbstract<Location, Vector> structureSaver = new StructureSaverAbstractImpl<>(proxyService, serializationService, worldService);
-        StructureBlockAbstractImpl<Location, Vector, Block, World> vector = new StructureBlockAbstractImpl<>(proxyService, structureLoader, structureSaver);
+        StructureBlockAbstractImpl<Location, Vector, Block,org.bukkit.entity.Entity, World> vector = new StructureBlockAbstractImpl<>(proxyService, structureLoader, structureSaver);
         TypeConversionService conversionService = new TypeConversionServiceImpl();
 
         return new WrappedCraftStructureBlock(vector, conversionService, block);
     }
 
     private static class WrappedCraftStructureBlock extends CraftStructureBlock {
-        public WrappedCraftStructureBlock(StructureBlockAbstractImpl<Location, Vector, Block, World> structure, TypeConversionService conversionService, Block block) {
+        public WrappedCraftStructureBlock(StructureBlockAbstractImpl<Location, Vector, Block,org.bukkit.entity.Entity, World> structure, TypeConversionService conversionService, Block block) {
             super(structure, conversionService, block);
         }
 

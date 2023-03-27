@@ -17,7 +17,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 * API to save or load structures without an actual structure block. 
 * Asynchronous implementation and API.
 * Fluent API.
-* Version support 1.9.R1 - 1.19.R2
+* Version support 1.9.R1 - 1.19.R3
 * Java support 8 - Latest
 
 ## Donation 

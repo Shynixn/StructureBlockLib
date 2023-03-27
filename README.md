@@ -17,7 +17,7 @@ StructureBlockLib is a bukkit API and implementation for handling structures on 
 * API to save or load structures without an actual structure block. 
 * Asynchronous implementation and API.
 * Fluent API.
-* Version support 1.9.R1 - 1.19.R2
+* Version support 1.9.R1 - 1.19.R3
 * Java support 8 - Latest
 
 ## Donation 
@@ -35,7 +35,7 @@ Support development with a small tip :heart: :coffee:.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.9.0</version>
+     <version>2.10.0</version>
      <scope>provided</scope>
 </dependency>
 ```
@@ -43,7 +43,7 @@ Support development with a small tip :heart: :coffee:.
 
 ```xml
 dependencies {
-    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.9.0")
+    compileOnly("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.10.0")
 }
 ```
 
@@ -277,8 +277,8 @@ structureBlock.update();
 **plugin.yml**
 ```yaml
 libraries:
-  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.9.0
-  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.9.0
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.10.0
+  - com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.10.0
 ```
 
 ### For version < 1.17
@@ -297,13 +297,13 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-api</artifactId>
-     <version>2.9.0</version>
+     <version>2.10.0</version>
      <scope>compile</scope>
 </dependency>
 <dependency>
      <groupId>com.github.shynixn.structureblocklib</groupId>
      <artifactId>structureblocklib-bukkit-core</artifactId>
-     <version>2.9.0</version>
+     <version>2.10.0</version>
      <scope>compile</scope>
 </dependency>
 ```
@@ -311,8 +311,8 @@ go with the option above instead. There are several tutorials on spigotmc.org.
 
 ```xml
 dependencies {
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.9.0")
-    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.9.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-api:2.10.0")
+    implementation("com.github.shynixn.structureblocklib:structureblocklib-bukkit-core:2.10.0")
 }
 ```
  

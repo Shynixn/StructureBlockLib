@@ -1,8 +1,0 @@
-com.github.shynixn.structureblocklib.api.bukkit
-com.github.shynixn.structureblocklib.api.bukkit.block
-com.github.shynixn.structureblocklib.api.bukkit.entity
-com.github.shynixn.structureblocklib.bukkit
-com.github.shynixn.structureblocklib.bukkit.entity
-com.github.shynixn.structureblocklib.bukkit.plugin
-com.github.shynixn.structureblocklib.bukkit.plugin.commandexecutor
-com.github.shynixn.structureblocklib.bukkit.service

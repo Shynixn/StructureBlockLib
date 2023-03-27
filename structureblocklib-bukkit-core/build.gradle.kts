@@ -82,6 +82,14 @@ tasks.register("pluginJar", Exec::class.java) {
         targetJarFile,
         targetJarFile
     )
+    obsMapping = "$obsMapping && " + createCommand(
+        "1.19.4-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_19_R3",
+        file,
+        shadowJar,
+        targetJarFile,
+        targetJarFile
+    )
 
     if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
         commandLine = listOf("cmd", "/c", obsMapping.replace("\$HOME", "%userprofile%"))
@@ -122,6 +130,7 @@ dependencies {
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-118R2"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-119R1"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-119R2"))
+    implementation(project(":structureblocklib-bukkit-core:bukkit-nms-119R3"))
 
     compileOnly("org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT")
     testCompile("org.spigotmc:spigot:1.12-R0.1-SNAPSHOT")

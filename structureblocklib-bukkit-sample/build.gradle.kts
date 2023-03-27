@@ -86,6 +86,14 @@ tasks.register("pluginJar", Exec::class.java) {
         targetJarFile,
         targetJarFile
     )
+    obsMapping = "$obsMapping && " + createCommand(
+        "1.19.4-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_19_R3",
+        file,
+        shadowJar,
+        targetJarFile,
+        targetJarFile
+    )
 
     if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
         commandLine = listOf("cmd", "/c", obsMapping.replace("\$HOME", "%userprofile%"))

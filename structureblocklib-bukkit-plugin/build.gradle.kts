@@ -14,7 +14,11 @@ tasks.withType<ShadowJar> {
     relocate("org.jetbrains", "com.github.shynixn.structureblocklib.lib.org.jetbrains")
 }
 
-tasks.register("pluginJar", Exec::class.java) {
+tasks.register("pluginJarOperation1", Exec::class.java) {
+    // Change the output folder of the plugin.
+    // val destinationDir = File("C:/temp/plugins")
+    val destinationDir = File(buildDir, "libs")
+
     dependsOn("shadowJar")
     workingDir = buildDir
 
@@ -40,7 +44,7 @@ tasks.register("pluginJar", Exec::class.java) {
     val shadowJar = tasks.findByName("shadowJar")!! as ShadowJar
     val sourceJarFile = File(buildDir, "libs/" + shadowJar.archiveName)
     val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"
-    val targetJarFile = File(buildDir, "libs/$archiveName")
+    val targetJarFile = File(destinationDir, archiveName)
 
     var obsMapping = createCommand(
         "1.17.1-R0.1-SNAPSHOT",
@@ -85,6 +89,52 @@ tasks.register("pluginJar", Exec::class.java) {
     obsMapping = "$obsMapping && " + createCommand(
         "1.19.4-R0.1-SNAPSHOT",
         "com/github/shynixn/structureblocklib/bukkit/v1_19_R3",
+        file,
+        shadowJar,
+        targetJarFile,
+        targetJarFile
+    )
+
+    if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")) {
+        commandLine = listOf("cmd", "/c", obsMapping.replace("\$HOME", "%userprofile%"))
+    } else {
+        commandLine = listOf("sh", "-c", obsMapping)
+    }
+}
+
+tasks.register("pluginJar", Exec::class.java, ) {
+    dependsOn("shadowJar","pluginJarOperation1")
+    // Change the output folder of the plugin.
+    //val destinationDir = File("C:/temp/plugins")
+    val destinationDir = File(buildDir, "libs")
+    workingDir = buildDir
+
+    if (!workingDir.exists()) {
+        workingDir.mkdir();
+    }
+
+    val folder = File(workingDir, "mapping")
+
+    if (!folder.exists()) {
+        folder.mkdir()
+    }
+
+    val file = File(folder, "SpecialSources.jar")
+
+    if (!file.exists()) {
+        URL("https://repo.maven.apache.org/maven2/net/md-5/SpecialSource/1.10.0/SpecialSource-1.10.0-shaded.jar").openStream()
+            .use {
+                Files.copy(it, file.toPath())
+            }
+    }
+
+    val shadowJar = tasks.findByName("shadowJar")!! as ShadowJar
+    val archiveName = "${shadowJar.baseName}-${shadowJar.version}.${shadowJar.extension}"
+    val targetJarFile = File(destinationDir, archiveName)
+
+    var obsMapping = createCommand(
+        "1.20-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_20_R1",
         file,
         shadowJar,
         targetJarFile,

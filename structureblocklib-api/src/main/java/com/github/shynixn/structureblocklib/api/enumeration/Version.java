@@ -87,9 +87,14 @@ public enum Version {
     VERSION_1_19_R3("v1_19_R3", "1.19.4", 1.194),
 
     /**
-     * Version 1.20 - 1.20.
+     * Version 1.20 - 1.20.1.
      */
-    VERSION_1_20_R1("v1_20_R1", "1.20.0", 1.20);
+    VERSION_1_20_R1("v1_20_R1", "1.20.0", 1.20),
+
+    /**
+     * Version 1.20.2 - 1.20.2.
+     */
+    VERSION_1_20_R2("v1_20_R2", "1.20.2", 1.22);
 
     private final String bukkitId;
     private final String id;

@@ -133,8 +133,16 @@ tasks.register("pluginJar", Exec::class.java, ) {
     val targetJarFile = File(destinationDir, archiveName)
 
     var obsMapping = createCommand(
-        "1.20-R0.1-SNAPSHOT",
+        "1.20.1-R0.1-SNAPSHOT",
         "com/github/shynixn/structureblocklib/bukkit/v1_20_R1",
+        file,
+        shadowJar,
+        targetJarFile,
+        targetJarFile
+    )
+    obsMapping = "$obsMapping && " + createCommand(
+        "1.20.2-R0.1-SNAPSHOT",
+        "com/github/shynixn/structureblocklib/bukkit/v1_20_R2",
         file,
         shadowJar,
         targetJarFile,
@@ -182,6 +190,7 @@ dependencies {
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-119R2"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-119R3"))
     implementation(project(":structureblocklib-bukkit-core:bukkit-nms-120R1"))
+    implementation(project(":structureblocklib-bukkit-core:bukkit-nms-120R2"))
 
     compileOnly("org.spigotmc:spigot:1.14.4-R0.1-SNAPSHOT")
     testCompile("org.spigotmc:spigot:1.12-R0.1-SNAPSHOT")

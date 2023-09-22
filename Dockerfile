@@ -29,7 +29,8 @@ RUN java -jar BuildTools.jar --rev 1.18.2 --remapped
 RUN java -jar BuildTools.jar --rev 1.19 --remapped
 RUN java -jar BuildTools.jar --rev 1.19.3 --remapped
 RUN java -jar BuildTools.jar --rev 1.19.4 --remapped
-RUN java -jar BuildTools.jar --rev 1.20 --remapped
+RUN java -jar BuildTools.jar --rev 1.20.1 --remapped
+RUN java -jar BuildTools.jar --rev 1.20.2 --remapped
 
 # 3. Build plugin for 1.8 - 1.17 with jdk17
 FROM amazoncorretto:17 AS plugin-jdk17
@@ -47,7 +48,7 @@ RUN ./gradlew build pluginJar --no-daemon
 # 4. Launch a minecraft server with jdk17 and plugin
 FROM amazoncorretto:17
 # Change to the current plugin version present in build.gradle
-ENV PLUGIN_VERSION=2.11.0
+ENV PLUGIN_VERSION=2.12.0
 # Change to the server version you want to test.
 ENV SERVER_VERSION=spigot-1.19.4.jar
 # Port of the Minecraft Server.

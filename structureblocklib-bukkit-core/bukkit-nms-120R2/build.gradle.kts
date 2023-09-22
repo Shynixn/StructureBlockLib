@@ -19,6 +19,6 @@ dependencies {
     implementation(project(":structureblocklib-api"))
     implementation(project(":structureblocklib-core"))
     implementation(project(":structureblocklib-bukkit-api"))
-    compileOnly("org.spigotmc:spigot:1.20.1-R0.1-SNAPSHOT:remapped-mojang")
-    testCompile("org.spigotmc:spigot:1.20.1-R0.1-SNAPSHOT:remapped-mojang")
+    compileOnly("org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:remapped-mojang")
+    testCompile("org.spigotmc:spigot:1.20.2-R0.1-SNAPSHOT:remapped-mojang")
 }

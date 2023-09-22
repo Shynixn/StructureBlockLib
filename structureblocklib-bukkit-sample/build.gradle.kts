@@ -133,7 +133,7 @@ tasks.register("pluginJar", Exec::class.java, ) {
     val targetJarFile = File(destinationDir, archiveName)
 
     var obsMapping = createCommand(
-        "1.20-R0.1-SNAPSHOT",
+        "1.20.1-R0.1-SNAPSHOT",
         "com/github/shynixn/structureblocklib/bukkit/v1_20_R1",
         file,
         shadowJar,

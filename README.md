@@ -1,3 +1,9 @@
+> [!IMPORTANT]  
+> **Final Notes:**
+> The NBT format has been reworked in Minecraft 1.20.5 and this library will not updated any further because it was not intended for that.
+> The final version support range is Minecraft 1.9.0 - 1.20.4 and can still be used for that. The binaries stay available in [Maven Central](https://central.sonatype.com/artifact/com.github.shynixn.structureblocklib/structureblocklib-api).
+> Thank you for supporting StructureBlockLib all those years ♥️ .
+
 # StructureBlockLib  [![Build Status](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.structureblocklib/structureblocklib-bukkit-api/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/com.github.shynixn.structureblocklib/structureblocklib-bukkit-api) [![GitHub license](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/Shynixn/StructureBlockLib/master/LICENSE)
 
 | branch        | status        | version | download |
